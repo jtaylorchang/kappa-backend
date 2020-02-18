@@ -1,0 +1,12 @@
+{
+  "name": "ktt-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/jtaylorchang/ktt-backend.git",
+  "author": "Jeff Taylor-Chang <jeff@jefftc.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
