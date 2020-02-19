@@ -8,5 +8,13 @@
   "private": true,
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "prettier": "1.19.1"
+  },
+  "prettier": {
+    "trailingComma": "none",
+    "singleQuote": true,
+    "printWidth": 120
   }
 }
