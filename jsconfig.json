@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "baseUrl": "./",
+    "checkJs": true,
+    "module": "commonjs",
+    "paths": {
+      "routes/*": ["src/routes/*"],
+      "utils/*": ["src/utils/*"]
+    }
+  },
+  "include": ["src/**/*"]
+}
