@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "baseUrl": "./",
+    "checkJs": true,
+    "module": "commonjs",
+    "paths": {
+      "middleware": ["src/utils/middleware"],
+      "optchain": ["src/utils/optchain"],
+      "routes/*": ["src/routes/*"],
+      "utils/*": ["src/utils/*"]
+    }
+  },
+  "include": ["src/**/*"]
+}
