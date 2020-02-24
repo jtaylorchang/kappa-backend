@@ -1,113 +1,162 @@
-# Welcome to Serverless!
-#
-# This file is the main config file for your service.
-# It's very minimal at this point and uses default values.
-# You can always add more config options for more control.
-# We've included some commented out config examples here.
-# Just uncomment any of them to get that config option.
-#
-# For full config options, check the docs:
-#    docs.serverless.com
-#
-# Happy Coding!
-
 service: ktt-backend
-# app and org for use with dashboard.serverless.com
-#app: your-app-name
-#org: your-org-name
-
-# You can pin your service to only deploy with a specific Serverless version
-# Check out our docs for more details
-# frameworkVersion: "=X.X.X"
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs10.x
+  memorySize: 128
+  stage: ${opt:stage,'dev'}
+  region: us-east-2 # Ohio
 
-# you can overwrite defaults here
-#  stage: dev
-#  region: us-east-1
+  environment:
+    APP_STAGE: ${self:provider.stage}
+    AUTH_SECRET: ${file(src/secrets.json):AUTH_SECRET}
+    ADMIN_SECRET: ${file(src/secrets.json):ADMIN_SECRET}
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "lambda:InvokeFunction"
+      Resource: "*"
 
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
+package:
+  individually: true
 
-# you can add packaging information here
-#package:
-#  include:
-#    - include-me.js
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.js
-#    - exclude-me-dir/**
+  exclude:
+    - "README.md"
 
 functions:
-  hello:
-    handler: handler.hello
-#    The following are a few example events you can configure
-#    NOTE: Please make sure to change your handler code to work with those events
-#    Check the event documentation for details
-#    events:
-#      - http:
-#          path: users/create
-#          method: get
-#      - websocket: $connect
-#      - s3: ${env:BUCKET}
-#      - schedule: rate(10 minutes)
-#      - sns: greeter-topic
-#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
-#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
-#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
-#      - iot:
-#          sql: "SELECT * FROM 'some_topic'"
-#      - cloudwatchEvent:
-#          event:
-#            source:
-#              - "aws.ec2"
-#            detail-type:
-#              - "EC2 Instance State-change Notification"
-#            detail:
-#              state:
-#                - pending
-#      - cloudwatchLog: '/aws/lambda/hello'
-#      - cognitoUserPool:
-#          pool: MyUserPool
-#          trigger: PreSignUp
-#      - alb:
-#          listenerArn: arn:aws:elasticloadbalancing:us-east-1:XXXXXX:listener/app/my-load-balancer/50dc6c495c0c9188/
-#          priority: 1
-#          conditions:
-#            host: example.com
-#            path: /hello
+  usersRegister:
+    warmup: true
+    handler: src/routes/users/register.default
+    events:
+      - http:
+          path: users/register
+          method: POST
+          cors: true
 
-#    Define function environment variables here
-#    environment:
-#      variable2: value2
+  usersLogin:
+    warmup: true
+    handler: src/routes/users/login.default
+    events:
+      - http:
+          path: users/login
+          method: POST
+          cors: true
 
-# you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
+  usersGetAll:
+    warmup: true
+    handler: src/routes/users/get-all.default
+    events:
+      - http:
+          path: users
+          method: GET
+          cors: true
+
+  usersUpdateOne:
+    warmup: true
+    handler: src/routes/users/update-one.default
+    events:
+      - http:
+          path: users/{target}
+          method: PATCH
+          cors: true
+
+  eventsCreate:
+    warmup: true
+    handler: src/routes/events/create.default
+    events:
+      - http:
+          path: events
+          method: POST
+          cors: true
+
+  eventsGetAll:
+    warmup: false
+    handler: src/routes/events/get-all.default
+    events:
+      - http:
+          path: events
+          method: GET
+          cors: true
+
+  eventsUpdateOne:
+    warmup: true
+    handler: src/routes/events/update-one.default
+    events:
+      - http:
+          path: events/{target}
+          method: PATCH
+          cors: true
+
+  attendanceAttend:
+    warmup: true
+    handler: src/routes/attendance/attend.default
+    events:
+      - http:
+          path: attendance
+          method: POST
+          cors: true
+
+  attendanceGetUser:
+    warmup: false
+    handler: src/routes/attendance/get-user.default
+    events:
+      - http:
+          path: attendance/user/{target}
+          method: GET
+          cors: true
+
+  attendanceGetAllByUser:
+    warmup: false
+    handler: src/routes/attendance/get-all-user.default
+    events:
+      - http:
+          path: attendance/user
+          method: GET
+          cors: true
+
+  attendanceGetEvent:
+    warmup: false
+    handler: src/routes/attendance/get-event.default
+    events:
+      - http:
+          path: attendance/event/{target}
+          method: GET
+          cors: true
+
+  attendanceGetAllByEvent:
+    warmup: false
+    handler: src/routes/attendance/get-all-event.default
+    events:
+      - http:
+          path: attendance/all/event
+          method: GET
+          cors: true
+
+  admin-override:
+    warmup: true
+    handler: src/routes/admin-override/handler.default
+    events:
+      - http:
+          path: admin-override
+          method: POST
+          cors: true
+
+custom:
+  serverless-offline:
+    prefix: dev
+    port: 3000
+    stage: dev
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+  stages:
+    - dev
+    - test
+    - v1.0
+
+plugins:
+  - serverless-webpack
+  - serverless-plugin-warmup
+  - serverless-offline # Should be last
+

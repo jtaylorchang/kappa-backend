@@ -8,7 +8,8 @@
     "jsonwebtoken": "^8.5.1",
     "middy": "^0.33.2",
     "mongodb": "^3.5.3",
-    "uuid": "^3.4.0"
+    "serverless-stage-manager": "^1.0.5",
+    "uuid": "^7.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -27,7 +28,7 @@
   },
   "scripts": {
     "offline": "source ./offline.sh && serverless offline start",
-    "deploy": ""
+    "deploy": "sls deploy --aws-profile theta-tau"
   },
   "prettier": {
     "trailingComma": "none",
