@@ -50,6 +50,8 @@ EVENT: {
     id: String,
     creator: String,
     eventType: String,
+    category: String,
+    points: Number,
     mandatory: Boolean, // ie voting
     title: String,
     description: String,
