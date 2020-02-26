@@ -34,6 +34,7 @@ module.exports = {
     alias: {
       // TODO: Define other local module aliases here
       middleware: path.resolve(__dirname, 'src/utils/middleware.js'),
+      optchain: path.resolve(__dirname, 'src/utils/optchain.js'),
       utils: path.resolve(__dirname, 'src/utils/'),
       src: path.resolve(__dirname, 'src/'),
       routes: path.resolve(__dirname, 'src/routes/')
