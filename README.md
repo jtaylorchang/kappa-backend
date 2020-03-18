@@ -41,7 +41,7 @@ USER: {
     lastName: String,
     phone: String,
     pledgeSemester: String,
-    classStanding: String,
+    graduationYear: Number,
     position: String,
     confirmed: Boolean
 }
