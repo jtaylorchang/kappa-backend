@@ -1,14 +1,25 @@
 import middyfy from 'middleware';
 
 import { verifyEmail } from 'utils/auth';
+import { verifyToken } from 'utils/google';
 import { getUser, createUser } from 'services/user';
 
 const handler = async (event, context) => {
-  // TODO: verify token
-
   const normalized = {
-    email: event.body?.user?.email.trim().toLowerCase()
+    email: event.body?.user?.email.trim().toLowerCase(),
+    idToken: event.body?.user?.idToken
   };
+
+  const verifiedToken = await verifyToken(normalized.idToken, normalized.email);
+
+  if (!verifiedToken.success) {
+    return {
+      statusCode: 401,
+      body: {
+        message: 'invalid id token'
+      }
+    };
+  }
 
   const verifiedEmail = await verifyEmail(normalized.email);
 
