@@ -49,7 +49,7 @@ const errorHandler = () => ({
   }
 });
 
-const middyfy = (handler, inputSchema) => {
+const middyfy = (handler, authorized = false, inputSchema) => {
   const middleware = middy(handler)
     .use(warmup())
     .use(
@@ -67,8 +67,11 @@ const middyfy = (handler, inputSchema) => {
     middleware.use(validator({ inputSchema }));
   }
 
+  if (authorized) {
+    // middleware.use(httpHeaderAuthorizer())
+  }
+
   middleware
-    // .use(httpHeaderAuthorizer())
     .use(jsonBodyEncoder())
     .use(errorHandler())
     .use(cors());
