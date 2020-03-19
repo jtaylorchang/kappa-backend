@@ -36,8 +36,9 @@ module.exports = {
       middleware: path.resolve(__dirname, 'src/utils/middleware.js'),
       optchain: path.resolve(__dirname, 'src/utils/optchain.js'),
       utils: path.resolve(__dirname, 'src/utils/'),
-      src: path.resolve(__dirname, 'src/'),
-      routes: path.resolve(__dirname, 'src/routes/')
+      routes: path.resolve(__dirname, 'src/routes/'),
+      services: path.resolve(__dirname, 'src/services'),
+      src: path.resolve(__dirname, 'src/')
     }
   }
 };
