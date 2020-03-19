@@ -1,9 +1,16 @@
 import middyfy from 'middleware';
 
 import { verifyEmail } from 'utils/auth';
+import { getUser, createUser } from 'services/user';
 
 const handler = async (event, context) => {
-  const verifiedEmail = await verifyEmail(event.body?.user?.email);
+  // TODO: verify token
+
+  const normalized = {
+    email: event.body?.user?.email.trim().toLowerCase()
+  };
+
+  const verifiedEmail = await verifyEmail(normalized.email);
 
   if (!verifiedEmail.success) {
     return {
@@ -14,10 +21,43 @@ const handler = async (event, context) => {
     };
   }
 
+  const foundUser = await getUser(normalized.email);
+
+  if (!foundUser.success) {
+    return {
+      statusCode: 500,
+      body: {
+        message: 'could not connect to database'
+      }
+    };
+  }
+
+  let user = foundUser.data.user;
+
+  if (!foundUser.data.user) {
+    const createdUser = await createUser({
+      email: normalized.email
+    });
+
+    if (!createdUser.success || !createdUser.data._id) {
+      return {
+        statusCode: 500,
+        body: {
+          message: 'could not create user'
+        }
+      };
+    }
+
+    user = {
+      _id: createdUser.data._id,
+      email: normalized.email
+    };
+  }
+
   return {
     statusCode: 200,
     body: {
-      message: 'Hello World'
+      user
     }
   };
 };
