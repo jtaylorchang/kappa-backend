@@ -6,11 +6,11 @@ import { DIRECTORY } from 'utils/dataSources';
 const BEARER_OFFSET = 7;
 const SALT_ROUNDS = 10;
 
-const extractToken = bearer => {
+export const extractToken = bearer => {
   return bearer.substring(BEARER_OFFSET);
 };
 
-const generateToken = username => {
+export const generateToken = username => {
   return jwt.sign(
     {
       username: username
@@ -22,7 +22,7 @@ const generateToken = username => {
   );
 };
 
-const verifyAndDecodeToken = token => {
+export const verifyAndDecodeToken = token => {
   try {
     // @ts-ignore
     return jwt.verify(token, process.env.AUTH_SECRET).username;
@@ -31,9 +31,7 @@ const verifyAndDecodeToken = token => {
   }
 };
 
-const verifyGoogleToken = token => {};
-
-const verifyEmail = async email => {
+export const verifyEmail = async email => {
   if (!email || email?.indexOf('@') == -1) {
     return {
       success: false,
@@ -66,5 +64,3 @@ const verifyEmail = async email => {
     };
   }
 };
-
-export { extractToken, generateToken, verifyAndDecodeToken, verifyGoogleToken, verifyEmail };
