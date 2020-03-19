@@ -25,15 +25,6 @@ package:
     - "README.md"
 
 functions:
-  usersRegister:
-    warmup: true
-    handler: src/routes/users/register.default
-    events:
-      - http:
-          path: users/register
-          method: POST
-          cors: true
-
   usersLogin:
     warmup: true
     handler: src/routes/users/login.default

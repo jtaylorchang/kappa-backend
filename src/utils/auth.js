@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
+import { DIRECTORY } from 'utils/dataSources';
+
 const BEARER_OFFSET = 7;
 const SALT_ROUNDS = 10;
 
@@ -29,12 +31,28 @@ const verifyAndDecodeToken = token => {
   }
 };
 
-const hashPassword = async password => {
-  return bcrypt.hash(password, SALT_ROUNDS);
+const verifyGoogleToken = token => {};
+
+const verifyEmail = async email => {
+  try {
+    const response = await fetch(DIRECTORY);
+    const data = await response.json();
+
+    if (data.directory.active.findIndex(user => user.email.toLowerCase() === email.toLowerCase()) >= 0) {
+      return {
+        success: true
+      };
+    } else {
+      return {
+        sucess: false
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error
+    };
+  }
 };
 
-const validatePassword = async (hash, password) => {
-  return bcrypt.compare(password, hash);
-};
-
-export { extractToken, generateToken, verifyAndDecodeToken, hashPassword, validatePassword };
+export { extractToken, generateToken, verifyAndDecodeToken };
