@@ -1,8 +1,7 @@
-import { connection } from 'utils/mongoConnector';
+import { db } from 'utils/mongoConnector';
 
 export const getUser = async email => {
   try {
-    const db = connection.db('ThetaTau');
     const collection = db.collection('users');
 
     const res = await collection.findOne({
@@ -25,7 +24,6 @@ export const getUser = async email => {
 
 export const createUser = async user => {
   try {
-    const db = connection.db('ThetaTau');
     const collection = db.collection('users');
 
     const res = await collection.update(

@@ -2,7 +2,7 @@ import { MongoClient } from 'mongodb';
 
 const log = (shouldLog, ...args) => shouldLog && console.log(...args);
 
-export let connection;
+export let db;
 
 const mongoConnector = ({
   databaseURI,
@@ -13,13 +13,15 @@ const mongoConnector = ({
   shouldLog = true
 }) => ({
   before: async () => {
-    if (connection?.topology?.isConnected()) {
+    if (db) {
       log(shouldLog, '=> Using existing MongoDB connection');
     } else {
       log(shouldLog, '=> Using new MongoDB connection');
 
       try {
-        connection = await MongoClient.connect(databaseURI, connectionOpts);
+        let client = await MongoClient.connect(databaseURI, connectionOpts);
+
+        db = client.db('ThetaTau');
       } catch (error) {
         log(shouldLog, '=> Connection error with MongoDB', error);
       }
@@ -28,7 +30,7 @@ const mongoConnector = ({
   after: async () => {
     if (shouldClose) {
       log(shouldLog, '=> Closing MongoDB connection');
-      await connection?.close();
+      await db?.close();
     }
   }
 });
