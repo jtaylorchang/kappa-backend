@@ -8,7 +8,8 @@
       "middleware": ["src/utils/middleware"],
       "optchain": ["src/utils/optchain"],
       "routes/*": ["src/routes/*"],
-      "utils/*": ["src/utils/*"]
+      "utils/*": ["src/utils/*"],
+      "services/*": ["src/services/*"]
     }
   },
   "include": ["src/**/*"]
