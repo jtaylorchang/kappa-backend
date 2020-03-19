@@ -1,6 +1,8 @@
 import middy from 'middy';
 import { warmup, httpHeaderNormalizer, jsonBodyParser, urlEncodeBodyParser, cors, validator } from 'middy/middlewares';
 
+import mongoConnector from 'utils/mongoConnector';
+
 const queryTrimmer = () => ({
   before: (handler, next) => {
     const params = Object.entries(handler.event.queryStringParameters || []);
@@ -50,6 +52,11 @@ const errorHandler = () => ({
 const middyfy = (handler, inputSchema) => {
   const middleware = middy(handler)
     .use(warmup())
+    .use(
+      mongoConnector({
+        databaseURI: process.env.MONGODB_URI
+      })
+    )
     .use(httpHeaderNormalizer())
     .use(queryTrimmer())
     .use(jsonBodyParser())
