@@ -34,6 +34,15 @@ const verifyAndDecodeToken = token => {
 const verifyGoogleToken = token => {};
 
 const verifyEmail = async email => {
+  if (!email || email?.indexOf('@') == -1) {
+    return {
+      success: false,
+      error: {
+        message: 'email is invalid'
+      }
+    };
+  }
+
   try {
     const response = await fetch(DIRECTORY);
     const data = await response.json();
@@ -44,7 +53,10 @@ const verifyEmail = async email => {
       };
     } else {
       return {
-        sucess: false
+        sucess: false,
+        error: {
+          message: 'unauthorized email'
+        }
       };
     }
   } catch (error) {
@@ -55,4 +67,4 @@ const verifyEmail = async email => {
   }
 };
 
-export { extractToken, generateToken, verifyAndDecodeToken };
+export { extractToken, generateToken, verifyAndDecodeToken, verifyGoogleToken, verifyEmail };
