@@ -35,7 +35,8 @@ yarn offline
 
 ## General Authentication
 
-1. client sends email as query param and bearer token
+1. client sends email as query param (or route param) and bearer token
+   - note: email will be URL encoded
 2. backend verifies token against email
 3. executes action and returns authorized data
 
