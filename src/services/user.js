@@ -31,7 +31,7 @@ export const createUser = async user => {
         email: user.email
       },
       {
-        email: user.email
+        ...user
       },
       {
         upsert: true
