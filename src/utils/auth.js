@@ -45,9 +45,15 @@ export const verifyEmail = async email => {
     const response = await fetch(DIRECTORY);
     const data = await response.json();
 
-    if (data.directory.active.findIndex(user => user.email.toLowerCase() === email.toLowerCase()) >= 0) {
+    const user = data.directory.active.find(user => user.email.toLowerCase() === email);
+
+    if (user) {
       return {
-        success: true
+        success: true,
+        data: {
+          role: user.role || '',
+          privileged: user.privileged !== undefined && user.privileged
+        }
       };
     } else {
       return {

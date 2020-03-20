@@ -24,7 +24,11 @@ export const verifyToken = async (token, email) => {
     }
 
     return {
-      success: true
+      success: true,
+      data: {
+        familyName: payload.family_name,
+        givenName: payload.given_name
+      }
     };
   } catch (error) {
     return {
