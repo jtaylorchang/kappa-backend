@@ -1,6 +1,6 @@
 import middyfy from 'middleware';
 
-import { verifyEmail, generateToken } from 'utils/auth';
+import { lookupEmail, generateToken } from 'utils/auth';
 import { verifyToken } from 'utils/google';
 import { getUser, createUser } from 'services/user';
 
@@ -21,13 +21,13 @@ const handler = async (event, context) => {
     };
   }
 
-  const verifiedEmail = await verifyEmail(normalized.email);
+  const directoryLookup = await lookupEmail(normalized.email);
 
-  if (!verifiedEmail.success) {
+  if (!directoryLookup.success) {
     return {
       statusCode: 401,
       body: {
-        message: verifiedEmail.error?.message
+        message: directoryLookup.error?.message
       }
     };
   }
@@ -52,15 +52,16 @@ const handler = async (event, context) => {
       email: normalized.email,
       familyName: verifiedToken.data.familyName,
       givenName: verifiedToken.data.givenName,
-      type: verifiedEmail.data.type
+      semester: directoryLookup.data.semester,
+      type: directoryLookup.data.type
     };
 
-    if (verifiedEmail.data.role) {
-      newUser.role = verifiedEmail.data.role;
+    if (directoryLookup.data.role) {
+      newUser.role = directoryLookup.data.role;
     }
 
-    if (verifiedEmail.data.privileged) {
-      newUser.privileged = verifiedEmail.data.privileged;
+    if (directoryLookup.data.privileged) {
+      newUser.privileged = directoryLookup.data.privileged;
     }
 
     const createdUser = await createUser(newUser);

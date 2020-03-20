@@ -31,7 +31,7 @@ export const verifyAndDecodeToken = token => {
   }
 };
 
-export const verifyEmail = async email => {
+export const lookupEmail = async email => {
   if (!email || email?.indexOf('@') == -1) {
     return {
       success: false,
@@ -45,15 +45,16 @@ export const verifyEmail = async email => {
     const response = await fetch(DIRECTORY);
     const data = await response.json();
 
-    const user = data.directory.active.find(user => user.email.toLowerCase() === email);
+    const user = data.directory.active[email];
 
     if (user) {
       return {
         success: true,
         data: {
+          semester: user.semester,
+          type: 'B',
           role: user.role || '',
-          privileged: user.privileged !== undefined && user.privileged,
-          type: 'B'
+          privileged: user.privileged !== undefined && user.privileged
         }
       };
     } else {
