@@ -126,11 +126,20 @@ functions:
           cors: true
 
   admin-override:
-    warmup: true
+    warmup: false
     handler: src/routes/admin-override/handler.default
     events:
       - http:
           path: admin-override
+          method: POST
+          cors: true
+
+  autoUpdateRoles:
+    warmup: false
+    handler: src/routes/auto/update-roles.default
+    events:
+      - http:
+          path: auto/roles
           method: POST
           cors: true
 

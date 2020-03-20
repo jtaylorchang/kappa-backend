@@ -38,3 +38,8 @@ yarn offline
 2. backend verifies email against database
 3. backend verifies google token
 4. executes action and returns authorized data
+
+## Privileges
+
+- looked up during initial login from directory and saved to database
+- route that updates privileges and roles across the board
