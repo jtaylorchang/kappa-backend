@@ -29,17 +29,17 @@ yarn offline
 2. client sends google credentials to backend
 3. backend verifies email against directory data source
 4. backend verifies google token
-5. backend creates new user in database if not found
-6. returns authorized data
+5. backend generates a JWT
+6. backend creates new user in database if not found
+7. returns authorized data and the generated token
 
 ## General Authentication
 
-1. client sends google credentials to backend
-2. backend verifies email against database
-3. backend verifies google token
-4. executes action and returns authorized data
+1. client sends email as query param and bearer token
+2. backend verifies token against email
+3. executes action and returns authorized data
 
 ## Privileges
 
 - looked up during initial login from directory and saved to database
-- route that updates privileges and roles across the board
+- auto-route that updates privileges and roles across the board
