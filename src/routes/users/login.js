@@ -51,7 +51,8 @@ const handler = async (event, context) => {
     const newUser = {
       email: normalized.email,
       familyName: verifiedToken.data.familyName,
-      givenName: verifiedToken.data.givenName
+      givenName: verifiedToken.data.givenName,
+      type: verifiedEmail.data.type
     };
 
     if (verifiedEmail.data.role) {

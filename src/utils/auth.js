@@ -52,7 +52,8 @@ export const verifyEmail = async email => {
         success: true,
         data: {
           role: user.role || '',
-          privileged: user.privileged !== undefined && user.privileged
+          privileged: user.privileged !== undefined && user.privileged,
+          type: 'B'
         }
       };
     } else {
