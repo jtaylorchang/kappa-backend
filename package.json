@@ -2,6 +2,8 @@
   "name": "ktt-backend",
   "version": "0.0.1",
   "description": "Serverless backend for Theta Tau Mobile",
+  "authory": "Jeff Taylor-Chang",
+  "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "google-auth-library": "^5.10.1",
