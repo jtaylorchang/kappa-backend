@@ -7,7 +7,7 @@ import { getUser, createUser } from 'services/user';
 const handler = async (event, context) => {
   const normalized = {
     email: event.body?.user?.email.trim().toLowerCase(),
-    idToken: event.body?.user?.idToken
+    idToken: event.body?.idToken
   };
 
   const verifiedToken = await verifyToken(normalized.idToken, normalized.email);
