@@ -9,7 +9,8 @@ Need to create a `src/secrets.json` file of the following signature. The values 
   "AUTH_SECRET": "<auth_secret>",
   "ADMIN_SECRET": "<admin_secret>",
   "AWS_ACCESS_KEY_ID": "<access_key>",
-  "AWS_SECRET_ACCESS_KEY": "<secret_access_key>"
+  "AWS_SECRET_ACCESS_KEY": "<secret_access_key>",
+  "MONGODB_URI": "<mongo_database_uri>"
 }
 ```
 
