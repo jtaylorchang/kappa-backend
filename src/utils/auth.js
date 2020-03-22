@@ -10,10 +10,10 @@ export const extractToken = bearer => {
   return bearer.substring(BEARER_OFFSET);
 };
 
-export const generateToken = username => {
+export const generateToken = email => {
   return jwt.sign(
     {
-      username: username
+      email
     },
     process.env.AUTH_SECRET,
     {
@@ -25,7 +25,7 @@ export const generateToken = username => {
 export const verifyAndDecodeToken = token => {
   try {
     // @ts-ignore
-    return jwt.verify(token, process.env.AUTH_SECRET).username;
+    return jwt.verify(token, process.env.AUTH_SECRET).email;
   } catch (err) {
     return undefined;
   }

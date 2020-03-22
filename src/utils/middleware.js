@@ -1,7 +1,32 @@
 import middy from 'middy';
 import { warmup, httpHeaderNormalizer, jsonBodyParser, urlEncodeBodyParser, cors, validator } from 'middy/middlewares';
 
+import { oc } from 'optchain';
 import mongoConnector from 'utils/mongoConnector';
+import * as auth from 'utils/auth';
+import { getUser } from 'services/user';
+
+const httpHeaderAuthorizer = () => ({
+  before: async (handler, next) => {
+    handler.event.authorized = false;
+
+    if (oc(handler.event.headers, { Authorization: '' }).Authorization.startsWith('Bearer')) {
+      const token = auth.extractToken(handler.event.headers.Authorization);
+      const email = auth.verifyAndDecodeToken(token);
+
+      if (email) {
+        const foundUser = await getUser(email);
+
+        if (foundUser.success && foundUser.data?.user) {
+          handler.event.authorized = true;
+          handler.event.user = foundUser.data.user;
+        }
+      }
+    }
+
+    return;
+  }
+});
 
 const queryTrimmer = () => ({
   before: (handler, next) => {
@@ -49,7 +74,7 @@ const errorHandler = () => ({
   }
 });
 
-const middyfy = (handler, authorized = false, inputSchema) => {
+const middyfy = (handler, authorized = true, inputSchema) => {
   const middleware = middy(handler)
     .use(warmup())
     .use(
@@ -68,7 +93,7 @@ const middyfy = (handler, authorized = false, inputSchema) => {
   }
 
   if (authorized) {
-    // middleware.use(httpHeaderAuthorizer())
+    middleware.use(httpHeaderAuthorizer());
   }
 
   middleware
