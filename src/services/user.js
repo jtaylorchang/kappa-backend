@@ -51,3 +51,30 @@ export const createUser = async user => {
     };
   }
 };
+
+export const updateUser = async (email, changes) => {
+  try {
+    const collection = db.collection('users');
+
+    const res = await collection.update(
+      {
+        email
+      },
+      {
+        ...changes
+      }
+    );
+
+    console.log(res);
+
+    return {
+      success: true,
+      data: {}
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error
+    };
+  }
+};
