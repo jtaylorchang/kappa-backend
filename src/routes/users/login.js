@@ -3,6 +3,7 @@ import middyfy from 'middleware';
 import { lookupEmail, generateToken } from 'utils/auth';
 import { verifyToken } from 'utils/google';
 import { getUser, createUser } from 'services/user';
+import createHttpError from 'http-errors';
 
 const handler = async (event, context) => {
   const normalized = {
@@ -13,12 +14,7 @@ const handler = async (event, context) => {
   const verifiedToken = await verifyToken(normalized.idToken, normalized.email);
 
   if (!verifiedToken.success) {
-    return {
-      statusCode: 401,
-      body: {
-        message: 'invalid id token'
-      }
-    };
+    throw new createHttpError.Unauthorized('Invalid id token');
   }
 
   const directoryLookup = await lookupEmail(normalized.email);
@@ -37,12 +33,7 @@ const handler = async (event, context) => {
   const foundUser = await getUser(normalized.email);
 
   if (!foundUser.success) {
-    return {
-      statusCode: 500,
-      body: {
-        message: 'could not connect to database'
-      }
-    };
+    throw new createHttpError.InternalServerError('Could not connect to database');
   }
 
   let user = foundUser.data.user;
@@ -67,12 +58,7 @@ const handler = async (event, context) => {
     const createdUser = await createUser(newUser);
 
     if (!createdUser.success || !createdUser.data._id) {
-      return {
-        statusCode: 500,
-        body: {
-          message: 'could not create user'
-        }
-      };
+      throw new createHttpError.InternalServerError('Could not create user');
     }
 
     user = {
