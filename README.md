@@ -2,7 +2,7 @@
 
 ## Running Offline
 
-Need to create a `src/secrets.json` file of the following signature. The values do not have to be real for development purposes.
+Need to create a `serverless-config/secrets.json` file of the following signature. The values do not have to be real for development purposes.
 
 ```javascript
 {
