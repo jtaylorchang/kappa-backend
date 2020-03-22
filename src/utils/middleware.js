@@ -74,7 +74,8 @@ const errorHandler = () => ({
   }
 });
 
-const middyfy = (handler, authorized = true, inputSchema) => {
+// add optional mongo
+const middyfy = (handler, { authorized = true, useMongo = true, useSql = true }, inputSchema) => {
   const middleware = middy(handler)
     .use(warmup())
     .use(

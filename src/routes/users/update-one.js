@@ -38,4 +38,6 @@ const handler = async (event, context) => {
   };
 };
 
-export default middyfy(handler);
+export default middyfy(handler, {
+  useSql: false
+});
