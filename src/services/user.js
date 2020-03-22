@@ -1,4 +1,5 @@
 import { db } from 'utils/mongoConnector';
+import { projectChanges } from './mongoHelper';
 
 export const getUser = async email => {
   try {
@@ -56,20 +57,25 @@ export const updateUser = async (email, changes) => {
   try {
     const collection = db.collection('users');
 
-    const res = await collection.update(
+    const res = await collection.findOneAndUpdate(
       {
         email
       },
       {
-        ...changes
+        $set: changes
+      },
+      {
+        returnOriginal: false,
+        returnNewDocument: true,
+        projection: projectChanges(changes)
       }
     );
 
-    console.log(res);
-
     return {
       success: true,
-      data: {}
+      data: {
+        changes: res.value
+      }
     };
   } catch (error) {
     return {
