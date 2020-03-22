@@ -76,13 +76,20 @@ const errorHandler = () => ({
 
 // add optional mongo
 const middyfy = (handler, { authorized = true, useMongo = true, useSql = true }, inputSchema) => {
-  const middleware = middy(handler)
-    .use(warmup())
-    .use(
+  const middleware = middy(handler).use(warmup());
+
+  if (useMongo) {
+    middleware.use(
       mongoConnector({
         databaseURI: process.env.MONGODB_URI
       })
-    )
+    );
+  }
+
+  if (useSql) {
+  }
+
+  middleware
     .use(httpHeaderNormalizer())
     .use(queryTrimmer())
     .use(jsonBodyParser())
