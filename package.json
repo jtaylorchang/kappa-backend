@@ -13,7 +13,7 @@
     "mongodb": "^3.5.3",
     "serverless-mysql": "^1.5.3",
     "serverless-stage-manager": "^1.0.5",
-    "uuid": "^7.0.0"
+    "uuid": "^7.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
