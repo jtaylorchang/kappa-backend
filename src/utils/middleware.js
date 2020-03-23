@@ -79,7 +79,7 @@ const errorHandler = () => ({
 const middyfy = (handler, config = { authorized: true, useMongo: true, useSql: true }, inputSchema) => {
   const middleware = middy(handler).use(warmup());
 
-  if (config.useMongo) {
+  if (config.authorized || config.useMongo) {
     middleware.use(
       mongoConnector({
         databaseURI: process.env.MONGODB_URI

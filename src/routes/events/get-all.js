@@ -1,18 +1,23 @@
 import middyfy from 'middleware';
+import createHttpError from 'http-errors';
 
-import { mysql } from 'utils/sqlConnector';
+import { getAllEvents } from 'services/event';
 
 const handler = async (event, context) => {
-  const result = await mysql.query('SELECT * FROM event');
+  if (!event.authorized) {
+    throw new createHttpError.Unauthorized('Not authorized to view events');
+  }
 
-  await mysql.end();
+  const allEvents = await getAllEvents();
 
-  console.log(result);
+  if (!allEvents.success) {
+    throw new createHttpError.InternalServerError('Could not get events');
+  }
 
   return {
     statusCode: 200,
     body: {
-      message: 'Hello World'
+      events: allEvents.data?.events
     }
   };
 };

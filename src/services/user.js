@@ -1,5 +1,6 @@
 import { db } from 'utils/mongoConnector';
 import { projectChanges } from './mongoHelper';
+import { pass, fail } from 'utils/res';
 
 export const getUser = async email => {
   try {
@@ -9,17 +10,11 @@ export const getUser = async email => {
       email
     });
 
-    return {
-      success: true,
-      data: {
-        user: res
-      }
-    };
+    return pass({
+      user: res
+    });
   } catch (error) {
-    return {
-      success: false,
-      error
-    };
+    return fail(error);
   }
 };
 
@@ -39,17 +34,11 @@ export const createUser = async user => {
       }
     );
 
-    return {
-      success: true,
-      data: {
-        _id: res.result.upserted.length === 1 ? res.result.upserted[0]._id : null
-      }
-    };
+    return pass({
+      _id: res.result.upserted.length === 1 ? res.result.upserted[0]._id : null
+    });
   } catch (error) {
-    return {
-      success: false,
-      error
-    };
+    return fail(error);
   }
 };
 
@@ -71,16 +60,14 @@ export const updateUser = async (email, changes) => {
       }
     );
 
-    return {
-      success: true,
-      data: {
-        changes: res.value
-      }
-    };
+    return pass({
+      changes: res.value
+    });
   } catch (error) {
-    return {
-      success: false,
-      error
-    };
+    return fail(error);
   }
+};
+
+export const extractNetid = email => {
+  return email.substring(0, email.indexOf('@'));
 };
