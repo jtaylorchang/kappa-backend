@@ -1,12 +1,12 @@
 import { mysql } from 'utils/sqlConnector';
 import { pass, fail } from 'utils/res';
 
-export const getAllEvents = async privileged => {
+export const getAllEvents = async user => {
   try {
     const results = await mysql.query(
-      privileged
-        ? 'SELECT * from event'
-        : 'SELECT creator, event_type, mandatory, excusable, title, description, start, duration FROM event'
+      `SELECT ${
+        user.privileged ? '*' : 'id, creator, event_type, mandatory, excusable, title, description, start, duration'
+      } FROM event`
     );
 
     return pass({
@@ -44,3 +44,19 @@ export const createEvent = async event => {
     return fail(error);
   }
 };
+
+export const getAttendanceByEvent = async (user, event) => {};
+
+export const getAttendanceByUser = async (user, target) => {};
+
+export const createAttendance = async attendance => {};
+
+export const createExcuse = async excuse => {};
+
+export const approveExcuse = async attendance => {};
+
+export const rejectExcuse = async attendance => {};
+
+export const createPoint = async point => {};
+
+export const editPoint = async point => {};

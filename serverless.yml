@@ -18,16 +18,16 @@ provider:
     SQL_PASSWORD: ${file(./serverless-config/secrets.json):SQL_PASSWORD}
 
   iamRoleStatements:
-    - Effect: "Allow"
+    - Effect: 'Allow'
       Action:
-        - "lambda:InvokeFunction"
-      Resource: "*"
+        - 'lambda:InvokeFunction'
+      Resource: '*'
 
 package:
   individually: true
 
   exclude:
-    - "README.md"
+    - 'README.md'
 
 functions:
   usersLogin:
@@ -93,39 +93,21 @@ functions:
           method: POST
           cors: true
 
-  attendanceGetUser:
+  attendanceGetByUser:
     warmup: false
-    handler: src/routes/attendance/get-user.default
+    handler: src/routes/attendance/get-by-user.default
     events:
       - http:
           path: attendance/user/{target}
           method: GET
           cors: true
 
-  attendanceGetAllByUser:
+  attendanceGetByEvent:
     warmup: false
-    handler: src/routes/attendance/get-all-user.default
-    events:
-      - http:
-          path: attendance/user
-          method: GET
-          cors: true
-
-  attendanceGetEvent:
-    warmup: false
-    handler: src/routes/attendance/get-event.default
+    handler: src/routes/attendance/get-by-event.default
     events:
       - http:
           path: attendance/event/{target}
-          method: GET
-          cors: true
-
-  attendanceGetAllByEvent:
-    warmup: false
-    handler: src/routes/attendance/get-all-event.default
-    events:
-      - http:
-          path: attendance/all/event
           method: GET
           cors: true
 

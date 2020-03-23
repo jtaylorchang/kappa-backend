@@ -4,7 +4,6 @@ import { v4 as uuidV4 } from 'uuid';
 
 import { oc } from 'optchain';
 import { extractNetid } from 'services/user';
-import { mysql } from 'utils/sqlConnector';
 import { createEvent } from 'services/event';
 
 const handler = async (event, context) => {
