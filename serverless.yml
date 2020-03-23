@@ -58,7 +58,7 @@ functions:
           cors: true
 
   eventsCreate:
-    warmup: true
+    warmup: false
     handler: src/routes/events/create.default
     events:
       - http:
@@ -67,7 +67,7 @@ functions:
           cors: true
 
   eventsGetAll:
-    warmup: false
+    warmup: true
     handler: src/routes/events/get-all.default
     events:
       - http:
@@ -76,7 +76,7 @@ functions:
           cors: true
 
   eventsUpdateOne:
-    warmup: true
+    warmup: false
     handler: src/routes/events/update-one.default
     events:
       - http:
@@ -90,15 +90,6 @@ functions:
     events:
       - http:
           path: attendance
-          method: POST
-          cors: true
-
-  attendanceExcuse:
-    warmup: true
-    handler: src/routes/attendance/excuse.default
-    events:
-      - http:
-          path: excuse
           method: POST
           cors: true
 
@@ -118,6 +109,33 @@ functions:
       - http:
           path: attendance/event/{target}
           method: GET
+          cors: true
+
+  attendanceExcuse:
+    warmup: false
+    handler: src/routes/excuse/excuse.default
+    events:
+      - http:
+          path: excuse
+          method: POST
+          cors: true
+
+  attendanceGetExcuses:
+    warmup: false
+    handler: src/routes/excuse/get-all.default
+    events:
+      - http:
+          path: excuse
+          method: GET
+          cors: true
+
+  attendanceApproveExcuse:
+    warmup: false
+    handler: src/routes/excuse/approve.default
+    events:
+      - http:
+          path: excuse
+          method: PATCH
           cors: true
 
   admin-override:
