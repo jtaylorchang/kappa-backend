@@ -91,9 +91,9 @@ EVENT: {
                         // => 2
   creator: STRING,      // the netid of the power-user responsible for creating the event
                         // => jjt4
-  event_type: STRING,   // the category type of the event
+  eventType: STRING,   // the category type of the event
                         // => GM
-  event_code: STRING,   // a cryptographically-strong uniquely generated code (or manually supplied)
+  eventCode: STRING,   // a cryptographically-strong uniquely generated code (or manually supplied)
                         // => 647319
   mandatory: BOOLEAN,   // if the event unexcused would result in probation
                         // => false
@@ -110,14 +110,14 @@ EVENT: {
 }
 
 ATTENDANCE: {
-  event_id: INT,        // the foreign key to an event
+  eventId: INT,        // the foreign key to an event
                         // => 2
   netid: STRING         // the netid of the user who attended
                         // => jjt4
 }
 
 EXCUSE: {
-  event_id: INT,        // the foreign key to an event
+  eventId: INT,        // the foreign key to an event
                         // => 2
   netid: STRING,        // the netid of the user who requested an excuse
                         // => jjt4
@@ -128,7 +128,7 @@ EXCUSE: {
 }
 
 POINT: {
-  event_id: INT,        // the foreign key to an event
+  eventId: INT,        // the foreign key to an event
                         // => 7
   category: STRING,     // the category the points are valid for
                         // => Rush
