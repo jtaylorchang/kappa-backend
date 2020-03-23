@@ -5,6 +5,7 @@ import { oc } from 'optchain';
 import mongoConnector from 'utils/mongoConnector';
 import * as auth from 'utils/auth';
 import { getUser } from 'services/user';
+import sqlConnector from './sqlConnector';
 
 const httpHeaderAuthorizer = () => ({
   before: async (handler, next) => {
@@ -75,10 +76,10 @@ const errorHandler = () => ({
 });
 
 // add optional mongo
-const middyfy = (handler, { authorized = true, useMongo = true, useSql = true }, inputSchema) => {
+const middyfy = (handler, config = { authorized: true, useMongo: true, useSql: true }, inputSchema) => {
   const middleware = middy(handler).use(warmup());
 
-  if (useMongo) {
+  if (config.useMongo) {
     middleware.use(
       mongoConnector({
         databaseURI: process.env.MONGODB_URI
@@ -86,7 +87,15 @@ const middyfy = (handler, { authorized = true, useMongo = true, useSql = true },
     );
   }
 
-  if (useSql) {
+  if (config.useSql) {
+    middleware.use(
+      sqlConnector({
+        host: process.env.SQL_HOST,
+        database: process.env.SQL_DATABASE,
+        user: process.env.SQL_USERNAME,
+        password: process.env.SQL_PASSWORD
+      })
+    );
   }
 
   middleware
@@ -100,7 +109,7 @@ const middyfy = (handler, { authorized = true, useMongo = true, useSql = true },
     middleware.use(validator({ inputSchema }));
   }
 
-  if (authorized) {
+  if (config.authorized) {
     middleware.use(httpHeaderAuthorizer());
   }
 

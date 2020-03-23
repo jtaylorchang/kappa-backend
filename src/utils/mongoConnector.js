@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 
-const log = (shouldLog, ...args) => shouldLog && console.log(...args);
+import { log } from 'utils/log';
 
 export let db;
 
@@ -30,7 +30,9 @@ const mongoConnector = ({
   after: async () => {
     if (shouldClose) {
       log(shouldLog, '=> Closing MongoDB connection');
+
       await db?.close();
+      db = null;
     }
   }
 });
