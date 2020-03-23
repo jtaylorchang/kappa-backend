@@ -93,6 +93,15 @@ functions:
           method: POST
           cors: true
 
+  attendanceExcuse:
+    warmup: true
+    handler: src/routes/attendance/excuse.default
+    events:
+      - http:
+          path: excuse
+          method: POST
+          cors: true
+
   attendanceGetByUser:
     warmup: false
     handler: src/routes/attendance/get-by-user.default

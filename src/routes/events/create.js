@@ -8,7 +8,7 @@ import { createEvent } from 'services/event';
 
 const handler = async (event, context) => {
   if (!event.authorized || !event.user.privileged) {
-    throw new createHttpError.Unauthorized('Not authorized to create events');
+    throw new createHttpError.Unauthorized('Not authorized');
   }
 
   const ocEvent = oc(event.body.event, {
