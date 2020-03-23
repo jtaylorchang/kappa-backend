@@ -8,7 +8,7 @@ const handler = async (event, context) => {
     throw new createHttpError.Unauthorized('Not authorized to view events');
   }
 
-  const allEvents = await getAllEvents();
+  const allEvents = await getAllEvents(event.user.privileged);
 
   if (!allEvents.success) {
     throw new createHttpError.InternalServerError('Could not get events');

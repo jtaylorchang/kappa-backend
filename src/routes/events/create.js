@@ -12,31 +12,31 @@ const handler = async (event, context) => {
     throw new createHttpError.Unauthorized('Not authorized to create events');
   }
 
-  const ocBody = oc(event.body, {
+  const ocEvent = oc(event.body.event, {
     eventType: '',
     eventCode: uuidV4().substring(0, 6),
     mandatory: false,
     excusable: event.body.eventType === 'GM',
     title: '',
-    desc: '',
-    start: null,
+    description: '',
+    start: '',
     duration: 0
   });
 
-  if (ocBody.title === '' || !ocBody.start || ocBody.duration === 0) {
+  if (ocEvent.title === '' || ocEvent.start === '' || ocEvent.duration === 0) {
     throw new createHttpError.BadRequest('Missing required fields');
   }
 
   const newEvent = {
     creator: extractNetid(event.user.email),
-    eventType: ocBody.eventType,
-    eventCode: ocBody.eventCode,
-    mandatory: ocBody.mandatory,
-    excusable: ocBody.excusable,
-    title: ocBody.title,
-    desc: ocBody.desc,
-    start: ocBody.start,
-    duration: ocBody.duration
+    eventType: ocEvent.eventType,
+    eventCode: ocEvent.eventCode,
+    mandatory: ocEvent.mandatory,
+    excusable: ocEvent.excusable,
+    title: ocEvent.title,
+    description: ocEvent.description,
+    start: new Date(ocEvent.start),
+    duration: ocEvent.duration
   };
 
   const createdEvent = await createEvent(newEvent);

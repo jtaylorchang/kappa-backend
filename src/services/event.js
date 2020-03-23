@@ -1,17 +1,18 @@
 import { mysql } from 'utils/sqlConnector';
 import { pass, fail } from 'utils/res';
 
-export const getAllEvents = async () => {
+export const getAllEvents = async privileged => {
   try {
     const results = await mysql.query(
-      'SELECT creator, event_type, mandatory, excusable, title, description, start, duration FROM event'
+      privileged
+        ? 'SELECT * from event'
+        : 'SELECT creator, event_type, mandatory, excusable, title, description, start, duration FROM event'
     );
 
     return pass({
       events: results
     });
   } catch (error) {
-    console.log(error);
     return fail(error);
   }
 };
@@ -30,14 +31,14 @@ export const createEvent = async event => {
         event.mandatory,
         event.excusable,
         event.title,
-        event.desc,
+        event.description,
         event.start,
         event.duration
       ]
     );
 
     return pass({
-      event: results
+      event
     });
   } catch (error) {
     return fail(error);
