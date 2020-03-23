@@ -1,10 +1,10 @@
 import middyfy from 'middleware';
 import createHttpError from 'http-errors';
-import { v4 as uuidV4 } from 'uuid';
 
 import { oc } from 'optchain';
 import { extractNetid } from 'services/user';
 import { createEvent } from 'services/event';
+import { generateCode } from 'utils/auth';
 
 const handler = async (event, context) => {
   if (!event.authorized || !event.user.privileged) {
@@ -13,7 +13,7 @@ const handler = async (event, context) => {
 
   const ocEvent = oc(event.body.event, {
     eventType: '',
-    eventCode: uuidV4().substring(0, 6),
+    eventCode: generateCode(),
     mandatory: false,
     excusable: event.body.eventType === 'GM',
     title: '',

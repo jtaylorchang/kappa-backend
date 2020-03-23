@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
+import { v4 as uuidV4 } from 'uuid';
 
 import { DIRECTORY } from 'utils/dataSources';
 
@@ -29,6 +29,16 @@ export const verifyAndDecodeToken = token => {
   } catch (err) {
     return undefined;
   }
+};
+
+export const generateCode = () => {
+  let code = '';
+
+  while (code.length < 6) {
+    code += uuidV4().replace(/\D/g, '');
+  }
+
+  return code.substring(0, 6);
 };
 
 export const lookupEmail = async email => {
