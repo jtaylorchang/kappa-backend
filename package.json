@@ -11,6 +11,7 @@
     "jsonwebtoken": "^8.5.1",
     "middy": "^0.33.2",
     "mongodb": "^3.5.3",
+    "serverless-mysql": "^1.5.3",
     "serverless-stage-manager": "^1.0.5",
     "uuid": "^7.0.0"
   },
