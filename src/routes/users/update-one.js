@@ -39,5 +39,7 @@ const handler = async (event, context) => {
 };
 
 export default middyfy(handler, {
+  authorized: true,
+  useMongo: true,
   useSql: false
 });
