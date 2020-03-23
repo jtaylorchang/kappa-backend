@@ -129,9 +129,9 @@ functions:
           method: GET
           cors: true
 
-  attendanceApproveExcuse:
+  attendanceUpdateExcuse:
     warmup: false
-    handler: src/routes/excuse/approve.default
+    handler: src/routes/excuse/update-one.default
     events:
       - http:
           path: excuse
