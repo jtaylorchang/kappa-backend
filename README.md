@@ -139,21 +139,21 @@ POINT: {
 
 ## Routes
 
-| Route                           | Method | Request                              | Response                                                            | Privilege                      |
-| ------------------------------- | ------ | ------------------------------------ | ------------------------------------------------------------------- | ------------------------------ |
-| dev/users/login                 | POST   | email, id token                      | their user data and session token or error (bad cred or unapproved) | none                           |
-| dev/users/                      | GET    | session token                        | all users' data                                                     | any user                       |
-| dev/users/{email}               | PATCH  | session token, target user, changes  | updated user data or error                                          | target user or privileged user |
-| dev/events/                     | GET    | session token                        | all events (which data elements depends on privilege)               | any user                       |
-| dev/events/                     | POST   | session token, event details         | created event or error                                              | privileged user                |
-| dev/events/{eventId}            | PATCH  | session token, target event, changes | updated event data or error                                         | privileged user                |
-| dev/attendance                  | POST   | session token, event id, event code  | success or error                                                    | any user                       |
-| dev/attendance/users/{email}    | GET    | session token, target user           | all events attended or excused by target user                       | target user or privileged user |
-| dev/attendance/events/{eventId} | GET    | session token, target event          | attendance and excuses of all users for the target event            | privileged user                |
-| dev/excuse                      | GET    | session token                        | all excuses for all events                                          | privileged user                |
-| dev/excuse                      | POST   | session token, event id, reason      | success or error                                                    | any user                       |
-| dev/excuse                      | PATCH  | session token, event id, approval    | success or error                                                    | privileged user                |
-| dev/auto/roles                  | POST   | session token                        | success or error                                                    | privileged user                |
+| Route                           | Method | Request                              | Response                                                               | Privilege                      |
+| ------------------------------- | ------ | ------------------------------------ | ---------------------------------------------------------------------- | ------------------------------ |
+| dev/users/login                 | POST   | email, id token                      | their user data and session token or error (bad cred or unapproved)    | none                           |
+| dev/users/                      | GET    | session token                        | all users' data                                                        | any user                       |
+| dev/users/{email}               | PATCH  | session token, target user, changes  | updated user data or error                                             | target user or privileged user |
+| dev/events/                     | GET    | session token                        | all events (which data elements depends on privilege) and point values | any user                       |
+| dev/events/                     | POST   | session token, event details, points | created event or error                                                 | privileged user                |
+| dev/events/{eventId}            | PATCH  | session token, target event, changes | updated event data or error                                            | privileged user                |
+| dev/attendance                  | POST   | session token, event id, event code  | success or error                                                       | any user                       |
+| dev/attendance/users/{email}    | GET    | session token, target user           | all events attended or excused by target user and point aggregates     | target user or privileged user |
+| dev/attendance/events/{eventId} | GET    | session token, target event          | attendance and excuses of all users for the target event               | privileged user                |
+| dev/excuse                      | GET    | session token                        | all excuses for all events                                             | privileged user                |
+| dev/excuse                      | POST   | session token, event id, reason      | success or error                                                       | any user                       |
+| dev/excuse                      | PATCH  | session token, event id, approval    | success or error                                                       | privileged user                |
+| dev/auto/roles                  | POST   | session token                        | success or error                                                       | privileged user                |
 
 ## Optional Chaining
 
