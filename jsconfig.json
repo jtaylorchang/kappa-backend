@@ -6,7 +6,6 @@
     "module": "commonjs",
     "paths": {
       "middleware": ["src/utils/middleware"],
-      "optchain": ["src/utils/optchain"],
       "routes/*": ["src/routes/*"],
       "utils/*": ["src/utils/*"],
       "services/*": ["src/services/*"]
