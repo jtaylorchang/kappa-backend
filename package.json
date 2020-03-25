@@ -8,6 +8,7 @@
     "bcryptjs": "^2.4.3",
     "google-auth-library": "^5.10.1",
     "http-errors": "^1.7.3",
+    "js-optchain": "^1.0.3",
     "jsonwebtoken": "^8.5.1",
     "middy": "^0.33.2",
     "mongodb": "^3.5.3",

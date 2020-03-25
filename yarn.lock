@@ -4682,6 +4682,11 @@ jmespath@0.15.0:
   resolved "https://registry.yarnpkg.com/jmespath/-/jmespath-0.15.0.tgz#a3f222a9aae9f966f5d27c796510e28091764217"
   integrity sha1-o/Iiqarp+Wb10nx5ZRDigJF2Qhc=
 
+js-optchain@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/js-optchain/-/js-optchain-1.0.3.tgz#9ad29a2a1129cbe8ab65e02bd860d8575f373d07"
+  integrity sha512-U0WKJwnggRGnmCPxDTiqQWUA1pOGPkLhOHQigPZpMWfEFFXHpffigKypKP4Bi3AAOvb4wCf3G7rYSpPr0nmf2Q==
+
 js-string-escape@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/js-string-escape/-/js-string-escape-1.0.1.tgz#e2625badbc0d67c7533e9edc1068c587ae4137ef"
