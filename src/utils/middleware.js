@@ -1,7 +1,7 @@
 import middy from 'middy';
 import { warmup, httpHeaderNormalizer, jsonBodyParser, urlEncodeBodyParser, cors, validator } from 'middy/middlewares';
+import oc from 'js-optchain';
 
-import { oc } from 'optchain';
 import mongoConnector from 'utils/mongoConnector';
 import * as auth from 'utils/auth';
 import { getUser } from 'services/user';
@@ -113,10 +113,7 @@ const middyfy = (handler, config = { authorized: true, useMongo: true, useSql: t
     middleware.use(httpHeaderAuthorizer());
   }
 
-  middleware
-    .use(jsonBodyEncoder())
-    .use(errorHandler())
-    .use(cors());
+  middleware.use(jsonBodyEncoder()).use(errorHandler()).use(cors());
 
   return middleware;
 };

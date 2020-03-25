@@ -1,7 +1,7 @@
 import middyfy from 'middleware';
 import createHttpError from 'http-errors';
+import oc from 'js-optchain';
 
-import { oc } from 'optchain';
 import { extractNetid } from 'services/user';
 import { createEvent } from 'services/event';
 import { generateCode } from 'utils/auth';
