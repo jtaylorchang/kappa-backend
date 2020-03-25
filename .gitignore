@@ -5,3 +5,6 @@ jspm_packages
 # Serverless directories
 .serverless
 .webpack
+
+# secrets
+deploy.sh
