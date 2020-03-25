@@ -1,3 +1,6 @@
+org: thetatauwebchair
+app: ktt-backend
+
 service: ktt-backend
 
 provider:
@@ -18,16 +21,16 @@ provider:
     SQL_PASSWORD: ${file(./serverless-config/secrets.json):SQL_PASSWORD}
 
   iamRoleStatements:
-    - Effect: 'Allow'
+    - Effect: "Allow"
       Action:
-        - 'lambda:InvokeFunction'
-      Resource: '*'
+        - "lambda:InvokeFunction"
+      Resource: "*"
 
 package:
   individually: true
 
   exclude:
-    - 'README.md'
+    - "README.md"
 
 functions:
   usersLogin:
