@@ -1,7 +1,7 @@
 import middyfy from 'middleware';
 import createHttpError from 'http-errors';
 
-const handler = async (event, context) => {
+const _handler = async (event, context) => {
   if (!event.authorized) {
     throw new createHttpError.Unauthorized('Not authorized');
   }
@@ -16,7 +16,7 @@ const handler = async (event, context) => {
   };
 };
 
-export default middyfy(handler, {
+export const handler = middyfy(_handler, {
   authorized: true,
   useMongo: true,
   useSql: false

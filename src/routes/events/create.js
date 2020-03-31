@@ -6,7 +6,7 @@ import { extractNetid } from 'services/user';
 import { createEvent } from 'services/event';
 import { generateCode } from 'utils/auth';
 
-const handler = async (event, context) => {
+const _handler = async (event, context) => {
   if (!event.authorized || !event.user.privileged) {
     throw new createHttpError.Unauthorized('Not authorized');
   }
@@ -52,7 +52,7 @@ const handler = async (event, context) => {
   };
 };
 
-export default middyfy(handler, {
+export const handler = middyfy(_handler, {
   authorized: true,
   useMongo: true,
   useSql: true

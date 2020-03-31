@@ -1,6 +1,6 @@
 import middyfy from 'middleware';
 
-const handler = async (event, context) => {
+const _handler = async (event, context) => {
   return {
     statusCode: 200,
     body: {
@@ -9,4 +9,4 @@ const handler = async (event, context) => {
   };
 };
 
-export default middyfy(handler);
+export const handler = middyfy(_handler);

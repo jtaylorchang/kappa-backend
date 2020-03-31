@@ -5,7 +5,7 @@ import { verifyToken } from 'utils/google';
 import { getUser, createUser } from 'services/user';
 import createHttpError from 'http-errors';
 
-const handler = async (event, context) => {
+const _handler = async (event, context) => {
   const normalized = {
     email: event.body?.user?.email.trim().toLowerCase(),
     idToken: event.body?.idToken
@@ -76,7 +76,7 @@ const handler = async (event, context) => {
   };
 };
 
-export default middyfy(handler, {
+export const handler = middyfy(_handler, {
   authorized: false,
   useMongo: true,
   useSql: false

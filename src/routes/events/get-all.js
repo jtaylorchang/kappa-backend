@@ -3,7 +3,7 @@ import createHttpError from 'http-errors';
 
 import { getAllEvents } from 'services/event';
 
-const handler = async (event, context) => {
+const _handler = async (event, context) => {
   if (!event.authorized) {
     throw new createHttpError.Unauthorized('Not authorized to view events');
   }
@@ -22,7 +22,7 @@ const handler = async (event, context) => {
   };
 };
 
-export default middyfy(handler, {
+export const handler = middyfy(_handler, {
   authorized: true,
   useMongo: true,
   useSql: true

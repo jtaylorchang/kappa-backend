@@ -2,7 +2,7 @@ import middyfy from 'middleware';
 import createHttpError from 'http-errors';
 import { getUser, updateUser } from 'services/user';
 
-const handler = async (event, context) => {
+const _handler = async (event, context) => {
   const target = event.pathParameters?.target;
   const changes = event.body?.changes;
 
@@ -38,7 +38,7 @@ const handler = async (event, context) => {
   };
 };
 
-export default middyfy(handler, {
+export const handler = middyfy(_handler, {
   authorized: true,
   useMongo: true,
   useSql: false
