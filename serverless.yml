@@ -34,7 +34,7 @@ package:
 
 functions:
   usersLogin:
-    warmup: true
+    warmup: false
     handler: src/routes/users/login.default
     events:
       - http:
@@ -43,7 +43,7 @@ functions:
           cors: true
 
   usersGetAll:
-    warmup: true
+    warmup: false
     handler: src/routes/users/get-all.default
     events:
       - http:
@@ -52,7 +52,7 @@ functions:
           cors: true
 
   usersUpdateOne:
-    warmup: true
+    warmup: false
     handler: src/routes/users/update-one.default
     events:
       - http:
@@ -70,7 +70,7 @@ functions:
           cors: true
 
   eventsGetAll:
-    warmup: true
+    warmup: false
     handler: src/routes/events/get-all.default
     events:
       - http:
@@ -88,7 +88,7 @@ functions:
           cors: true
 
   attendanceAttend:
-    warmup: true
+    warmup: false
     handler: src/routes/attendance/attend.default
     events:
       - http:
