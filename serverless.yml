@@ -21,21 +21,21 @@ provider:
     SQL_PASSWORD: ${file(./serverless-config/secrets.json):SQL_PASSWORD}
 
   iamRoleStatements:
-    - Effect: "Allow"
+    - Effect: 'Allow'
       Action:
-        - "lambda:InvokeFunction"
-      Resource: "*"
+        - 'lambda:InvokeFunction'
+      Resource: '*'
 
 package:
   individually: true
 
   exclude:
-    - "README.md"
+    - 'README.md'
 
 functions:
   usersLogin:
     warmup: false
-    handler: src/routes/users/login.default
+    handler: src/routes/users/login.handler
     events:
       - http:
           path: users/login
@@ -44,7 +44,7 @@ functions:
 
   usersGetAll:
     warmup: false
-    handler: src/routes/users/get-all.default
+    handler: src/routes/users/get-all.handler
     events:
       - http:
           path: users
@@ -53,7 +53,7 @@ functions:
 
   usersUpdateOne:
     warmup: false
-    handler: src/routes/users/update-one.default
+    handler: src/routes/users/update-one.handler
     events:
       - http:
           path: users/{target}
@@ -62,7 +62,7 @@ functions:
 
   eventsCreate:
     warmup: false
-    handler: src/routes/events/create.default
+    handler: src/routes/events/create.handler
     events:
       - http:
           path: events
@@ -71,7 +71,7 @@ functions:
 
   eventsGetAll:
     warmup: false
-    handler: src/routes/events/get-all.default
+    handler: src/routes/events/get-all.handler
     events:
       - http:
           path: events
@@ -80,7 +80,7 @@ functions:
 
   eventsUpdateOne:
     warmup: false
-    handler: src/routes/events/update-one.default
+    handler: src/routes/events/update-one.handler
     events:
       - http:
           path: events/{target}
@@ -89,7 +89,7 @@ functions:
 
   attendanceAttend:
     warmup: false
-    handler: src/routes/attendance/attend.default
+    handler: src/routes/attendance/attend.handler
     events:
       - http:
           path: attendance
@@ -98,7 +98,7 @@ functions:
 
   attendanceGetByUser:
     warmup: false
-    handler: src/routes/attendance/get-by-user.default
+    handler: src/routes/attendance/get-by-user.handler
     events:
       - http:
           path: attendance/user/{target}
@@ -107,7 +107,7 @@ functions:
 
   attendanceGetByEvent:
     warmup: false
-    handler: src/routes/attendance/get-by-event.default
+    handler: src/routes/attendance/get-by-event.handler
     events:
       - http:
           path: attendance/event/{target}
@@ -116,7 +116,7 @@ functions:
 
   attendanceExcuse:
     warmup: false
-    handler: src/routes/excuse/excuse.default
+    handler: src/routes/excuse/excuse.handler
     events:
       - http:
           path: excuse
@@ -125,7 +125,7 @@ functions:
 
   attendanceGetExcuses:
     warmup: false
-    handler: src/routes/excuse/get-all.default
+    handler: src/routes/excuse/get-all.handler
     events:
       - http:
           path: excuse
@@ -134,7 +134,7 @@ functions:
 
   attendanceUpdateExcuse:
     warmup: false
-    handler: src/routes/excuse/update-one.default
+    handler: src/routes/excuse/update-one.handler
     events:
       - http:
           path: excuse
@@ -143,7 +143,7 @@ functions:
 
   admin-override:
     warmup: false
-    handler: src/routes/admin-override/handler.default
+    handler: src/routes/admin-override/handler.handler
     events:
       - http:
           path: admin-override
@@ -152,7 +152,7 @@ functions:
 
   autoUpdateRoles:
     warmup: false
-    handler: src/routes/auto/update-roles.default
+    handler: src/routes/auto/update-roles.handler
     events:
       - http:
           path: auto/roles
