@@ -33,7 +33,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "scripts": {
-    "offline": "source ./offline.sh && serverless offline start --skipCacheInvalidation",
+    "offline": "source ./offline.sh && serverless offline start",
     "deploy": "source ./deploy.sh && sls deploy --aws-profile theta-tau"
   },
   "prettier": {
