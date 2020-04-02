@@ -2,12 +2,12 @@ import { mysql } from 'utils/sqlConnector';
 import { pass, fail } from 'utils/res';
 import { extractNetid } from './user';
 
-export const getAllEvents = async user => {
+export const getAllEvents = async (user) => {
   try {
     const results = await mysql.query(
       `SELECT ${
         user.privileged ? '*' : 'id, creator, eventType, mandatory, excusable, title, description, start, duration'
-      } FROM event`
+      } FROM event ORDER BY start`
     );
 
     return pass({
@@ -18,7 +18,7 @@ export const getAllEvents = async user => {
   }
 };
 
-export const createEvent = async event => {
+export const createEvent = async (event) => {
   try {
     const results = await mysql.query(
       'INSERT INTO event' +
@@ -46,7 +46,7 @@ export const createEvent = async event => {
   }
 };
 
-export const getAttendanceByEvent = async event => {
+export const getAttendanceByEvent = async (event) => {
   try {
     const attended = await mysql.query('SELECT * FROM attendance WHERE eventId = ?', [event.id]);
 
@@ -61,7 +61,7 @@ export const getAttendanceByEvent = async event => {
   }
 };
 
-export const getAttendanceByUser = async user => {
+export const getAttendanceByUser = async (user) => {
   try {
     const attended = await mysql.query('SELECT * FROM attendance WHERE netid = ?', [extractNetid(user)]);
 
@@ -76,7 +76,7 @@ export const getAttendanceByUser = async user => {
   }
 };
 
-export const createAttendance = async attendance => {
+export const createAttendance = async (attendance) => {
   try {
     const results = await mysql.query('INSERT INTO attendance (eventId, netid) VALUES (?, ?)', [
       attendance.eventId,
@@ -91,7 +91,7 @@ export const createAttendance = async attendance => {
   }
 };
 
-export const createExcuse = async excuse => {
+export const createExcuse = async (excuse) => {
   try {
     const results = await mysql.query('INSERT INTO excuse (eventId, netid, reason, approved) VALUES (?, ?)', [
       excuse.eventId,
@@ -108,7 +108,7 @@ export const createExcuse = async excuse => {
   }
 };
 
-export const approveExcuse = async excuse => {
+export const approveExcuse = async (excuse) => {
   try {
     const results = await mysql.query('UPDATE excuse SET approved = ? WHERE eventId = ? AND netid = ?', [
       true,
@@ -127,7 +127,7 @@ export const approveExcuse = async excuse => {
   }
 };
 
-export const rejectExcuse = async excuse => {
+export const rejectExcuse = async (excuse) => {
   try {
     const results = await mysql.query('DELETE FROM excuse WHERE eventId = ? AND netid = ?', [
       excuse.eventId,
@@ -138,7 +138,7 @@ export const rejectExcuse = async excuse => {
   }
 };
 
-export const createPoint = async point => {
+export const createPoint = async (point) => {
   try {
     const results = await mysql.query('INSERT INTO point (eventId, category, count) VALUES (?, ?, ?)', [
       point.eventId,
@@ -154,7 +154,7 @@ export const createPoint = async point => {
   }
 };
 
-export const editPoint = async point => {
+export const editPoint = async (point) => {
   try {
     const results = await mysql.query('UPDATE point SET category = ?, count = ? WHERE eventId = ?', [
       point.category,
