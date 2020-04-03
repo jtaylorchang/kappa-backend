@@ -8,11 +8,7 @@ export const getAllEvents = async (user) => {
       `SELECT ${
         user.privileged
           ? '*'
-          : `id, creator, event_type, mandatory, excusable, title, description, start, duration, location, (${`SELECT * FROM attendance WHERE event_id = id AND netid = ${extractNetid(
-              user
-            )}`}) AS attendance, (${`SELECT * FROM excuse WHERE event_id = id AND netid = ${extractNetid(
-              user
-            )}`}) AS excuse`
+          : 'id, creator, event_type, mandatory, excusable, title, description, start, duration, location'
       } FROM event ORDER BY start`
     );
 
@@ -20,6 +16,7 @@ export const getAllEvents = async (user) => {
       events: results
     });
   } catch (error) {
+    console.log(error);
     return fail(error);
   }
 };
@@ -70,14 +67,38 @@ export const getAttendanceByEvent = async (event) => {
 
 export const getAttendanceByUser = async (user) => {
   try {
-    const attended = await mysql.query('SELECT * FROM attendance WHERE netid = ?', [extractNetid(user)]);
+    const attended = await mysql.query('SELECT * FROM attendance WHERE netid = ?', [extractNetid(user.email)]);
 
-    const excused = await mysql.query('SELECT * FROM excuse WHERE approved = 1 AND netid = ?', [extractNetid(user)]);
+    const excused = await mysql.query('SELECT * FROM excuse WHERE approved = 1 AND netid = ?', [
+      extractNetid(user.email)
+    ]);
 
     return pass({
       attended,
       excused
     });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
+export const verifyAttendanceCode = async (event) => {
+  try {
+    const matchingEvent = await mysql.query('SELECT * FROM event WHERE id = ?', [event.eventId]);
+
+    if (!matchingEvent) {
+      return fail({
+        message: 'Event not found'
+      });
+    }
+
+    if (matchingEvent[0].event_code !== event.eventCode) {
+      return fail({
+        message: 'Invalid code'
+      });
+    }
+
+    return pass();
   } catch (error) {
     return fail(error);
   }

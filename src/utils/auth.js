@@ -6,11 +6,11 @@ import { DIRECTORY } from 'utils/dataSources';
 const BEARER_OFFSET = 7;
 const SALT_ROUNDS = 10;
 
-export const extractToken = bearer => {
+export const extractToken = (bearer) => {
   return bearer.substring(BEARER_OFFSET);
 };
 
-export const generateToken = email => {
+export const generateToken = (email) => {
   return jwt.sign(
     {
       email
@@ -22,7 +22,7 @@ export const generateToken = email => {
   );
 };
 
-export const verifyAndDecodeToken = token => {
+export const verifyAndDecodeToken = (token) => {
   try {
     // @ts-ignore
     return jwt.verify(token, process.env.AUTH_SECRET).email;
@@ -41,7 +41,7 @@ export const generateCode = () => {
   return code.substring(0, 6);
 };
 
-export const lookupEmail = async email => {
+export const lookupEmail = async (email) => {
   if (!email || email?.indexOf('@') == -1) {
     return {
       success: false,
