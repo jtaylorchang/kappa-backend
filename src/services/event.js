@@ -86,7 +86,7 @@ export const verifyAttendanceCode = async (event) => {
   try {
     const matchingEvent = await mysql.query('SELECT * FROM event WHERE id = ?', [event.eventId]);
 
-    if (!matchingEvent) {
+    if (matchingEvent.length === 0) {
       return fail({
         message: 'Event not found'
       });
