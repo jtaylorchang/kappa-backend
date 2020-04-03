@@ -8,7 +8,11 @@ export const getAllEvents = async (user) => {
       `SELECT ${
         user.privileged
           ? '*'
-          : 'id, creator, eventType, mandatory, excusable, title, description, start, duration, location'
+          : `id, creator, event_type, mandatory, excusable, title, description, start, duration, location, (${`SELECT * FROM attendance WHERE event_id = id AND netid = ${extractNetid(
+              user
+            )}`}) AS attendance, (${`SELECT * FROM excuse WHERE event_id = id AND netid = ${extractNetid(
+              user
+            )}`}) AS excuse`
       } FROM event ORDER BY start`
     );
 
@@ -24,9 +28,9 @@ export const createEvent = async (event) => {
   try {
     const results = await mysql.query(
       'INSERT INTO event' +
-        ' (creator, eventType, eventCode, mandatory, excusable, title, description, start, duration, location)' +
+        ' (creator, event_type, event_code, mandatory, excusable, title, description, start, duration, location)' +
         ' VALUES' +
-        ' (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        ' (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [
         event.creator,
         event.eventType,
@@ -51,9 +55,9 @@ export const createEvent = async (event) => {
 
 export const getAttendanceByEvent = async (event) => {
   try {
-    const attended = await mysql.query('SELECT * FROM attendance WHERE eventId = ?', [event.id]);
+    const attended = await mysql.query('SELECT * FROM attendance WHERE event_id = ?', [event.id]);
 
-    const excused = await mysql.query('SELECT * FROM excuse WHERE approved = 1 AND eventId = ?', [event.id]);
+    const excused = await mysql.query('SELECT * FROM excuse WHERE approved = 1 AND event_id = ?', [event.id]);
 
     return pass({
       attended,
@@ -81,7 +85,7 @@ export const getAttendanceByUser = async (user) => {
 
 export const createAttendance = async (attendance) => {
   try {
-    const results = await mysql.query('INSERT INTO attendance (eventId, netid) VALUES (?, ?)', [
+    const results = await mysql.query('INSERT INTO attendance (event_id, netid) VALUES (?, ?)', [
       attendance.eventId,
       attendance.netid
     ]);
@@ -96,7 +100,7 @@ export const createAttendance = async (attendance) => {
 
 export const createExcuse = async (excuse) => {
   try {
-    const results = await mysql.query('INSERT INTO excuse (eventId, netid, reason, approved) VALUES (?, ?)', [
+    const results = await mysql.query('INSERT INTO excuse (event_id, netid, reason, approved) VALUES (?, ?)', [
       excuse.eventId,
       excuse.netid,
       excuse.reason,
@@ -113,7 +117,7 @@ export const createExcuse = async (excuse) => {
 
 export const approveExcuse = async (excuse) => {
   try {
-    const results = await mysql.query('UPDATE excuse SET approved = ? WHERE eventId = ? AND netid = ?', [
+    const results = await mysql.query('UPDATE excuse SET approved = ? WHERE event_id = ? AND netid = ?', [
       true,
       excuse.eventId,
       excuse.netid
@@ -132,7 +136,7 @@ export const approveExcuse = async (excuse) => {
 
 export const rejectExcuse = async (excuse) => {
   try {
-    const results = await mysql.query('DELETE FROM excuse WHERE eventId = ? AND netid = ?', [
+    const results = await mysql.query('DELETE FROM excuse WHERE event_id = ? AND netid = ?', [
       excuse.eventId,
       excuse.netid
     ]);
@@ -143,7 +147,7 @@ export const rejectExcuse = async (excuse) => {
 
 export const createPoint = async (point) => {
   try {
-    const results = await mysql.query('INSERT INTO point (eventId, category, count) VALUES (?, ?, ?)', [
+    const results = await mysql.query('INSERT INTO point (event_id, category, count) VALUES (?, ?, ?)', [
       point.eventId,
       point.category,
       point.count
@@ -159,7 +163,7 @@ export const createPoint = async (point) => {
 
 export const editPoint = async (point) => {
   try {
-    const results = await mysql.query('UPDATE point SET category = ?, count = ? WHERE eventId = ?', [
+    const results = await mysql.query('UPDATE point SET category = ?, count = ? WHERE event_id = ?', [
       point.category,
       point.count,
       point.eventId
