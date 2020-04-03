@@ -65,13 +65,11 @@ export const getAttendanceByEvent = async (event) => {
   }
 };
 
-export const getAttendanceByUser = async (user) => {
+export const getAttendanceByUser = async (email) => {
   try {
-    const attended = await mysql.query('SELECT * FROM attendance WHERE netid = ?', [extractNetid(user.email)]);
+    const attended = await mysql.query('SELECT * FROM attendance WHERE netid = ?', [extractNetid(email)]);
 
-    const excused = await mysql.query('SELECT * FROM excuse WHERE approved = 1 AND netid = ?', [
-      extractNetid(user.email)
-    ]);
+    const excused = await mysql.query('SELECT * FROM excuse WHERE approved = 1 AND netid = ?', [extractNetid(email)]);
 
     return pass({
       attended,
