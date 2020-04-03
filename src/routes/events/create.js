@@ -19,7 +19,8 @@ const _handler = async (event, context) => {
     title: '',
     description: '',
     start: '',
-    duration: 0
+    duration: 0,
+    location: ''
   });
 
   if (ocEvent.title === '' || ocEvent.start === '' || ocEvent.duration === 0) {
@@ -35,7 +36,8 @@ const _handler = async (event, context) => {
     title: ocEvent.title,
     description: ocEvent.description,
     start: new Date(ocEvent.start),
-    duration: ocEvent.duration
+    duration: ocEvent.duration,
+    location: ocEvent.location
   };
 
   const createdEvent = await createEvent(newEvent);

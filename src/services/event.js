@@ -6,7 +6,9 @@ export const getAllEvents = async (user) => {
   try {
     const results = await mysql.query(
       `SELECT ${
-        user.privileged ? '*' : 'id, creator, eventType, mandatory, excusable, title, description, start, duration'
+        user.privileged
+          ? '*'
+          : 'id, creator, eventType, mandatory, excusable, title, description, start, duration, location'
       } FROM event ORDER BY start`
     );
 
@@ -22,7 +24,7 @@ export const createEvent = async (event) => {
   try {
     const results = await mysql.query(
       'INSERT INTO event' +
-        ' (creator, eventType, eventCode, mandatory, excusable, title, description, start, duration)' +
+        ' (creator, eventType, eventCode, mandatory, excusable, title, description, start, duration, location)' +
         ' VALUES' +
         ' (?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [
@@ -34,7 +36,8 @@ export const createEvent = async (event) => {
         event.title,
         event.description,
         event.start,
-        event.duration
+        event.duration,
+        event.location
       ]
     );
 
