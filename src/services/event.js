@@ -30,8 +30,8 @@ export const createEvent = async (event) => {
         ' (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [
         event.creator,
-        event.eventType,
-        event.eventCode,
+        event.event_type,
+        event.event_code,
         event.mandatory,
         event.excusable,
         event.title,
@@ -84,7 +84,7 @@ export const getAttendanceByUser = async (user) => {
 
 export const verifyAttendanceCode = async (event) => {
   try {
-    const matchingEvent = await mysql.query('SELECT * FROM event WHERE id = ?', [event.eventId]);
+    const matchingEvent = await mysql.query('SELECT * FROM event WHERE id = ?', [event.event_id]);
 
     if (matchingEvent.length === 0) {
       return fail({
@@ -92,7 +92,7 @@ export const verifyAttendanceCode = async (event) => {
       });
     }
 
-    if (matchingEvent[0].event_code !== event.eventCode) {
+    if (matchingEvent[0].event_code !== event.event_code) {
       return fail({
         message: 'Invalid code'
       });
@@ -107,7 +107,7 @@ export const verifyAttendanceCode = async (event) => {
 export const createAttendance = async (attendance) => {
   try {
     const results = await mysql.query('INSERT INTO attendance (event_id, netid) VALUES (?, ?)', [
-      attendance.eventId,
+      attendance.event_id,
       attendance.netid
     ]);
 
@@ -122,7 +122,7 @@ export const createAttendance = async (attendance) => {
 export const createExcuse = async (excuse) => {
   try {
     const results = await mysql.query('INSERT INTO excuse (event_id, netid, reason, approved) VALUES (?, ?)', [
-      excuse.eventId,
+      excuse.event_id,
       excuse.netid,
       excuse.reason,
       false
@@ -140,7 +140,7 @@ export const approveExcuse = async (excuse) => {
   try {
     const results = await mysql.query('UPDATE excuse SET approved = ? WHERE event_id = ? AND netid = ?', [
       true,
-      excuse.eventId,
+      excuse.event_id,
       excuse.netid
     ]);
 
@@ -158,7 +158,7 @@ export const approveExcuse = async (excuse) => {
 export const rejectExcuse = async (excuse) => {
   try {
     const results = await mysql.query('DELETE FROM excuse WHERE event_id = ? AND netid = ?', [
-      excuse.eventId,
+      excuse.event_id,
       excuse.netid
     ]);
   } catch (error) {
@@ -169,7 +169,7 @@ export const rejectExcuse = async (excuse) => {
 export const createPoint = async (point) => {
   try {
     const results = await mysql.query('INSERT INTO point (event_id, category, count) VALUES (?, ?, ?)', [
-      point.eventId,
+      point.event_id,
       point.category,
       point.count
     ]);
@@ -187,7 +187,7 @@ export const editPoint = async (point) => {
     const results = await mysql.query('UPDATE point SET category = ?, count = ? WHERE event_id = ?', [
       point.category,
       point.count,
-      point.eventId
+      point.event_id
     ]);
 
     return pass({

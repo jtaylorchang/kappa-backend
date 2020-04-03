@@ -12,10 +12,10 @@ const _handler = async (event, context) => {
   }
 
   const ocEvent = oc(event.body.event, {
-    eventType: '',
-    eventCode: generateCode(),
+    event_type: '',
+    event_code: generateCode(),
     mandatory: false,
-    excusable: event.body.eventType === 'GM',
+    excusable: event.body.event_type === 'GM',
     title: '',
     description: '',
     start: '',
@@ -29,8 +29,8 @@ const _handler = async (event, context) => {
 
   const newEvent = {
     creator: extractNetid(event.user.email),
-    eventType: ocEvent.eventType,
-    eventCode: ocEvent.eventCode,
+    event_type: ocEvent.event_type,
+    event_code: ocEvent.event_code,
     mandatory: ocEvent.mandatory,
     excusable: ocEvent.excusable,
     title: ocEvent.title,

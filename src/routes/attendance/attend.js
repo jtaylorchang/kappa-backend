@@ -11,11 +11,11 @@ const _handler = async (event, context) => {
   }
 
   const ocBody = oc(event.body, {
-    eventId: '',
-    eventCode: ''
+    event_id: '',
+    event_code: ''
   });
 
-  if (ocBody.eventId === '' || ocBody.eventCode === '') {
+  if (ocBody.event_id === '' || ocBody.event_code === '') {
     throw new createHttpError.BadRequest('Missing required fields');
   }
 
@@ -26,7 +26,7 @@ const _handler = async (event, context) => {
   }
 
   const createdAttendance = await createAttendance({
-    eventId: ocBody.eventId,
+    event_id: ocBody.event_id,
     netid: extractNetid(event.user.email)
   });
 
