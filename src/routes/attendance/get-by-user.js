@@ -10,7 +10,9 @@ const _handler = async (event, context) => {
     throw new createHttpError.Unauthorized('Not authorized');
   }
 
-  const attendance = await getAttendanceByUser(target);
+  const attendance = await getAttendanceByUser({
+    email: target
+  });
 
   if (!attendance.success) {
     throw new createHttpError.InternalServerError('Could not get attendance');

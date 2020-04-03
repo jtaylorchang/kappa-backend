@@ -1,17 +1,27 @@
 import middyfy from 'middleware';
 import createHttpError from 'http-errors';
 
+import { getAttendanceByEvent } from 'services/event';
+
 const _handler = async (event, context) => {
+  const target = event.pathParameters?.target;
+
   if (!event.authorized || !event.user.privileged) {
     throw new createHttpError.Unauthorized('Not authorized');
   }
 
-  // TODO
+  const attendance = await getAttendanceByEvent({
+    id: target
+  });
+
+  if (!attendance.success) {
+    throw new createHttpError.InternalServerError('Could not get attendance');
+  }
 
   return {
     statusCode: 200,
     body: {
-      message: 'Hello World'
+      ...attendance
     }
   };
 };
