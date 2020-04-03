@@ -58,13 +58,15 @@ const jsonBodyEncoder = () => ({
 const errorHandler = () => ({
   onError: (handler, next) => {
     if (handler.error.statusCode && handler.error.message) {
-      console.log(handler.error);
+      console.log(handler.error); // TODO: remove
 
       handler.response = {
         statusCode: handler.error.statusCode,
         body: JSON.stringify({
-          message: handler.error.message,
-          details: handler.error.details
+          error: {
+            message: handler.error.message,
+            details: handler.error.details
+          }
         })
       };
 
