@@ -1,17 +1,23 @@
 import middyfy from 'middleware';
 import createHttpError from 'http-errors';
 
+import { getAllUsers } from 'services/user';
+
 const _handler = async (event, context) => {
   if (!event.authorized) {
     throw new createHttpError.Unauthorized('Not authorized');
   }
 
-  // TODO
+  const foundUsers = await getAllUsers();
+
+  if (!foundUsers.success) {
+    throw new createHttpError.InternalServerError('Could not connect to database');
+  }
 
   return {
     statusCode: 200,
     body: {
-      message: 'Hello World'
+      users: foundUsers.data.users
     }
   };
 };

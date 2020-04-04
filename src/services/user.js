@@ -2,7 +2,7 @@ import { db } from 'utils/mongoConnector';
 import { projectChanges } from './mongoHelper';
 import { pass, fail } from 'utils/res';
 
-export const getUser = async email => {
+export const getUser = async (email) => {
   try {
     const collection = db.collection('users');
 
@@ -18,7 +18,21 @@ export const getUser = async email => {
   }
 };
 
-export const createUser = async user => {
+export const getAllUsers = async () => {
+  try {
+    const collection = db.collection('users');
+
+    const res = await collection.find({}).toArray();
+
+    return pass({
+      users: res
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
+export const createUser = async (user) => {
   try {
     const collection = db.collection('users');
 
@@ -68,6 +82,6 @@ export const updateUser = async (email, changes) => {
   }
 };
 
-export const extractNetid = email => {
+export const extractNetid = (email) => {
   return email.substring(0, email.indexOf('@'));
 };
