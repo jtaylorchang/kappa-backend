@@ -2,6 +2,8 @@ import { mysql } from 'utils/sqlConnector';
 import { pass, fail } from 'utils/res';
 import { extractNetid } from './user';
 
+export const POINT_CATEGORIES = ['BRO', 'RUSH', 'PROF', 'PHIL', 'ANY'];
+
 export const getAllEvents = async (user) => {
   try {
     const results = await mysql.query(
