@@ -11,7 +11,7 @@ export const getAllEvents = async (user) => {
         user.privileged
           ? '*'
           : 'id, creator, event_type, mandatory, excusable, title, description, start, duration, location'
-      } FROM event ORDER BY start`
+      }, (SELECT GROUP_CONCAT(category, ':', count) FROM point WHERE event_id = id GROUP BY event_id) as points FROM event ORDER BY start`
     );
 
     return pass({
