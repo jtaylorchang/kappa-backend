@@ -147,6 +147,7 @@ POINT: {
 | dev/events/                      | GET    | session token                        | all events (which data elements depends on privilege) and points    | any user                       |
 | dev/events/                      | POST   | session token, event details, points | created event or error                                              | privileged user                |
 | dev/events/{event_id}            | PATCH  | session token, target event, changes | updated event data and/or points or error                           | privileged user                |
+| dev/events/{event_id}            | DELETE | session token, target event          | deleted event or error                                              | privileged user                |
 | dev/attendance                   | POST   | session token, event id, event code  | success or error                                                    | any user                       |
 | dev/attendance/users/{email}     | GET    | session token, target user           | all events attended or excused by target user and point aggregates  | target user or privileged user |
 | dev/attendance/events/{event_id} | GET    | session token, target event          | attendance and excuses of all users for the target event            | privileged user                |

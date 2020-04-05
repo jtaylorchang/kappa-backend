@@ -57,6 +57,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not update event');
   }
 
+  updatedEvent.points = null;
+
   if (ocBody.points.length > 0) {
     for (const point of ocBody.points) {
       const normalPoint = {
@@ -77,7 +79,7 @@ const _handler = async (event, context) => {
           });
 
           if (updatedPoint.success) {
-            if (!changedEvent.hasOwnProperty('points')) {
+            if (changedEvent.points === null) {
               changedEvent.points = `${normalPoint.category}:${normalPoint.count}`;
             } else {
               changedEvent.points += `,${normalPoint.category}:${normalPoint.count}`;
