@@ -121,11 +121,11 @@ export const createAttendance = async (attendance) => {
 
 export const createExcuse = async (excuse) => {
   try {
-    const results = await mysql.query('INSERT INTO excuse (event_id, netid, reason, approved) VALUES (?, ?)', [
+    const results = await mysql.query('INSERT INTO excuse (event_id, netid, reason, approved) VALUES (?, ?, ?, ?)', [
       excuse.event_id,
       excuse.netid,
       excuse.reason,
-      false
+      0
     ]);
 
     return pass({
@@ -151,7 +151,7 @@ export const getPendingExcuses = async () => {
 export const approveExcuse = async (excuse) => {
   try {
     const results = await mysql.query('UPDATE excuse SET approved = ? WHERE event_id = ? AND netid = ?', [
-      true,
+      1,
       excuse.event_id,
       excuse.netid
     ]);
