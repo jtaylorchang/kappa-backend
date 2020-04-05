@@ -4,9 +4,19 @@ import { getUser, updateUser } from 'services/user';
 
 const _handler = async (event, context) => {
   const target = event.pathParameters?.target;
-  const changes = event.body?.changes;
+  const changes = event.body?.changes || {};
 
-  if (!changes) {
+  let partialChanges = {};
+
+  if (changes.hasOwnProperty('phone') && changes.phone.constructor === String) {
+    partialChanges.phone = changes.phone;
+  }
+
+  if (changes.hasOwnProperty('gradYear') && changes.gradYear.constructor === String) {
+    partialChanges.gradYear = changes.gradYear;
+  }
+
+  if (!partialChanges.hasOwnProperty('phone') && !partialChanges.hasOwnProperty('gradYear')) {
     throw new createHttpError.BadRequest('Invalid format');
   }
 
