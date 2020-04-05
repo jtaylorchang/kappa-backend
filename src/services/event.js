@@ -52,6 +52,44 @@ export const createEvent = async (event) => {
   }
 };
 
+export const updateEvent = async (event) => {
+  try {
+    const results = await mysql.query(
+      'UPDATE event SET event_type = ?, event_code = ?, mandatory = ?, excusable = ?, title = ?, description = ?, start = ?, duration = ?, location = ? WHERE id = ?',
+      [
+        event.event_type,
+        event.event_code,
+        event.mandatory,
+        event.excusable,
+        event.title,
+        event.description,
+        event.start,
+        event.duration,
+        event.location,
+        event.id
+      ]
+    );
+
+    return pass({
+      event
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
+export const deleteEvent = async (event) => {
+  try {
+    const results = await mysql.query('DELETE FROM event WHERE id = ?', [event.id]);
+
+    return pass({
+      event
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
 export const getAttendanceByEvent = async (event) => {
   try {
     const attended = await mysql.query('SELECT * FROM attendance WHERE event_id = ?', [event.id]);
