@@ -27,10 +27,11 @@ export const createEvent = async (event) => {
   try {
     const results = await mysql.query(
       'INSERT INTO event' +
-        ' (creator, event_type, event_code, mandatory, excusable, title, description, start, duration, location)' +
+        ' (id, creator, event_type, event_code, mandatory, excusable, title, description, start, duration, location)' +
         ' VALUES' +
-        ' (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        ' (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [
+        event.id,
         event.creator,
         event.event_type,
         event.event_code,
@@ -180,6 +181,7 @@ export const createPoint = async (point) => {
       point
     });
   } catch (error) {
+    console.log(error);
     return fail(error);
   }
 };

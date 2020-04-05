@@ -1,5 +1,6 @@
 import middyfy from 'middleware';
 import createHttpError from 'http-errors';
+import { v4 as uuidV4 } from 'uuid';
 import oc from 'js-optchain';
 
 import { extractNetid } from 'services/user';
@@ -31,6 +32,7 @@ const _handler = async (event, context) => {
   }
 
   const newEvent = {
+    id: uuidV4(),
     creator: extractNetid(event.user.email),
     event_type: ocBody.event.event_type,
     event_code: ocBody.event.event_code,
@@ -49,7 +51,7 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not create event');
   }
 
-  if (ocBody.points.length > 0 && createdEvent.data.event.event_id.length > 0) {
+  if (ocBody.points.length > 0 && createdEvent.data.event.id.length > 0) {
     for (const point of ocBody.points) {
       const normalPoint = {
         category: point.category.toUpperCase(),
@@ -59,7 +61,7 @@ const _handler = async (event, context) => {
       // should use a transaction to couple with event creation
       if (POINT_CATEGORIES.includes(normalPoint.category)) {
         const createdPoint = await createPoint({
-          event_id: createdEvent.data.event.event_id,
+          event_id: createdEvent.data.event.id,
           ...normalPoint
         });
       }
