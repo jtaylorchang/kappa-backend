@@ -158,3 +158,46 @@ POINT: {
 ## Optional Chaining
 
 **Note**: this project uses my custom Optional Chaining util, see: https://github.com/jtaylorchang/js-optchain
+
+## DDL
+
+```SQL
+CREATE TABLE `event` (
+  `id` varchar(36) NOT NULL DEFAULT '',
+  `creator` varchar(16) NOT NULL DEFAULT '',
+  `event_type` varchar(16) DEFAULT NULL,
+  `event_code` varchar(6) DEFAULT NULL,
+  `mandatory` tinyint(1) DEFAULT NULL,
+  `excusable` tinyint(1) DEFAULT NULL,
+  `title` varchar(32) DEFAULT '',
+  `description` varchar(256) DEFAULT '',
+  `start` datetime DEFAULT NULL,
+  `duration` int(11) DEFAULT NULL,
+  `location` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `attendance` (
+  `event_id` varchar(36) NOT NULL DEFAULT '',
+  `netid` varchar(16) NOT NULL DEFAULT '',
+  PRIMARY KEY (`event_id`,`netid`),
+  CONSTRAINT `attendance_event_id` FOREIGN KEY (`event_id`) REFERENCES `event` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `excuse` (
+  `event_id` varchar(36) NOT NULL DEFAULT '',
+  `netid` varchar(16) NOT NULL DEFAULT '',
+  `reason` varchar(128) NOT NULL DEFAULT '',
+  `approved` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`event_id`,`netid`),
+  CONSTRAINT `excuse_event_id` FOREIGN KEY (`event_id`) REFERENCES `event` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `point` (
+  `event_id` varchar(36) NOT NULL DEFAULT '',
+  `category` varchar(16) NOT NULL DEFAULT '',
+  `count` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`event_id`,`category`),
+  CONSTRAINT `point_event_id` FOREIGN KEY (`event_id`) REFERENCES `event` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
