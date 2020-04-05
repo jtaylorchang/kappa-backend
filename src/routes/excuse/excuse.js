@@ -35,10 +35,12 @@ const _handler = async (event, context) => {
   return {
     statusCode: 200,
     body: {
-      excuse: {
-        ...newExcuse,
-        approved: 0
-      }
+      excused: [
+        {
+          ...newExcuse,
+          approved: 0
+        }
+      ]
     }
   };
 };

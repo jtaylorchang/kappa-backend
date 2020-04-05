@@ -42,7 +42,7 @@ const _handler = async (event, context) => {
   return {
     statusCode: 200,
     body: {
-      excuse: ocBody.excuse.approved === 1 ? ocBody.excuse : {}
+      excuse: ocBody.excuse.approved === 1 ? ocBody.excuse : null
     }
   };
 };

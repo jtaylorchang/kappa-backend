@@ -17,7 +17,7 @@ const _handler = async (event, context) => {
   return {
     statusCode: 200,
     body: {
-      excuses: allExcuses.data?.excuses
+      excused: allExcuses.data?.excuses
     }
   };
 };
