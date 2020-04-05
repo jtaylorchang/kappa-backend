@@ -87,8 +87,8 @@ USER: {
 }
 
 EVENT: {
-  id: INT,              // the unique auto-incremented id for the event upon creation
-                        // => 2
+  id: STRING,           // the cryptographically strong unique id for the event created
+                        // => 111ce678-6929-480c-964b-7cf355f7d282
   creator: STRING,      // the netid of the power-user responsible for creating the event
                         // => jjt4
   event_type: STRING,   // the category type of the event
@@ -110,15 +110,15 @@ EVENT: {
 }
 
 ATTENDANCE: {
-  event_id: INT,        // the foreign key to an event
-                        // => 2
+  event_id: STRING,     // the foreign key to an event
+                        // => 111ce678-6929-480c-964b-7cf355f7d282
   netid: STRING         // the netid of the user who attended
                         // => jjt4
 }
 
 EXCUSE: {
-  event_id: INT,        // the foreign key to an event
-                        // => 2
+  event_id: STRING,     // the foreign key to an event
+                        // => 111ce678-6929-480c-964b-7cf355f7d282
   netid: STRING,        // the netid of the user who requested an excuse
                         // => jjt4
   reason: STRING,       // the reason for the request
@@ -128,8 +128,8 @@ EXCUSE: {
 }
 
 POINT: {
-  event_id: INT,        // the foreign key to an event
-                        // => 7
+  event_id: STRING,     // the foreign key to an event
+                        // => 111ce678-6929-480c-964b-7cf355f7d282
   category: STRING,     // the category the points are valid for
                         // => Rush
   count: INT            // the number of points the event is worth
