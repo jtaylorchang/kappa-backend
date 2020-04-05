@@ -6,6 +6,7 @@ import oc from 'js-optchain';
 import { extractNetid } from 'services/user';
 import { createEvent, createPoint, POINT_CATEGORIES } from 'services/event';
 import { generateCode } from 'utils/auth';
+import { devLog } from 'utils/log';
 
 const _handler = async (event, context) => {
   if (!event.authorized || !event.user.privileged) {

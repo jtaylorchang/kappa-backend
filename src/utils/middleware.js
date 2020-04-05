@@ -6,6 +6,7 @@ import mongoConnector from 'utils/mongoConnector';
 import * as auth from 'utils/auth';
 import { getUser } from 'services/user';
 import sqlConnector from './sqlConnector';
+import { devLog } from './log';
 
 const httpHeaderAuthorizer = () => ({
   before: async (handler, next) => {
@@ -58,7 +59,7 @@ const jsonBodyEncoder = () => ({
 const errorHandler = () => ({
   onError: (handler, next) => {
     if (handler.error.statusCode && handler.error.message) {
-      console.log(handler.error); // TODO: remove
+      devLog(handler.error);
 
       handler.response = {
         statusCode: handler.error.statusCode,
