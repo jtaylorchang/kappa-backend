@@ -184,11 +184,10 @@ export const rejectExcuse = async (excuse) => {
 
 export const createPoint = async (point) => {
   try {
-    const results = await mysql.query('INSERT INTO point (event_id, category, count) VALUES (?, ?, ?)', [
-      point.event_id,
-      point.category,
-      point.count
-    ]);
+    const results = await mysql.query(
+      'INSERT INTO point (event_id, category, count) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE count = ?',
+      [point.event_id, point.category, point.count, point.count]
+    );
 
     return pass({
       point

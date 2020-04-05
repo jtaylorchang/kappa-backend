@@ -17,8 +17,8 @@ const _handler = async (event, context) => {
     event: {
       event_type: '',
       event_code: generateCode(),
-      mandatory: false,
-      excusable: event.body.event_type === 'GM',
+      mandatory: 0,
+      excusable: event.body?.event?.event_type === 'GM',
       title: '',
       description: '',
       start: '',
@@ -52,6 +52,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not create event');
   }
 
+  newEvent.points = null;
+
   if (ocBody.points.length > 0) {
     for (const point of ocBody.points) {
       const normalPoint = {
@@ -67,11 +69,11 @@ const _handler = async (event, context) => {
         });
 
         if (createdPoint.success) {
-          if (!newEvent.hasOwnProperty('points')) {
-            newEvent.points = [];
+          if (newEvent.points === null) {
+            newEvent.points = `${normalPoint.category}:${normalPoint.count}`;
+          } else {
+            newEvent.points += `,${normalPoint.category}:${normalPoint.count}`;
           }
-
-          newEvent.points.push(normalPoint);
         }
       }
     }
