@@ -31,7 +31,7 @@ const _handler = async (event, context) => {
     throw new createHttpError.BadRequest('Missing required fields');
   }
 
-  const newEvent = {
+  let newEvent = {
     id: uuidV4(),
     creator: extractNetid(event.user.email),
     event_type: ocBody.event.event_type,
@@ -51,7 +51,7 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not create event');
   }
 
-  if (ocBody.points.length > 0 && createdEvent.data.event.id.length > 0) {
+  if (ocBody.points.length > 0) {
     for (const point of ocBody.points) {
       const normalPoint = {
         category: point.category.toUpperCase(),
@@ -61,9 +61,17 @@ const _handler = async (event, context) => {
       // should use a transaction to couple with event creation
       if (POINT_CATEGORIES.includes(normalPoint.category)) {
         const createdPoint = await createPoint({
-          event_id: createdEvent.data.event.id,
+          event_id: newEvent.id,
           ...normalPoint
         });
+
+        if (createdPoint.success) {
+          if (!newEvent.hasOwnProperty('points')) {
+            newEvent.points = [];
+          }
+
+          newEvent.points.push(normalPoint);
+        }
       }
     }
   }
@@ -71,7 +79,7 @@ const _handler = async (event, context) => {
   return {
     statusCode: 200,
     body: {
-      event: createdEvent.data?.event
+      event: newEvent
     }
   };
 };
