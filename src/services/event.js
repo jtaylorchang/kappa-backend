@@ -18,7 +18,6 @@ export const getAllEvents = async (user) => {
       events: results
     });
   } catch (error) {
-    console.log(error);
     return fail(error);
   }
 };
@@ -181,7 +180,6 @@ export const createPoint = async (point) => {
       point
     });
   } catch (error) {
-    console.log(error);
     return fail(error);
   }
 };
