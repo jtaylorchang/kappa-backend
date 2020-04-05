@@ -136,6 +136,18 @@ export const createExcuse = async (excuse) => {
   }
 };
 
+export const getPendingExcuses = async () => {
+  try {
+    const results = await mysql.query('SELECT * FROM excuse WHERE approved <> 1');
+
+    return pass({
+      excuses: results
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
 export const approveExcuse = async (excuse) => {
   try {
     const results = await mysql.query('UPDATE excuse SET approved = ? WHERE event_id = ? AND netid = ?', [
@@ -147,7 +159,7 @@ export const approveExcuse = async (excuse) => {
     return pass({
       excuse: {
         ...excuse,
-        approved: true
+        approved: 1
       }
     });
   } catch (error) {
@@ -161,6 +173,10 @@ export const rejectExcuse = async (excuse) => {
       excuse.event_id,
       excuse.netid
     ]);
+
+    return pass({
+      excuse
+    });
   } catch (error) {
     return fail(error);
   }
@@ -188,6 +204,21 @@ export const editPoint = async (point) => {
       point.category,
       point.count,
       point.event_id
+    ]);
+
+    return pass({
+      point
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
+export const deletePoint = async (point) => {
+  try {
+    const results = await mysql.query('DELETE FROM point WHERE event_id = ? AND category = ?', [
+      point.event_id,
+      point.category
     ]);
 
     return pass({
