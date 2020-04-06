@@ -62,7 +62,7 @@ const _handler = async (event, context) => {
       };
 
       // should use a transaction to couple with event creation
-      if (POINT_CATEGORIES.includes(normalPoint.category)) {
+      if (POINT_CATEGORIES.includes(normalPoint.category) && point.count > 0) {
         const createdPoint = await createPoint({
           event_id: newEvent.id,
           ...normalPoint
