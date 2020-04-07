@@ -167,7 +167,7 @@ CREATE TABLE `event` (
   `id` varchar(36) NOT NULL DEFAULT '',
   `creator` varchar(16) NOT NULL DEFAULT '',
   `event_type` varchar(16) DEFAULT NULL,
-  `event_code` varchar(6) DEFAULT NULL,
+  `event_code` varchar(4) DEFAULT NULL,
   `mandatory` tinyint(1) DEFAULT NULL,
   `excusable` tinyint(1) DEFAULT NULL,
   `title` varchar(32) DEFAULT '',

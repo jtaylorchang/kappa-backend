@@ -34,11 +34,11 @@ export const verifyAndDecodeToken = (token) => {
 export const generateCode = () => {
   let code = '';
 
-  while (code.length < 6) {
+  while (code.length < 4) {
     code += uuidV4().replace(/\D/g, '');
   }
 
-  return code.substring(0, 6);
+  return code.substring(0, 4);
 };
 
 export const lookupEmail = async (email) => {
