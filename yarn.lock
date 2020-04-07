@@ -4840,10 +4840,10 @@ jmespath@0.15.0:
   resolved "https://registry.yarnpkg.com/jmespath/-/jmespath-0.15.0.tgz#a3f222a9aae9f966f5d27c796510e28091764217"
   integrity sha1-o/Iiqarp+Wb10nx5ZRDigJF2Qhc=
 
-js-optchain@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/js-optchain/-/js-optchain-1.0.7.tgz#5c4570e37beb3d7db603e8b561f0a17dec6b36ff"
-  integrity sha512-w2rvgVgdR3zEkrIYnN//gLTrJJ8w/XYu+UITepp0r2WO+VCHFGHevxOTage9T/AQkk3C3NJkjV077dIaW6YY3Q==
+js-optchain@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/js-optchain/-/js-optchain-1.1.0.tgz#6ea321cfe4ed44b48cf4b96f999c1849efd84a1b"
+  integrity sha512-KYnwR8W49S1jtmWUimCRe/OSrljSI4UaG3E2XFg9PxzYAQZBwwCQ9poTMh6Ca1z97+RcmsQ1nfWrzRU05OUDmQ==
 
 js-string-escape@^1.0.1:
   version "1.0.1"
