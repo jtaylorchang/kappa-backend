@@ -37,7 +37,9 @@ const _handler = async (event, context) => {
   return {
     statusCode: 200,
     body: {
-      message: 'Success'
+      event: {
+        id: ocBody.event_id
+      }
     }
   };
 };
