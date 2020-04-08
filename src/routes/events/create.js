@@ -16,7 +16,7 @@ const _handler = async (event, context) => {
   const ocBody = oc(event.body, {
     event: {
       event_type: '',
-      event_code: generateCode(),
+      event_code: '',
       mandatory: 0,
       excusable: event.body?.event?.event_type === 'GM',
       title: '',
@@ -36,7 +36,7 @@ const _handler = async (event, context) => {
     id: uuidV4(),
     creator: extractNetid(event.user.email),
     event_type: ocBody.event.event_type,
-    event_code: ocBody.event.event_code,
+    event_code: ocBody.event.event_code || generateCode(),
     mandatory: ocBody.event.mandatory,
     excusable: ocBody.event.excusable,
     title: ocBody.event.title,
