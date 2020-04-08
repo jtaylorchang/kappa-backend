@@ -25,9 +25,11 @@ const _handler = async (event, context) => {
     throw new createHttpError.BadRequest(verifiedAttendance.error.message);
   }
 
+  const netid = extractNetid(event.user.email);
+
   const createdAttendance = await createAttendance({
     event_id: ocBody.event_id,
-    netid: extractNetid(event.user.email)
+    netid
   });
 
   if (!createdAttendance.success) {
@@ -37,9 +39,12 @@ const _handler = async (event, context) => {
   return {
     statusCode: 200,
     body: {
-      event: {
-        id: ocBody.event_id
-      }
+      attended: [
+        {
+          netid,
+          event_id: ocBody.event_id
+        }
+      ]
     }
   };
 };
