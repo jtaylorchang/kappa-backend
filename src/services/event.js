@@ -176,7 +176,7 @@ export const createExcuse = async (excuse) => {
 
 export const getPendingExcuses = async () => {
   try {
-    const results = await mysql.query('SELECT * FROM excuse WHERE approved <> 1');
+    const results = await mysql.query('SELECT * FROM excuse WHERE approved <> 0');
 
     return pass({
       excuses: results
