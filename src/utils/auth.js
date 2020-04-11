@@ -41,6 +41,23 @@ export const generateCode = () => {
   return code.substring(0, 4);
 };
 
+export const getDirectory = async () => {
+  try {
+    const response = await fetch(DIRECTORY);
+    const data = await response.json();
+
+    return {
+      success: true,
+      data
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error
+    };
+  }
+};
+
 export const lookupEmail = async (email) => {
   if (!email || email?.indexOf('@') == -1) {
     return {
