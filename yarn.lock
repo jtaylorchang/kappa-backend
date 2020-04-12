@@ -1077,11 +1077,6 @@
   dependencies:
     http-errors "^1.6.3"
 
-"@middy/http-header-normalizer@^1.0.0-beta.8":
-  version "1.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/@middy/http-header-normalizer/-/http-header-normalizer-1.0.0-beta.8.tgz#19c25ed258a6eff7951bff7a9a1d1c8c33596549"
-  integrity sha512-zpI98iSHGIbqlcHTaBhXAravHVy0hAu+ngMBzGlMTqR5lifMfqxZTp0mRxFFBOmD8GI9UiInBkhO8EpCx60siA==
-
 "@middy/http-json-body-parser@^1.0.0-beta.8":
   version "1.0.0-beta.8"
   resolved "https://registry.yarnpkg.com/@middy/http-json-body-parser/-/http-json-body-parser-1.0.0-beta.8.tgz#54f5985784b3fac6137658aa0ca021c9f4dba5b3"
