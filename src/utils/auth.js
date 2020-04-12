@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { v4 as uuidV4 } from 'uuid';
+import fetch from 'node-fetch';
+import { pass, fail } from 'utils/res';
 
 import { DIRECTORY } from 'utils/dataSources';
 
@@ -46,26 +48,17 @@ export const getDirectory = async () => {
     const response = await fetch(DIRECTORY);
     const data = await response.json();
 
-    return {
-      success: true,
-      data
-    };
+    return pass(data);
   } catch (error) {
-    return {
-      success: false,
-      error
-    };
+    return fail(error);
   }
 };
 
 export const lookupEmail = async (email) => {
   if (!email || email?.indexOf('@') == -1) {
-    return {
-      success: false,
-      error: {
-        message: 'email is invalid'
-      }
-    };
+    return fail({
+      message: 'email is invalid'
+    });
   }
 
   try {
@@ -75,27 +68,18 @@ export const lookupEmail = async (email) => {
     const user = data.directory.active[email];
 
     if (user) {
-      return {
-        success: true,
-        data: {
-          semester: user.semester,
-          type: 'B',
-          role: user.role || '',
-          privileged: user.privileged !== undefined && user.privileged
-        }
-      };
+      return pass({
+        semester: user.semester,
+        type: 'B',
+        role: user.role || '',
+        privileged: user.privileged !== undefined && user.privileged
+      });
     } else {
-      return {
-        sucess: false,
-        error: {
-          message: 'unauthorized email'
-        }
-      };
+      fail({
+        message: 'unauthorized email'
+      });
     }
   } catch (error) {
-    return {
-      success: false,
-      error
-    };
+    return fail(error);
   }
 };
