@@ -1,6 +1,5 @@
 import middy from '@middy/core';
 import warmup from '@middy/warmup';
-import httpHeaderNormalizer from '@middy/http-header-normalizer';
 import jsonBodyParser from '@middy/http-json-body-parser';
 import urlEncodeBodyParser from '@middy/http-urlencode-body-parser';
 import cors from '@middy/http-cors';
@@ -108,7 +107,6 @@ const middyfy = (handler, config = { authorized: true, useMongo: true, useSql: t
   }
 
   middleware
-    .use(httpHeaderNormalizer())
     .use(queryTrimmer())
     .use(jsonBodyParser())
     .use(jsonBodyEncoder())
