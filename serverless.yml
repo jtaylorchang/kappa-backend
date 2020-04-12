@@ -6,7 +6,7 @@ service: ktt-backend
 provider:
   name: aws
   runtime: nodejs10.x
-  memorySize: 128
+  memorySize: 256
   stage: ${opt:stage,'dev'}
   region: us-east-2 # Ohio
 
@@ -25,6 +25,8 @@ package:
 
   exclude:
     - 'README.md'
+    - ./*.sh
+    - .gitignore
 
 functions:
   hello:
