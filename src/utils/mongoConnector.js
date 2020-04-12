@@ -7,7 +7,8 @@ export let db;
 const mongoConnector = ({
   databaseURI,
   connectionOpts = {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true
   },
   shouldClose = false,
   shouldLog = true
