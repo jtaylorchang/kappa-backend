@@ -1,4 +1,4 @@
-import { devLog } from './log';
+import { devLog, errorLog } from './log';
 
 export const pass = (data) => {
   return {
@@ -8,7 +8,7 @@ export const pass = (data) => {
 };
 
 export const fail = (error) => {
-  devLog(error);
+  errorLog(error);
 
   return {
     success: false,

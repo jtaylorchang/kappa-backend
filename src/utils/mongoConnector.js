@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 
-import { log } from 'utils/log';
+import { log, errorLog } from 'utils/log';
 
 export let db;
 
@@ -24,7 +24,7 @@ const mongoConnector = ({
 
         db = client.db('ThetaTau');
       } catch (error) {
-        log(shouldLog, '=> Connection error with MongoDB', error);
+        errorLog('=> Connection error with MongoDB', error);
       }
     }
   },
