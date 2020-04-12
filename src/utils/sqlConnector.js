@@ -1,6 +1,6 @@
 import ServerlessMysql from 'serverless-mysql';
 
-import { log } from 'utils/log';
+import { log, errorLog } from 'utils/log';
 
 export let mysql;
 
@@ -22,7 +22,11 @@ const sqlConnector = ({ host, database, user, password, shouldClose = false, sho
         }
       });
 
-      await mysql.connect();
+      try {
+        await mysql.connect();
+      } catch (error) {
+        errorLog('=> Connection error with MySQL', error);
+      }
     }
   },
   after: async () => {
