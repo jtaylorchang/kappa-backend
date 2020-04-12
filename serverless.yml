@@ -20,19 +20,22 @@ provider:
     SQL_USERNAME: ${file(./serverless-config/secrets.json):SQL_USERNAME}
     SQL_PASSWORD: ${file(./serverless-config/secrets.json):SQL_PASSWORD}
 
-  iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-        - "lambda:InvokeFunction"
-      Resource: "*"
-
 package:
   individually: true
 
   exclude:
-    - "README.md"
+    - 'README.md'
 
 functions:
+  hello:
+    warmup: false
+    handler: src/routes/hello.handler
+    events:
+      - http:
+          path: hello
+          method: GET
+          cors: true
+
   usersLogin:
     warmup: false
     handler: src/routes/users/login.handler
