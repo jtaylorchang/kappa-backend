@@ -1,9 +1,10 @@
 import middyfy from 'middleware';
 import createHttpError from 'http-errors';
 import { getUser, updateUser } from 'services/user';
+import { errorLog } from 'utils/log';
 
 const _handler = async (event, context) => {
-  const target = event.pathParameters?.target;
+  const target = decodeURIComponent(event.pathParameters?.target);
   const changes = event.body?.changes || {};
 
   let partialChanges = {};
@@ -21,6 +22,8 @@ const _handler = async (event, context) => {
   }
 
   if (!event.authorized || (target !== event.user.email && !event.user.privileged)) {
+    errorLog(`${event.user.email} tried to update ${target}`);
+
     throw new createHttpError.Unauthorized('Invalid credentials');
   }
 
