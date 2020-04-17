@@ -80,8 +80,8 @@ USER: {
                         // Web Chair
   privileged?: BOOLEAN, // is a power-user (all executives are by default) from official directory
                         // true
-  firstYear: NUMBER,    // the first year the user attended UIUC
-                        // 2017
+  firstYear: STRING,    // the first year the user attended UIUC
+                        // "2017"
   gradYear: STRING,     // graduation term provided by user
                         // Spring 2021
   phone: STRING         // phone number provided by user
