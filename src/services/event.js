@@ -120,6 +120,21 @@ export const getAttendanceByUser = async (user) => {
   }
 };
 
+export const getAttendedEventTypesByUser = async (user) => {
+  try {
+    const results = await mysql.query(
+      "SELECT event_type, (SELECT GROUP_CONCAT(category, ':', count) FROM point WHERE event_id = id GROUP BY event_id) as points FROM event e WHERE EXISTS (SELECT netid FROM attendance WHERE event_id = e.id AND netid = ? UNION SELECT netid FROM excuse WHERE event_id = e.id AND netid = ? AND approved = 1)",
+      [extractNetid(user.email), extractNetid(user.email)]
+    );
+
+    return pass({
+      events: results
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
 export const verifyAttendanceCode = async (event) => {
   try {
     const matchingEvent = await mysql.query('SELECT * FROM event WHERE id = ?', [event.event_id]);
@@ -214,6 +229,21 @@ export const rejectExcuse = async (excuse) => {
 
     return pass({
       excuse
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
+export const getPointsByUser = async (user) => {
+  try {
+    const results = await mysql.query(
+      'SELECT p.category as category, SUM(p.count) as count FROM event e JOIN point p on e.id = p.event_id WHERE EXISTS (SELECT netid FROM attendance WHERE event_id = e.id AND netid = ? UNION SELECT netid FROM excuse WHERE event_id = e.id AND netid = ? AND approved = 1) GROUP BY category',
+      [extractNetid(user.email), extractNetid(user.email)]
+    );
+
+    return pass({
+      points: results
     });
   } catch (error) {
     return fail(error);
