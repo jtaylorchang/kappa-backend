@@ -250,6 +250,41 @@ export const getPointsByUser = async (user) => {
   }
 };
 
+export const computePoints = (events) => {
+  let totalPoints = {
+    BRO: 0,
+    PHIL: 0,
+    PROF: 0,
+    RUSH: 0,
+    ANY: 0
+  };
+
+  let countedHappyHour = false;
+
+  for (const event of events) {
+    const { event_type, points } = event;
+
+    if (event_type === 'Weekly Happy Hour' && !countedHappyHour) {
+      totalPoints.BRO += 1;
+
+      countedHappyHour = true;
+    } else if (points) {
+      const point_pieces = points.split(',');
+
+      for (const piece of point_pieces) {
+        const colonIndex = piece.indexOf(':');
+
+        const category = piece.substring(0, colonIndex);
+        const count = parseInt(piece.substring(colonIndex + 1));
+
+        totalPoints[category] += count;
+      }
+    }
+  }
+
+  return totalPoints;
+};
+
 export const createPoint = async (point) => {
   try {
     const results = await mysql.query(
