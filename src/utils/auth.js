@@ -71,6 +71,7 @@ export const lookupEmail = async (email) => {
       return pass({
         semester: user.semester,
         type: 'B',
+        firstYear: user.firstYear,
         role: user.role || '',
         privileged: user.privileged !== undefined && user.privileged
       });

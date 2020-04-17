@@ -43,6 +43,7 @@ const _handler = async (event, context) => {
       email: normalized.email,
       familyName: verifiedToken.data.familyName,
       givenName: verifiedToken.data.givenName,
+      firstYear: directoryLookup.data.firstYear,
       semester: directoryLookup.data.semester,
       type: directoryLookup.data.type
     };
