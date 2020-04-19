@@ -4,11 +4,11 @@ import createHttpError from 'http-errors';
 import { getPendingExcuses } from 'services/event';
 
 const _handler = async (event, context) => {
-  if (!event.authorized || !event.user.privileged) {
+  if (!event.authorized) {
     throw new createHttpError.Unauthorized('Not authorized');
   }
 
-  const allExcuses = await getPendingExcuses();
+  const allExcuses = await getPendingExcuses(event.user);
 
   if (!allExcuses.success) {
     throw new createHttpError.InternalServerError('Could not get excuses');

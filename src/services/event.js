@@ -189,9 +189,11 @@ export const createExcuse = async (excuse) => {
   }
 };
 
-export const getPendingExcuses = async () => {
+export const getPendingExcuses = async (user) => {
   try {
-    const results = await mysql.query('SELECT * FROM excuse WHERE approved <> 0');
+    const results = user.privileged
+      ? await mysql.query('SELECT * FROM excuse WHERE approved <> 0')
+      : await mysql.query('SELECT * FROM excuse WHERE approved <> 0 AND netid = ?', [extractNetid(user.email)]);
 
     return pass({
       excuses: results
