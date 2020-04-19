@@ -191,9 +191,10 @@ export const createExcuse = async (excuse) => {
 
 export const getPendingExcuses = async (user) => {
   try {
-    const results = user.privileged
-      ? await mysql.query('SELECT * FROM excuse WHERE approved <> 0')
-      : await mysql.query('SELECT * FROM excuse WHERE approved <> 0 AND netid = ?', [extractNetid(user.email)]);
+    const query = `SELECT excuses.event_id, excuses.netid, excuses.reason, excuses.approved, event.title, event.start FROM (SELECT * FROM excuse WHERE approved = 0${
+      user.privileged ? '' : ' AND netid = ?'
+    }) as excuses JOIN event ON excuses.event_id = event.id`;
+    const results = user.privileged ? await mysql.query(query) : await mysql.query(query, [extractNetid(user.email)]);
 
     return pass({
       excuses: results
