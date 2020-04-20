@@ -174,12 +174,10 @@ export const createAttendance = async (attendance) => {
 
 export const createExcuse = async (excuse) => {
   try {
-    const results = await mysql.query('INSERT INTO excuse (event_id, netid, reason, approved) VALUES (?, ?, ?, ?)', [
-      excuse.event_id,
-      excuse.netid,
-      excuse.reason,
-      0
-    ]);
+    const results = await mysql.query(
+      'INSERT INTO excuse (event_id, netid, reason, late, approved) VALUES (?, ?, ?, ?, ?)',
+      [excuse.event_id, excuse.netid, excuse.reason, excuse.late, 0]
+    );
 
     return pass({
       excuse
@@ -191,7 +189,7 @@ export const createExcuse = async (excuse) => {
 
 export const getPendingExcuses = async (user) => {
   try {
-    const query = `SELECT excuses.event_id, excuses.netid, excuses.reason, excuses.approved, event.title, event.start FROM (SELECT * FROM excuse WHERE approved = 0${
+    const query = `SELECT excuses.event_id, excuses.netid, excuses.reason, excuses.late, excuses.approved, event.title, event.start FROM (SELECT * FROM excuse WHERE approved = 0${
       user.privileged ? '' : ' AND netid = ?'
     }) as excuses JOIN event ON excuses.event_id = event.id`;
     const results = user.privileged ? await mysql.query(query) : await mysql.query(query, [extractNetid(user.email)]);

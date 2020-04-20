@@ -13,7 +13,8 @@ const _handler = async (event, context) => {
   const ocBody = oc(event.body, {
     excuse: {
       event_id: '',
-      reason: ''
+      reason: '',
+      late: 0
     }
   });
 
