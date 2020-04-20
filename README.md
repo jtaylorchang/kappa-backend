@@ -191,6 +191,7 @@ CREATE TABLE `excuse` (
   `event_id` varchar(36) NOT NULL DEFAULT '',
   `netid` varchar(16) NOT NULL DEFAULT '',
   `reason` varchar(128) NOT NULL DEFAULT '',
+  `late` tinyint(1) DEFAULT '0',
   `approved` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`event_id`,`netid`),
   CONSTRAINT `excuse_event_id` FOREIGN KEY (`event_id`) REFERENCES `event` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
