@@ -1,8 +1,19 @@
 # serverless
 
+## Setup
+
+- Run `yarn install`
+- Create `secrets.json` file referenced below
+
+## Deploying
+
+- Setup a deploy script `deploy.sh` that exports the appropriate tokens: `SERVERLESS_ACCESS_KEY`, `AWS_ACCESS_KEY_ID`, and `AWS_SECRET_ACCESS_KEY`
+- Run `yarn deploy`
+- Follow serverless directions for deploying
+
 ## Running Offline
 
-Need to create a `serverless-config/secrets.json` file of the following signature. The values do not have to be real for development purposes.
+Need to create a `serverless-config/secrets.json` file of the following signature. The values do not have to be real for development purposes except for ones pertaining to the database connections.
 
 ```javascript
 {
@@ -21,6 +32,23 @@ Need to create a `serverless-config/secrets.json` file of the following signatur
 ```bash
 yarn offline
 ```
+
+## Testing
+
+This project uses `serverless` in conjunction with `MySQL` and `Docker`. In order to test offline, you must have docker installed and our `ktt-docker` repos cloned. You must also have mysql and mongo installed locally, we recommend using Homebrew for MacOS users.
+
+**Installation**
+
+- Clone the `ktt-docker-mysql` and `ktt-docker-mongo` repos, with their default names, as sibling folders of this `ktt-backend` repo.
+- Install Docker
+
+**Running**
+
+- Run the Docker Daemon
+- Make sure none of our docker instances are running
+- Run `yarn run test`
+
+There is a pre-test hook that will spin up a MySQL docker instance and a Mongo docker instance. Both of these will require downloading the first time they are run which may be time intensive. The MySQL docker instance will automatically have the correct SQL dump run during initialization. Both databases will be empty once the hook is complete. The MySQL docker is accessible at `127.0.0.1:3306` and Mongo is at `127.0.0.1:27017` assuming they complete successfully. The tests will be run with `Jest` and then the post-test hook will spin down both docker instances and clear data.
 
 ## Data Sources
 
