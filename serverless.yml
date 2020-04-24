@@ -24,9 +24,9 @@ package:
   individually: true
 
   exclude:
-    - "README.md"
+    - 'README.md'
     - ./*.sh
-    - .gitignore
+    - tests/**
 
 functions:
   hello:
