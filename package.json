@@ -43,7 +43,10 @@
   },
   "scripts": {
     "offline": "source ./offline.sh && serverless offline start",
-    "deploy": "source ./deploy.sh && sls deploy --aws-profile theta-tau"
+    "deploy": "source ./deploy.sh && sls deploy --aws-profile theta-tau",
+    "pretest": "sh pretest.sh",
+    "test": "echo 'TEST GOES HERE'",
+    "posttest": "sh posttest.sh"
   },
   "prettier": {
     "trailingComma": "none",
