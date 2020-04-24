@@ -1,4 +1,4 @@
-# serverless
+# ktt-backend
 
 ## Setup
 
@@ -55,9 +55,10 @@ There is a pre-test hook that will spin up a MySQL docker instance and a Mongo d
 | usage                      | url                                                  |
 | -------------------------- | ---------------------------------------------------- |
 | directory of allowed users | `https://kappathetatau.org/assets/js/directory.json` |
-| users                      | MongoDB                                              |
+| users                      | MongoDB Atlas                                        |
 | events                     | Heroku SQL                                           |
 | attendance                 | Heroku SQL                                           |
+| points                     | Heroku SQL                                           |
 
 ## Functions
 
