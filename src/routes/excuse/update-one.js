@@ -13,7 +13,9 @@ const _handler = async (event, context) => {
     excuse: {
       event_id: '',
       netid: '',
-      approved: -1
+      reason: '',
+      approved: -1,
+      late: 0
     }
   });
 
@@ -42,7 +44,15 @@ const _handler = async (event, context) => {
   return {
     statusCode: 200,
     body: {
-      excuse: ocBody.excuse.approved === 1 ? ocBody.excuse : null
+      excused:
+        ocBody.excuse.approved === 1
+          ? [ocBody.excuse]
+          : [
+              {
+                ...ocBody.excuse,
+                approved: -1
+              }
+            ]
     }
   };
 };
