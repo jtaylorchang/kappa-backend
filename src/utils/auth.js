@@ -100,3 +100,14 @@ export const lookupEmail = async (email) => {
     return fail(error);
   }
 };
+
+export const isEmpty = (obj) => {
+  if (obj === undefined || obj === null) return true;
+  if (obj.constructor !== Object) return false;
+
+  for (const key in obj) {
+    return false;
+  }
+
+  return true;
+};
