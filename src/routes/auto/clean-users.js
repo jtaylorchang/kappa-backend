@@ -8,7 +8,11 @@ const _handler = async (event, context) => {
     throw new createHttpError.Unauthorized('Not authorized');
   }
 
-  const directory = getDirectory();
+  const directory = await getDirectory();
+
+  if (!directory.success) {
+    throw new createHttpError.InternalServerError('Failed to get directory');
+  }
 
   // TODO: Remove all non-user data for users who don't exist in the Mongo database
 

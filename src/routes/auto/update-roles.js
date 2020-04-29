@@ -30,6 +30,7 @@ const _handler = async (event, context) => {
     const directoryUser = getDirectoryUser(directory.data, user.email);
 
     if (directoryUser && directoryUser.privileged === true) {
+      // skip user who should be privileged anyways
       continue;
     }
 
@@ -48,26 +49,28 @@ const _handler = async (event, context) => {
 
   const directoryUsers = getAllDirectoryUsers(directory.data);
 
-  for (const [email, user] of Object.entries(directoryUsers)) {
-    if (!user.privileged) {
+  for (const [email, directoryUser] of Object.entries(directoryUsers)) {
+    if (!directoryUser.privileged) {
+      // skip user who shouldn't be privileged
       continue;
     }
 
     // found a privileged user
 
     const addPrivileges = await updateUser(email, {
-      role: user.role,
-      privileged: user.privileged
+      role: directoryUser.role,
+      privileged: directoryUser.privileged
     });
 
     if (addPrivileges.success && addPrivileges.data.changes === null) {
+      // skip user who does not exist
       continue;
     }
 
     if (
       !addPrivileges.success ||
-      addPrivileges.data.changes.role !== user.role ||
-      addPrivileges.data.changes.privileged !== user.privileged
+      addPrivileges.data.changes.role !== directoryUser.role ||
+      addPrivileges.data.changes.privileged !== directoryUser.privileged
     ) {
       throw new createHttpError.InternalServerError(`Failed to add privileges to ${email}`);
     }
