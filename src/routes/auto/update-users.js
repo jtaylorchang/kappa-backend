@@ -2,7 +2,7 @@ import middyfy from 'middleware';
 import createHttpError from 'http-errors';
 
 import { getDirectory, getDirectoryUser, getAllDirectoryUsers, isEmpty } from 'utils/auth';
-import { getAllUsers, removeUser, buildUserDict, getDifferences, upsertUser, updateUser } from 'services/user';
+import { getAllUsers, removeUser, buildUserDict, getDifferences, updateUser } from 'services/user';
 
 const _handler = async (event, context) => {
   if (!event.authorized || !event.user.privileged) {
