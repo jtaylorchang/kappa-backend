@@ -6,6 +6,23 @@ import { getUser, createUser } from 'services/user';
 import createHttpError from 'http-errors';
 
 const _handler = async (event, context) => {
+  if (event.authorized) {
+    // Allow users to refresh their token
+
+    const user = event.user;
+    const sessionToken = generateToken(user.email);
+
+    return {
+      statusCode: 200,
+      body: {
+        user,
+        sessionToken
+      }
+    };
+  }
+
+  // Regular sign in via Google OAuth
+
   const normalized = {
     email: event.body?.user?.email.trim().toLowerCase(),
     idToken: event.body?.idToken
@@ -39,6 +56,8 @@ const _handler = async (event, context) => {
   let user = foundUser.data.user;
 
   if (!foundUser.data.user) {
+    // Need to create a user in the database
+
     const newUser = {
       email: normalized.email,
       familyName: verifiedToken.data.familyName,
@@ -78,7 +97,7 @@ const _handler = async (event, context) => {
 };
 
 export const handler = middyfy(_handler, {
-  authorized: false,
+  authorized: true,
   useMongo: true,
   useSql: false
 });
