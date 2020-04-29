@@ -13,6 +13,8 @@ export const extractToken = (bearer) => {
 };
 
 export const generateToken = (email) => {
+  // generate a JWT containing the email
+
   return jwt.sign(
     {
       email
@@ -36,6 +38,7 @@ export const verifyAndDecodeToken = (token) => {
 export const generateCode = () => {
   let code = '';
 
+  // continue generating until code is long enough
   while (code.length < 4) {
     code += uuidV4().replace(/\D/g, '');
   }
@@ -54,6 +57,14 @@ export const getDirectory = async () => {
   }
 };
 
+export const getDirectoryUser = (directoryData, email) => {
+  return directoryData.directory.active[email];
+};
+
+export const getAllDirectoryUsers = (directoryData) => {
+  return directoryData.directory.active;
+};
+
 export const lookupEmail = async (email) => {
   if (!email || email?.indexOf('@') == -1) {
     return fail({
@@ -62,12 +73,17 @@ export const lookupEmail = async (email) => {
   }
 
   try {
-    const response = await fetch(DIRECTORY);
-    const data = await response.json();
+    const directory = await getDirectory();
 
-    const user = data.directory.active[email];
+    if (!directory.success) {
+      throw new Error('Failed to get directory');
+    }
+
+    const user = getDirectoryUser(directory.data, email);
 
     if (user) {
+      // user found. return valid user data
+
       return pass({
         semester: user.semester,
         type: 'B',

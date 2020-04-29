@@ -41,6 +41,7 @@ const _handler = async (event, context) => {
     }
   }
 
+  // return excuse back with approved -1 if the item was deleted
   return {
     statusCode: 200,
     body: {
