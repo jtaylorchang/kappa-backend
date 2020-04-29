@@ -10,7 +10,7 @@ const _handler = async (event, context) => {
 
   const directory = getDirectory();
 
-  // TODO
+  // TODO: Remove roles and privileges and add them back based on the directory
 
   return {
     statusCode: 200,

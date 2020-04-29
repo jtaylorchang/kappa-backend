@@ -1,12 +1,16 @@
 import middyfy from 'middleware';
 import createHttpError from 'http-errors';
 
+import { getDirectory } from 'utils/auth';
+
 const _handler = async (event, context) => {
   if (!event.authorized || !event.user.privileged) {
     throw new createHttpError.Unauthorized('Not authorized');
   }
 
-  // TODO: Remove all data from SQL
+  const directory = getDirectory();
+
+  // TODO: Remove all non-user data for users who don't exist in the Mongo database
 
   return {
     statusCode: 200,
