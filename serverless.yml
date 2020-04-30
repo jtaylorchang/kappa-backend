@@ -209,6 +209,15 @@ functions:
           method: POST
           cors: true
 
+  autoImportBulk:
+    warmup: false
+    handler: src/routes/auto/import-bulk.handler
+    events:
+      - http:
+          path: auto/import-bulk
+          method: POST
+          cors: true
+
 custom:
   serverless-offline:
     prefix: dev

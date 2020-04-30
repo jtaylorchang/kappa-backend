@@ -172,11 +172,11 @@ export const createAttendance = async (attendance) => {
   }
 };
 
-export const createExcuse = async (excuse) => {
+export const createExcuse = async (excuse, approved = 0) => {
   try {
     const results = await mysql.query(
       'INSERT INTO excuse (event_id, netid, reason, late, approved) VALUES (?, ?, ?, ?, ?)',
-      [excuse.event_id, excuse.netid, excuse.reason, excuse.late, 0]
+      [excuse.event_id, excuse.netid, excuse.reason, excuse.late, approved]
     );
 
     return pass({
@@ -327,6 +327,16 @@ export const deletePoint = async (point) => {
     return pass({
       point
     });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
+export const deleteAllEvents = async () => {
+  try {
+    const results = await mysql.query('DELETE FROM event');
+
+    return pass();
   } catch (error) {
     return fail(error);
   }
