@@ -18,7 +18,7 @@ const _handler = async (event, context) => {
       event_type: '',
       event_code: '',
       mandatory: 0,
-      excusable: event.body?.event?.event_type === 'GM',
+      excusable: event.body?.event?.event_type === 'GM' ? 1 : 0,
       title: '',
       description: '',
       start: '',
