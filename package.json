@@ -19,6 +19,8 @@
     "http-errors": "^1.7.3",
     "js-optchain": "^1.1.0",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.28",
     "mongodb": "^3.5.3",
     "node-fetch": "^2.6.0",
     "serverless-mysql": "^1.5.3",
