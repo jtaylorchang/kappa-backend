@@ -22,13 +22,13 @@ const _handler = async (event, context) => {
       title: '',
       description: '',
       start: '',
-      duration: 0,
+      duration: -1,
       location: ''
     },
     points: []
   });
 
-  if (ocBody.event.title === '' || ocBody.event.start === '' || ocBody.event.duration === 0) {
+  if (ocBody.event.title === '' || ocBody.event.start === '' || ocBody.event.duration === -1) {
     throw new createHttpError.BadRequest('Missing required fields');
   }
 
