@@ -46,7 +46,7 @@ const _handler = async (event, context) => {
     excusable: ocBody.event.excusable,
     title: ocBody.event.title,
     description: ocBody.event.description,
-    start: new Date(ocBody.event.start),
+    start: ocBody.event.start,
     duration: ocBody.event.duration,
     location: ocBody.event.location
   };

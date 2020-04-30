@@ -134,7 +134,7 @@ EVENT: {
                         // => General Meeting
   description: STRING,  // the description of the event
                         // => Weekly chapter meeting for exec to provide updates to the chapter
-  start: DATETIME,      // the UTC datetime of when th eevent begins
+  start: STRING,        // the ISO datetime of when th eevent begins
                         // => 2020-03-24T01:00:00.000Z
   duration: INT         // the duration of the event in minutes
                         // => 60
@@ -203,7 +203,7 @@ CREATE TABLE `event` (
   `excusable` tinyint(1) DEFAULT NULL,
   `title` varchar(32) DEFAULT '',
   `description` varchar(256) DEFAULT '',
-  `start` datetime DEFAULT NULL,
+  `start` varchar(32) DEFAULT '',
   `duration` int(11) DEFAULT NULL,
   `location` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`id`)

@@ -47,7 +47,7 @@ const _handler = async (event, context) => {
       excusable: event.excusable === '1' ? 1 : 0,
       title: event.title,
       description: event.description,
-      start: moment.tz(`${event.date} ${event.time}`, 'America/Chicago').toDate(),
+      start: moment.tz(`${event.date} ${event.time}`, 'America/Chicago').toISOString(),
       duration: parseInt(event.duration),
       location: event.location
     };
