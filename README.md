@@ -56,9 +56,9 @@ There is a pre-test hook that will spin up a MySQL docker instance and a Mongo d
 | -------------------------- | ---------------------------------------------------- |
 | directory of allowed users | `https://kappathetatau.org/assets/js/directory.json` |
 | users                      | MongoDB Atlas                                        |
-| events                     | Heroku SQL                                           |
-| attendance                 | Heroku SQL                                           |
-| points                     | Heroku SQL                                           |
+| events                     | AWS RDS MySQL                                        |
+| attendance                 | AWS RDS MySQL                                        |
+| points                     | AWS RDS MySQL                                        |
 
 ## Functions
 
