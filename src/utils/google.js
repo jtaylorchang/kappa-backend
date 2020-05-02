@@ -10,7 +10,8 @@ export const verifyToken = async (token, email) => {
       audience: [
         '223233671218-ceilcecpn0t04ec5or3tk680pfoomf4v.apps.googleusercontent.com',
         '223233671218-joevmt53u95c0o70mttjrodcbd5nj23j.apps.googleusercontent.com',
-        '223233671218-v5meaa316pd8mgar3mgcvsmg3td7qnl6.apps.googleusercontent.com'
+        '223233671218-v5meaa316pd8mgar3mgcvsmg3td7qnl6.apps.googleusercontent.com',
+        '223233671218-6pfiu8hqonhkhugvf2jb4burtij54tru.apps.googleusercontent.com'
       ]
     });
 
