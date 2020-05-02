@@ -2,7 +2,7 @@
   "name": "ktt-backend",
   "version": "0.0.1",
   "description": "Serverless backend for Theta Tau Mobile",
-  "authory": "Jeff Taylor-Chang",
+  "author": "Jeff Taylor-Chang",
   "license": "ISC",
   "dependencies": {
     "@middy/core": "^1.0.0-beta.8",
