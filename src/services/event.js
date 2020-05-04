@@ -341,3 +341,41 @@ export const deleteAllEvents = async () => {
     return fail(error);
   }
 };
+
+export const searchEvents = async (search) => {
+  try {
+    let SELECT = `SELECT DISTINCT e.id, e.title, e.start`;
+    let FROM = 'FROM event e';
+    let WHERE = search.title ? `WHERE e.title LIKE ?` : ``;
+    let ORDER = `ORDER BY e.start`;
+
+    let values = [];
+
+    const searchForPoints = (category, value) => {
+      if (value !== '') {
+        FROM += ` INNER JOIN point p${category} ON e.id = p${category}.event_id AND p${category}.category = "${category}" AND p${category}.count = ?`;
+        values.push(value);
+      }
+    };
+
+    searchForPoints('PROF', search.profPoints);
+    searchForPoints('PHIL', search.philPoints);
+    searchForPoints('BRO', search.broPoints);
+    searchForPoints('RUSH', search.rushPoints);
+    searchForPoints('ANY', search.anyPoints);
+
+    if (search.title) {
+      values.push(search.title);
+    }
+
+    const query = `${SELECT} ${FROM} ${WHERE} ${ORDER}`;
+
+    const results = await mysql.query(query, values);
+
+    return pass({
+      events: results
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
