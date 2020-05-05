@@ -17,6 +17,12 @@ export const verifyToken = async (token, email) => {
 
     const payload = ticket.getPayload();
 
+    if (!payload.email_verified) {
+      return fail({
+        message: 'email not verified'
+      });
+    }
+
     if (payload.email.toLowerCase() !== email.toLowerCase()) {
       return fail({
         message: 'email mismatch'
