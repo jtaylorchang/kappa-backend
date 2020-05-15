@@ -11,11 +11,11 @@ const _handler = async (event, context) => {
   }
 
   const ocBody = oc(event.body, {
-    event_id: '',
-    event_code: ''
+    eventId: '',
+    eventCode: ''
   });
 
-  if (ocBody.event_id === '' || ocBody.event_code === '') {
+  if (ocBody.eventId === '' || ocBody.eventCode === '') {
     throw new createHttpError.BadRequest('Missing required fields');
   }
 
@@ -25,11 +25,9 @@ const _handler = async (event, context) => {
     throw new createHttpError.BadRequest(verifiedAttendance.error.message);
   }
 
-  const netid = extractNetid(event.user.email);
-
   const createdAttendance = await createAttendance({
-    event_id: ocBody.event_id,
-    netid
+    eventId: ocBody.eventId,
+    _id: event.user.email
   });
 
   if (!createdAttendance.success) {
@@ -39,18 +37,12 @@ const _handler = async (event, context) => {
   return {
     statusCode: 200,
     body: {
-      attended: [
-        {
-          netid,
-          event_id: ocBody.event_id
-        }
-      ]
+      attended: [createdAttendance.data.attendance]
     }
   };
 };
 
 export const handler = middyfy(_handler, {
   authorized: true,
-  useMongo: true,
-  useSql: true
+  useMongo: true
 });

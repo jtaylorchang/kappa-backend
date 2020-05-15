@@ -1,6 +1,6 @@
 import { db } from 'utils/mongoConnector';
 import { pass, fail } from 'utils/res';
-import { extractNetid } from './user';
+import { projectChanges } from 'services/mongoHelper';
 
 export const POINT_CATEGORIES = ['BRO', 'RUSH', 'PROF', 'PHIL', 'ANY'];
 
@@ -38,26 +38,25 @@ export const createEvent = async (event) => {
   }
 };
 
-export const updateEvent = async (event) => {
+export const updateEvent = async (_id, changes) => {
   try {
-    const results = await mysql.query(
-      'UPDATE event SET event_type = ?, event_code = ?, mandatory = ?, excusable = ?, title = ?, description = ?, start = ?, duration = ?, location = ? WHERE id = ?',
-      [
-        event.event_type,
-        event.event_code,
-        event.mandatory,
-        event.excusable,
-        event.title,
-        event.description,
-        event.start,
-        event.duration,
-        event.location,
-        event.id
-      ]
+    const collection = db.collection('events');
+
+    const res = await collection.findOneAndUpdate(
+      {
+        _id
+      },
+      {
+        $set: changes
+      },
+      {
+        returnOriginal: false,
+        returnNewDocument: true
+      }
     );
 
     return pass({
-      event
+      event: res.value
     });
   } catch (error) {
     return fail(error);
@@ -66,7 +65,11 @@ export const updateEvent = async (event) => {
 
 export const deleteEvent = async (event) => {
   try {
-    const results = await mysql.query('DELETE FROM event WHERE id = ?', [event.id]);
+    const collection = db.collection('events');
+
+    const res = await collection.deleteOne({
+      _id: event._id
+    });
 
     return pass({
       event
@@ -78,9 +81,13 @@ export const deleteEvent = async (event) => {
 
 export const getAttendanceByEvent = async (event) => {
   try {
-    const attended = await mysql.query('SELECT * FROM attendance WHERE event_id = ?', [event.id]);
+    const attended = await db.collection('attendance').find({
+      eventId: event._id
+    });
 
-    const excused = await mysql.query('SELECT * FROM excuse WHERE event_id = ?', [event.id]);
+    const excused = await db.collection('excuses').find({
+      eventId: event._id
+    });
 
     return pass({
       attended,
@@ -93,9 +100,13 @@ export const getAttendanceByEvent = async (event) => {
 
 export const getAttendanceByUser = async (user) => {
   try {
-    const attended = await mysql.query('SELECT * FROM attendance WHERE netid = ?', [extractNetid(user.email)]);
+    const attended = await db.collection('attendance').find({
+      _id: user.email
+    });
 
-    const excused = await mysql.query('SELECT * FROM excuse WHERE netid = ?', [extractNetid(user.email)]);
+    const excused = await db.collection('excuses').find({
+      _id: user.email
+    });
 
     return pass({
       attended,
@@ -106,32 +117,21 @@ export const getAttendanceByUser = async (user) => {
   }
 };
 
-export const getAttendedEventTypesByUser = async (user) => {
-  try {
-    const results = await mysql.query(
-      "SELECT event_type, (SELECT GROUP_CONCAT(category, ':', count) FROM point WHERE event_id = id GROUP BY event_id) as points FROM event e WHERE EXISTS (SELECT netid FROM attendance WHERE event_id = e.id AND netid = ? UNION SELECT netid FROM excuse WHERE event_id = e.id AND netid = ? AND approved = 1)",
-      [extractNetid(user.email), extractNetid(user.email)]
-    );
-
-    return pass({
-      events: results
-    });
-  } catch (error) {
-    return fail(error);
-  }
-};
-
 export const verifyAttendanceCode = async (event) => {
   try {
-    const matchingEvent = await mysql.query('SELECT * FROM event WHERE id = ?', [event.event_id]);
+    const collection = db.collection('events');
 
-    if (matchingEvent.length === 0) {
+    const matchingEvent = await collection.findOne({
+      eventId: event._id
+    });
+
+    if (!matchingEvent) {
       return fail({
         message: 'Event not found'
       });
     }
 
-    if (matchingEvent[0].event_code !== event.event_code) {
+    if (matchingEvent.event_code !== event.event_code) {
       return fail({
         message: 'Invalid code'
       });
@@ -145,13 +145,12 @@ export const verifyAttendanceCode = async (event) => {
 
 export const createAttendance = async (attendance) => {
   try {
-    const results = await mysql.query('INSERT INTO attendance (event_id, netid) VALUES (?, ?)', [
-      attendance.event_id,
-      attendance.netid
-    ]);
+    const collection = db.collection('attendance');
+
+    const res = await collection.insertOne(attendance);
 
     return pass({
-      attendance
+      attendance: res.ops[0]
     });
   } catch (error) {
     return fail(error);
@@ -160,13 +159,15 @@ export const createAttendance = async (attendance) => {
 
 export const createExcuse = async (excuse, approved = 0) => {
   try {
-    const results = await mysql.query(
-      'INSERT INTO excuse (event_id, netid, reason, late, approved) VALUES (?, ?, ?, ?, ?)',
-      [excuse.event_id, excuse.netid, excuse.reason, excuse.late, approved]
-    );
+    const collection = db.collection('excuses');
+
+    const res = await collection.insertOne({
+      ...excuse,
+      approved
+    });
 
     return pass({
-      excuse
+      excuse: res.ops[0]
     });
   } catch (error) {
     return fail(error);
@@ -175,6 +176,9 @@ export const createExcuse = async (excuse, approved = 0) => {
 
 export const getPendingExcuses = async (user) => {
   try {
+    const collection = db.collection('excuses');
+
+    const res = await collection.aggregate({});
     const query = `SELECT excuses.event_id, excuses.netid, excuses.reason, excuses.late, excuses.approved, event.title, event.start FROM (SELECT * FROM excuse WHERE approved = 0${
       user.privileged ? '' : ' AND netid = ?'
     }) as excuses JOIN event ON excuses.event_id = event.id`;
@@ -190,17 +194,26 @@ export const getPendingExcuses = async (user) => {
 
 export const approveExcuse = async (excuse) => {
   try {
-    const results = await mysql.query('UPDATE excuse SET approved = ? WHERE event_id = ? AND netid = ?', [
-      1,
-      excuse.event_id,
-      excuse.netid
-    ]);
+    const collection = db.collection('excuses');
+
+    const res = await collection.findOneAndUpdate(
+      {
+        _id: excuse._id,
+        eventId: excuse.eventId
+      },
+      {
+        $set: {
+          approved: 1
+        }
+      },
+      {
+        returnOriginal: false,
+        returnNewDocument: true
+      }
+    );
 
     return pass({
-      excuse: {
-        ...excuse,
-        approved: 1
-      }
+      excuse: res.value
     });
   } catch (error) {
     return fail(error);
@@ -209,10 +222,12 @@ export const approveExcuse = async (excuse) => {
 
 export const rejectExcuse = async (excuse) => {
   try {
-    const results = await mysql.query('DELETE FROM excuse WHERE event_id = ? AND netid = ?', [
-      excuse.event_id,
-      excuse.netid
-    ]);
+    const collection = db.collection('excuses');
+
+    const res = await collection.deleteOne({
+      _id: excuse._id,
+      eventId: excuse.eventId
+    });
 
     return pass({
       excuse
@@ -272,95 +287,13 @@ export const computePoints = (events) => {
   return totalPoints;
 };
 
-export const createPoint = async (point) => {
-  try {
-    const results = await mysql.query(
-      'INSERT INTO point (event_id, category, count) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE count = ?',
-      [point.event_id, point.category, point.count, point.count]
-    );
-
-    return pass({
-      point
-    });
-  } catch (error) {
-    return fail(error);
-  }
-};
-
-export const editPoint = async (point) => {
-  try {
-    const results = await mysql.query('UPDATE point SET category = ?, count = ? WHERE event_id = ?', [
-      point.category,
-      point.count,
-      point.event_id
-    ]);
-
-    return pass({
-      point
-    });
-  } catch (error) {
-    return fail(error);
-  }
-};
-
-export const deletePoint = async (point) => {
-  try {
-    const results = await mysql.query('DELETE FROM point WHERE event_id = ? AND category = ?', [
-      point.event_id,
-      point.category
-    ]);
-
-    return pass({
-      point
-    });
-  } catch (error) {
-    return fail(error);
-  }
-};
-
 export const deleteAllEvents = async () => {
   try {
-    const results = await mysql.query('DELETE FROM event');
+    const collection = db.collection('events');
+
+    const res = await collection.deleteMany({});
 
     return pass();
-  } catch (error) {
-    return fail(error);
-  }
-};
-
-export const searchEvents = async (search) => {
-  try {
-    let SELECT = `SELECT DISTINCT e.id, e.title, e.start`;
-    let FROM = 'FROM event e';
-    let WHERE = search.title ? `WHERE e.title LIKE ?` : ``;
-    let ORDER = `ORDER BY e.start`;
-
-    let values = [];
-
-    const searchForPoints = (category, value) => {
-      if (value !== '') {
-        FROM += ` INNER JOIN point p${category} ON e.id = p${category}.event_id AND p${category}.category = "${category}" AND p${category}.count = ?`;
-        values.push(value);
-      }
-    };
-
-    searchForPoints('PROF', search.profPoints);
-    searchForPoints('PHIL', search.philPoints);
-    searchForPoints('BRO', search.broPoints);
-    searchForPoints('RUSH', search.rushPoints);
-    searchForPoints('ANY', search.anyPoints);
-
-    if (search.title) {
-      values.push(search.title);
-    }
-
-    const query = `${SELECT} ${FROM} ${WHERE} ${ORDER}`;
-
-    const results = await mysql.query(query, values);
-
-    return pass({
-      events: results
-    });
   } catch (error) {
     return fail(error);
   }

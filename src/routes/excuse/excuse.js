@@ -3,7 +3,6 @@ import createHttpError from 'http-errors';
 import oc from 'js-optchain';
 
 import { createExcuse } from 'services/event';
-import { extractNetid } from 'services/user';
 
 const _handler = async (event, context) => {
   if (!event.authorized) {
@@ -12,19 +11,19 @@ const _handler = async (event, context) => {
 
   const ocBody = oc(event.body, {
     excuse: {
-      event_id: '',
+      eventId: '',
       reason: '',
       late: 0
     }
   });
 
-  if (ocBody.excuse.event_id === '' || ocBody.excuse.reason === '') {
+  if (ocBody.excuse.eventId === '' || ocBody.excuse.reason === '') {
     throw new createHttpError.BadRequest('Missing required fields');
   }
 
   let newExcuse = {
     ...ocBody.excuse,
-    netid: extractNetid(event.user.email)
+    _id: event.user.email
   };
 
   const createdExcuse = await createExcuse(newExcuse);
@@ -36,18 +35,12 @@ const _handler = async (event, context) => {
   return {
     statusCode: 200,
     body: {
-      excused: [
-        {
-          ...newExcuse,
-          approved: 0
-        }
-      ]
+      excused: [createdExcuse.data.excuse]
     }
   };
 };
 
 export const handler = middyfy(_handler, {
   authorized: true,
-  useMongo: true,
-  useSql: true
+  useMongo: true
 });

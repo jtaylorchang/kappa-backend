@@ -11,6 +11,5 @@ const _handler = async (event, context) => {
 
 export const handler = middyfy(_handler, {
   authorized: false,
-  useMongo: false,
-  useSql: false
+  useMongo: false
 });

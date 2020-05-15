@@ -15,7 +15,7 @@ const _handler = async (event, context) => {
   }
 
   const deletedEvent = await deleteEvent({
-    id: target
+    _id: target
   });
 
   if (!deletedEvent.success) {
@@ -26,7 +26,7 @@ const _handler = async (event, context) => {
     statusCode: 200,
     body: {
       event: {
-        id: target
+        _id: target
       }
     }
   };
@@ -34,6 +34,5 @@ const _handler = async (event, context) => {
 
 export const handler = middyfy(_handler, {
   authorized: true,
-  useMongo: true,
-  useSql: true
+  useMongo: true
 });

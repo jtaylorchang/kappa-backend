@@ -1,5 +1,5 @@
 import { db } from 'utils/mongoConnector';
-import { projectChanges } from './mongoHelper';
+import { projectChanges } from 'services/mongoHelper';
 import { pass, fail } from 'utils/res';
 
 export const getUser = async (email) => {

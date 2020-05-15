@@ -11,8 +11,8 @@ const _handler = async (event, context) => {
 
   const ocBody = oc(event.body, {
     excuse: {
-      event_id: '',
-      netid: '',
+      eventId: '',
+      _id: '',
       reason: '',
       approved: -1,
       late: 0
@@ -20,8 +20,8 @@ const _handler = async (event, context) => {
   });
 
   if (
-    ocBody.excuse.event_id === '' ||
-    ocBody.excuse.netid === '' ||
+    ocBody.excuse.eventId === '' ||
+    ocBody.excuse._id === '' ||
     (ocBody.excuse.approved !== 0 && ocBody.excuse.approved !== 1)
   ) {
     throw new createHttpError.BadRequest('Missing required fields');
@@ -60,6 +60,5 @@ const _handler = async (event, context) => {
 
 export const handler = middyfy(_handler, {
   authorized: true,
-  useMongo: true,
-  useSql: true
+  useMongo: true
 });

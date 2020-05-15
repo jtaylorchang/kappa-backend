@@ -11,7 +11,7 @@ const _handler = async (event, context) => {
   }
 
   const attendance = await getAttendanceByEvent({
-    id: target
+    _id: target
   });
 
   if (!attendance.success) {
@@ -28,6 +28,5 @@ const _handler = async (event, context) => {
 
 export const handler = middyfy(_handler, {
   authorized: true,
-  useMongo: true,
-  useSql: true
+  useMongo: true
 });
