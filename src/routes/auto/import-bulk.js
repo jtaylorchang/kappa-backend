@@ -48,11 +48,11 @@ const _handler = async (event, context) => {
       duration: parseInt(event.duration),
       location: event.location,
       points: {
-        PROF: event.profPoints,
-        PHIL: event.philPoints,
-        BRO: event.broPoints,
-        RUSH: event.rushPoints,
-        ANY: event.anyPoints
+        PROF: parseInt(event.profPoints),
+        PHIL: parseInt(event.philPoints),
+        BRO: parseInt(event.broPoints),
+        RUSH: parseInt(event.rushPoints),
+        ANY: parseInt(event.anyPoints)
       }
     };
 
