@@ -1,4 +1,4 @@
-import { db } from 'utils/mongoConnector';
+import { mysql } from 'utils/sqlConnector';
 import { pass, fail } from 'utils/res';
 import { extractNetid } from './user';
 
@@ -6,18 +6,16 @@ export const POINT_CATEGORIES = ['BRO', 'RUSH', 'PROF', 'PHIL', 'ANY'];
 
 export const getAllEvents = async (user) => {
   try {
-    const collection = db.collection('events');
-
-    const projection = user.privileged
-      ? undefined
-      : {
-          eventCode: 0
-        };
-
-    const res = await collection.find({}, projection).toArray();
+    const results = await mysql.query(
+      `SELECT ${
+        user.privileged
+          ? '*'
+          : 'id, creator, event_type, mandatory, excusable, title, description, start, duration, location'
+      }, (SELECT GROUP_CONCAT(category, ':', count) FROM point WHERE event_id = id GROUP BY event_id) as points FROM event ORDER BY start`
+    );
 
     return pass({
-      events: res
+      events: results
     });
   } catch (error) {
     return fail(error);
@@ -26,12 +24,28 @@ export const getAllEvents = async (user) => {
 
 export const createEvent = async (event) => {
   try {
-    const collection = db.collection('events');
-
-    const res = await collection.insertOne(event);
+    const results = await mysql.query(
+      'INSERT INTO event' +
+        ' (id, creator, event_type, event_code, mandatory, excusable, title, description, start, duration, location)' +
+        ' VALUES' +
+        ' (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [
+        event.id,
+        event.creator,
+        event.event_type,
+        event.event_code,
+        event.mandatory,
+        event.excusable,
+        event.title,
+        event.description,
+        event.start,
+        event.duration,
+        event.location
+      ]
+    );
 
     return pass({
-      event: res.ops[0]
+      event
     });
   } catch (error) {
     return fail(error);

@@ -15,10 +15,6 @@ provider:
     AUTH_SECRET: ${file(./serverless-config/secrets.json):AUTH_SECRET}
     ADMIN_SECRET: ${file(./serverless-config/secrets.json):ADMIN_SECRET}
     MONGODB_URI: ${file(./serverless-config/secrets.json):MONGODB_URI}
-    SQL_HOST: ${file(./serverless-config/secrets.json):SQL_HOST}
-    SQL_DATABASE: ${file(./serverless-config/secrets.json):SQL_DATABASE}
-    SQL_USERNAME: ${file(./serverless-config/secrets.json):SQL_USERNAME}
-    SQL_PASSWORD: ${file(./serverless-config/secrets.json):SQL_PASSWORD}
 
 package:
   individually: true
