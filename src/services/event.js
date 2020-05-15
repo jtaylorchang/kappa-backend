@@ -1,4 +1,5 @@
 import { db } from 'utils/mongoConnector';
+import { ObjectID } from 'mongodb';
 import { pass, fail } from 'utils/res';
 import { projectChanges } from 'services/mongoHelper';
 
@@ -65,10 +66,16 @@ export const updateEvent = async (_id, changes) => {
 
 export const deleteEvent = async (event) => {
   try {
-    const collection = db.collection('events');
+    await db.collection('events').deleteOne({
+      _id: new ObjectID(event._id)
+    });
 
-    const res = await collection.deleteOne({
-      _id: event._id
+    await db.collection('attendance').deleteMany({
+      eventId: event._id
+    });
+
+    await db.collection('excuses').deleteMany({
+      eventId: event._id
     });
 
     return pass({
@@ -210,7 +217,7 @@ export const approveExcuse = async (excuse) => {
 
     const res = await collection.findOneAndUpdate(
       {
-        _id: excuse._id
+        _id: new ObjectID(excuse._id)
       },
       {
         $set: {
@@ -236,7 +243,7 @@ export const rejectExcuse = async (excuse) => {
     const collection = db.collection('excuses');
 
     const res = await collection.deleteOne({
-      _id: excuse._id
+      _id: new ObjectID(excuse._id)
     });
 
     return pass({
@@ -299,9 +306,9 @@ export const computePoints = (events) => {
 
 export const deleteAllEvents = async () => {
   try {
-    const collection = db.collection('events');
-
-    const res = await collection.deleteMany({});
+    await db.collection('events').deleteMany({});
+    await db.collection('attendance').deleteMany({});
+    await db.collection('excuses').deleteMany({});
 
     return pass();
   } catch (error) {

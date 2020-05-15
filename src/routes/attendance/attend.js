@@ -3,7 +3,6 @@ import createHttpError from 'http-errors';
 import oc from 'js-optchain';
 
 import { verifyAttendanceCode, createAttendance } from 'services/event';
-import { extractNetid } from 'services/user';
 
 const _handler = async (event, context) => {
   if (!event.authorized) {
