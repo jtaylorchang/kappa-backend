@@ -27,7 +27,7 @@ const _handler = async (event, context) => {
 
   const createdAttendance = await createAttendance({
     eventId: ocBody.eventId,
-    _id: event.user.email
+    email: event.user.email
   });
 
   if (!createdAttendance.success) {

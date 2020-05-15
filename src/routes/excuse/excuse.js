@@ -23,7 +23,7 @@ const _handler = async (event, context) => {
 
   let newExcuse = {
     ...ocBody.excuse,
-    _id: event.user.email
+    email: event.user.email
   };
 
   const createdExcuse = await createExcuse(newExcuse);

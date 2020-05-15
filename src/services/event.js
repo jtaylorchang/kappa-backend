@@ -81,13 +81,19 @@ export const deleteEvent = async (event) => {
 
 export const getAttendanceByEvent = async (event) => {
   try {
-    const attended = await db.collection('attendance').find({
-      eventId: event._id
-    });
+    const attended = await db
+      .collection('attendance')
+      .find({
+        eventId: event._id
+      })
+      .toArray();
 
-    const excused = await db.collection('excuses').find({
-      eventId: event._id
-    });
+    const excused = await db
+      .collection('excuses')
+      .find({
+        eventId: event._id
+      })
+      .toArray();
 
     return pass({
       attended,
@@ -100,13 +106,19 @@ export const getAttendanceByEvent = async (event) => {
 
 export const getAttendanceByUser = async (user) => {
   try {
-    const attended = await db.collection('attendance').find({
-      _id: user.email
-    });
+    const attended = await db
+      .collection('attendance')
+      .find({
+        email: user.email
+      })
+      .toArray();
 
-    const excused = await db.collection('excuses').find({
-      _id: user.email
-    });
+    const excused = await db
+      .collection('excuses')
+      .find({
+        email: user.email
+      })
+      .toArray();
 
     return pass({
       attended,
@@ -131,7 +143,7 @@ export const verifyAttendanceCode = async (event) => {
       });
     }
 
-    if (matchingEvent.event_code !== event.event_code) {
+    if (matchingEvent.eventCode !== event.eventCode) {
       return fail({
         message: 'Invalid code'
       });
@@ -198,8 +210,7 @@ export const approveExcuse = async (excuse) => {
 
     const res = await collection.findOneAndUpdate(
       {
-        _id: excuse._id,
-        eventId: excuse.eventId
+        _id: excuse._id
       },
       {
         $set: {
@@ -225,8 +236,7 @@ export const rejectExcuse = async (excuse) => {
     const collection = db.collection('excuses');
 
     const res = await collection.deleteOne({
-      _id: excuse._id,
-      eventId: excuse.eventId
+      _id: excuse._id
     });
 
     return pass({

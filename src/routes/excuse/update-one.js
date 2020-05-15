@@ -11,21 +11,16 @@ const _handler = async (event, context) => {
 
   const ocBody = oc(event.body, {
     excuse: {
-      eventId: '',
       _id: '',
-      reason: '',
-      approved: -1,
-      late: 0
+      approved: -1
     }
   });
 
-  if (
-    ocBody.excuse.eventId === '' ||
-    ocBody.excuse._id === '' ||
-    (ocBody.excuse.approved !== 0 && ocBody.excuse.approved !== 1)
-  ) {
+  if (ocBody.excuse._id === '' || (ocBody.excuse.approved !== 0 && ocBody.excuse.approved !== 1)) {
     throw new createHttpError.BadRequest('Missing required fields');
   }
+
+  let updatedExcuse = ocBody.excuse;
 
   if (ocBody.excuse.approved === 1) {
     const approvedExcuse = await approveExcuse(ocBody.excuse);
@@ -33,6 +28,8 @@ const _handler = async (event, context) => {
     if (!approvedExcuse.success) {
       throw new createHttpError.InternalServerError('Could not approve excuse');
     }
+
+    updatedExcuse = approvedExcuse.data.excuse;
   } else if (ocBody.excuse.approved === 0) {
     const rejectedExcuse = await rejectExcuse(ocBody.excuse);
 
@@ -47,7 +44,7 @@ const _handler = async (event, context) => {
     body: {
       excused:
         ocBody.excuse.approved === 1
-          ? [ocBody.excuse]
+          ? [updatedExcuse]
           : [
               {
                 ...ocBody.excuse,
