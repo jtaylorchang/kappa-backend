@@ -21,11 +21,7 @@ Need to create a `serverless-config/secrets.json` file of the following signatur
   "ADMIN_SECRET": "<admin_secret>",
   "AWS_ACCESS_KEY_ID": "<access_key>",
   "AWS_SECRET_ACCESS_KEY": "<secret_access_key>",
-  "MONGODB_URI": "<mongo_database_uri>",
-  "SQL_HOST": "<sql_host>",
-  "SQL_DATABASE": "<sql_database>",
-  "SQL_USERNAME": "<sql_username>",
-  "SQL_PASSWORD": "<sql_password>"
+  "MONGODB_URI": "<mongo_database_uri>"
 }
 ```
 
@@ -33,9 +29,13 @@ Need to create a `serverless-config/secrets.json` file of the following signatur
 yarn offline
 ```
 
+## Note:
+
+`MySQL` was used in v0.1 but for v1.0 we are moving to store all data in `Mongo`. Originally the `MySQL` hosting was via `Heroku` but we hit free tier limitations and AWS RDS pricing is not perpetual unlike `Mongo`. `Mongo`'s 512mb free tier should be plenty to store all the data for the app. Any references to `SQL` are for legacy purposes but are going to be (or are) deprecated as of v1.0
+
 ## Testing
 
-This project uses `serverless` in conjunction with `MySQL` and `Docker`. In order to test offline, you must have docker installed and our `ktt-docker` repos cloned. You must also have mysql and mongo installed locally, we recommend using Homebrew for MacOS users.
+This project uses `serverless` in conjunction with `Mongo`, `MySQL` and `Docker`. In order to test offline, you must have docker installed and our `ktt-docker` repos cloned. You must also have mysql and mongo installed locally, we recommend using Homebrew for MacOS users.
 
 **Installation**
 
