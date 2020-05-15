@@ -6037,10 +6037,10 @@ jmespath@0.15.0:
   resolved "https://registry.yarnpkg.com/jmespath/-/jmespath-0.15.0.tgz#a3f222a9aae9f966f5d27c796510e28091764217"
   integrity sha1-o/Iiqarp+Wb10nx5ZRDigJF2Qhc=
 
-js-optchain@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/js-optchain/-/js-optchain-1.1.0.tgz#6ea321cfe4ed44b48cf4b96f999c1849efd84a1b"
-  integrity sha512-KYnwR8W49S1jtmWUimCRe/OSrljSI4UaG3E2XFg9PxzYAQZBwwCQ9poTMh6Ca1z97+RcmsQ1nfWrzRU05OUDmQ==
+js-optchain@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/js-optchain/-/js-optchain-2.0.0.tgz#724fb6b08a0bf8929dc6d111141b1b2ca539b202"
+  integrity sha512-VNnBuUkDGdIuDnZfsaIEIOXcA+5rGz+toR+Vt8nYkb5yOGaYy8ayWiB+gyQ+UV++bJ15E6e3ZekHPU0af+4wpA==
 
 js-string-escape@^1.0.1:
   version "1.0.1"
