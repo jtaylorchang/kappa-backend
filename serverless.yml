@@ -160,14 +160,14 @@ functions:
           method: GET
           cors: true
 
-  searchEvents:
-    warmup: false
-    handler: src/routes/search/search-event.handler
-    events:
-      - http:
-          path: search/events
-          method: POST
-          cors: true
+  # searchEvents:
+  #   warmup: false
+  #   handler: src/routes/search/search-event.handler
+  #   events:
+  #     - http:
+  #         path: search/events
+  #         method: POST
+  #         cors: true
 
   admin-override:
     warmup: false
