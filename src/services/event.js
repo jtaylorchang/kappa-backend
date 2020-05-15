@@ -45,7 +45,7 @@ export const updateEvent = async (_id, changes) => {
 
     const res = await collection.findOneAndUpdate(
       {
-        _id
+        _id: new ObjectID(_id)
       },
       {
         $set: changes
