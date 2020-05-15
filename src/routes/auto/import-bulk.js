@@ -1,12 +1,10 @@
 import middyfy from 'middleware';
 import createHttpError from 'http-errors';
-import { v4 as uuidV4 } from 'uuid';
 import moment from 'moment-timezone';
 
-import { deleteAllEvents, createEvent, createPoint, createAttendance, createExcuse } from 'services/event';
+import { deleteAllEvents, createEvent, createAttendance, createExcuse } from 'services/event';
 import { SPRING_2020 } from 'utils/dataSources';
 import { generateCode } from 'utils/auth';
-import { extractNetid } from 'services/user';
 
 const _handler = async (event, context) => {
   if (!event.authorized || !event.user.privileged || process.env.SLS_IS_OFFLINE !== 'TRUE') {
@@ -38,18 +36,24 @@ const _handler = async (event, context) => {
   for (const event of events) {
     // Create event
 
-    const newEvent = {
-      id: uuidV4(),
+    let newEvent = {
       creator: 'jjt4',
-      event_type: event.type,
-      event_code: generateCode(),
+      eventType: event.type,
+      eventCode: generateCode(),
       mandatory: event.mandatory === '1' ? 1 : 0,
       excusable: event.excusable === '1' ? 1 : 0,
       title: event.title,
       description: event.description,
       start: moment.tz(`${event.date} ${event.time}`, 'America/Chicago').toISOString(),
       duration: parseInt(event.duration),
-      location: event.location
+      location: event.location,
+      points: {
+        PROF: event.profPoints,
+        PHIL: event.philPoints,
+        BRO: event.broPoints,
+        RUSH: event.rushPoints,
+        ANY: event.anyPoints
+      }
     };
 
     const createdEvent = await createEvent(newEvent);
@@ -58,52 +62,20 @@ const _handler = async (event, context) => {
       throw new createHttpError.InternalServerError('Could not create event');
     }
 
+    newEvent = createdEvent.data.event;
+
     createdEvents.push(newEvent);
-
-    // Create points
-
-    const _createPoints = async (category, count) => {
-      const createdPoint = await createPoint({
-        event_id: newEvent.id,
-        category: category,
-        count: parseInt(count)
-      });
-
-      if (!createdPoint.success) {
-        throw new createHttpError.InternalServerError('Failed to create prof points');
-      }
-    };
-
-    if (event.profPoints !== '0') {
-      await _createPoints('PROF', event.profPoints);
-    }
-
-    if (event.philPoints !== '0') {
-      await _createPoints('PHIL', event.philPoints);
-    }
-
-    if (event.broPoints !== '0') {
-      await _createPoints('BRO', event.broPoints);
-    }
-
-    if (event.rushPoints !== '0') {
-      await _createPoints('RUSH', event.rushPoints);
-    }
-
-    if (event.anyPoints !== '0') {
-      await _createPoints('ANY', event.anyPoints);
-    }
 
     // Add attendance
 
     for (const email of event.attended) {
       const createdAttendance = await createAttendance({
-        event_id: newEvent.id,
-        netid: extractNetid(email)
+        eventId: newEvent._id,
+        email
       });
 
       if (!createdAttendance.success) {
-        throw new createHttpError.InternalServerError(`Failed to create attendance for ${newEvent.id} : ${email}`);
+        throw new createHttpError.InternalServerError(`Failed to create attendance for ${newEvent._id} : ${email}`);
       }
     }
 
@@ -112,8 +84,8 @@ const _handler = async (event, context) => {
     for (const email of event.excused) {
       const createdExcuse = await createExcuse(
         {
-          event_id: newEvent.id,
-          netid: extractNetid(email),
+          eventId: newEvent._id,
+          email,
           reason: 'Automatic',
           late: 0
         },
@@ -121,7 +93,7 @@ const _handler = async (event, context) => {
       );
 
       if (!createdExcuse.success) {
-        throw new createHttpError.InternalServerError(`Failed to create excuse for ${newEvent} : ${email}`);
+        throw new createHttpError.InternalServerError(`Failed to create excuse for ${newEvent._id} : ${email}`);
       }
     }
   }
