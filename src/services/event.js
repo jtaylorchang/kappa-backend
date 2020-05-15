@@ -71,11 +71,11 @@ export const deleteEvent = async (event) => {
     });
 
     await db.collection('attendance').deleteMany({
-      eventId: event._id
+      eventId: new ObjectID(event._id)
     });
 
     await db.collection('excuses').deleteMany({
-      eventId: event._id
+      eventId: new ObjectID(event._id)
     });
 
     return pass({
@@ -91,14 +91,14 @@ export const getAttendanceByEvent = async (event) => {
     const attended = await db
       .collection('attendance')
       .find({
-        eventId: event._id
+        eventId: new ObjectID(event._id)
       })
       .toArray();
 
     const excused = await db
       .collection('excuses')
       .find({
-        eventId: event._id
+        eventId: new ObjectID(event._id)
       })
       .toArray();
 
@@ -141,7 +141,7 @@ export const verifyAttendanceCode = async (event) => {
     const collection = db.collection('events');
 
     const matchingEvent = await collection.findOne({
-      eventId: event._id
+      eventId: new ObjectID(event._id)
     });
 
     if (!matchingEvent) {
@@ -166,7 +166,10 @@ export const createAttendance = async (attendance) => {
   try {
     const collection = db.collection('attendance');
 
-    const res = await collection.insertOne(attendance);
+    const res = await collection.insertOne({
+      email: attendance.email,
+      eventId: new ObjectID(attendance.eventId)
+    });
 
     return pass({
       attendance: res.ops[0]
@@ -181,7 +184,10 @@ export const createExcuse = async (excuse, approved = 0) => {
     const collection = db.collection('excuses');
 
     const res = await collection.insertOne({
-      ...excuse,
+      email: excuse.email,
+      eventId: new ObjectID(excuse.eventId),
+      reason: excuse.reason,
+      late: excuse.late,
       approved
     });
 
@@ -254,15 +260,62 @@ export const rejectExcuse = async (excuse) => {
   }
 };
 
-export const getPointsByUser = async (user) => {
+export const getAllPointEvents = async (user) => {
   try {
-    const results = await mysql.query(
-      'SELECT p.category as category, SUM(p.count) as count FROM event e JOIN point p on e.id = p.event_id WHERE EXISTS (SELECT netid FROM attendance WHERE event_id = e.id AND netid = ? UNION SELECT netid FROM excuse WHERE event_id = e.id AND netid = ? AND approved = 1) GROUP BY category',
-      [extractNetid(user.email), extractNetid(user.email)]
-    );
+    const attended = await db
+      .collection('attendance')
+      .aggregate([
+        {
+          $match: {
+            email: user.email
+          }
+        },
+        {
+          $lookup: {
+            from: 'events',
+            localField: 'eventId',
+            foreignField: '_id',
+            as: 'event'
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            eventId: 1,
+            eventType: { $arrayElemAt: ['$event.eventType', 0] },
+            points: { $arrayElemAt: ['$event.points', 0] }
+          }
+        }
+      ])
+      .toArray();
+
+    const excused = await db.collection('excuses').aggregate([
+      {
+        $match: {
+          email: user.email,
+          approved: 1
+        }
+      },
+      {
+        $lookup: {
+          from: 'events',
+          localField: 'eventId',
+          foreignField: '_id',
+          as: 'event'
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          eventId: 1,
+          eventType: { $arrayElemAt: ['$event.eventType', 0] },
+          points: { $arrayElemAt: ['$event.points', 0] }
+        }
+      }
+    ]);
 
     return pass({
-      points: results
+      events: attended.concat(excused)
     });
   } catch (error) {
     return fail(error);
@@ -288,15 +341,8 @@ export const computePoints = (events) => {
 
       countedHappyHour = true;
     } else if (points) {
-      const point_pieces = points.split(',');
-
-      for (const piece of point_pieces) {
-        const colonIndex = piece.indexOf(':');
-
-        const category = piece.substring(0, colonIndex);
-        const count = parseInt(piece.substring(colonIndex + 1));
-
-        totalPoints[category] += count;
+      for (const [key, value] of Object.entries(points)) {
+        totalPoints[key] += parseInt(value);
       }
     }
   }

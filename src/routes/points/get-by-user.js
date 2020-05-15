@@ -1,7 +1,7 @@
 import middyfy from 'middleware';
 import createHttpError from 'http-errors';
 
-import { getAttendedEventTypesByUser, computePoints } from 'services/event';
+import { getAllPointEvents, computePoints } from 'services/event';
 
 const _handler = async (event, context) => {
   const target = decodeURIComponent(event.pathParameters?.target);
@@ -10,18 +10,16 @@ const _handler = async (event, context) => {
     throw new createHttpError.Unauthorized('Not authorized');
   }
 
-  const attendedEventPoints = await getAttendedEventTypesByUser({
-    email: target
-  });
+  const pointEvents = await getAllPointEvents({ email: target });
 
-  if (!attendedEventPoints.success) {
+  if (!pointEvents.success) {
     throw new createHttpError.InternalServerError('Could not get points');
   }
 
   return {
     statusCode: 200,
     body: {
-      points: computePoints(attendedEventPoints.data.events)
+      points: computePoints(pointEvents.data.events)
     }
   };
 };
