@@ -201,16 +201,45 @@ export const createExcuse = async (excuse, approved = 0) => {
 
 export const getPendingExcuses = async (user) => {
   try {
-    const collection = db.collection('excuses');
+    const match = {
+      approved: 0
+    };
 
-    const res = await collection.aggregate({});
-    const query = `SELECT excuses.event_id, excuses.netid, excuses.reason, excuses.late, excuses.approved, event.title, event.start FROM (SELECT * FROM excuse WHERE approved = 0${
-      user.privileged ? '' : ' AND netid = ?'
-    }) as excuses JOIN event ON excuses.event_id = event.id`;
-    const results = user.privileged ? await mysql.query(query) : await mysql.query(query, [extractNetid(user.email)]);
+    if (!user.privileged) {
+      match.email = user.email;
+    }
+
+    const res = await db
+      .collection('excuses')
+      .aggregate([
+        {
+          $match: match
+        },
+        {
+          $lookup: {
+            from: 'events',
+            localField: 'eventId',
+            foreignField: '_id',
+            as: 'event'
+          }
+        },
+        {
+          $project: {
+            _id: 1,
+            eventId: 1,
+            email: 1,
+            reason: 1,
+            late: 1,
+            approved: 1,
+            title: { $arrayElemAt: ['$event.eventType', 0] },
+            start: { $arrayElemAt: ['$event.start', 0] }
+          }
+        }
+      ])
+      .toArray();
 
     return pass({
-      excuses: results
+      excuses: res
     });
   } catch (error) {
     return fail(error);
