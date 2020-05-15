@@ -23,7 +23,6 @@
     "moment-timezone": "^0.5.28",
     "mongodb": "^3.5.3",
     "node-fetch": "^2.6.0",
-    "serverless-mysql": "^1.5.3",
     "serverless-stage-manager": "^1.0.5",
     "source-map-support": "^0.5.16",
     "uuid": "^7.0.2"
