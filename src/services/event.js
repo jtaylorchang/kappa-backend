@@ -136,12 +136,12 @@ export const getAttendanceByUser = async (user) => {
   }
 };
 
-export const verifyAttendanceCode = async (event) => {
+export const verifyAttendanceCode = async (attendance) => {
   try {
     const collection = db.collection('events');
 
     const matchingEvent = await collection.findOne({
-      eventId: new ObjectID(event._id)
+      _id: new ObjectID(attendance.eventId)
     });
 
     if (!matchingEvent) {
@@ -150,7 +150,7 @@ export const verifyAttendanceCode = async (event) => {
       });
     }
 
-    if (matchingEvent.eventCode !== event.eventCode) {
+    if (matchingEvent.eventCode !== attendance.eventCode) {
       return fail({
         message: 'Invalid code'
       });
