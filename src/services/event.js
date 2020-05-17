@@ -179,7 +179,7 @@ export const createAttendance = async (attendance) => {
   }
 };
 
-export const createExcuse = async (excuse, approved = 0) => {
+export const createExcuse = async (excuse, approved = false) => {
   try {
     const collection = db.collection('excuses');
 
@@ -202,7 +202,7 @@ export const createExcuse = async (excuse, approved = 0) => {
 export const getPendingExcuses = async (user) => {
   try {
     const match = {
-      approved: 0
+      approved: false
     };
 
     if (!user.privileged) {
@@ -256,7 +256,7 @@ export const approveExcuse = async (excuse) => {
       },
       {
         $set: {
-          approved: 1
+          approved: true
         }
       },
       {
@@ -322,7 +322,7 @@ export const getAllPointEvents = async (user) => {
       {
         $match: {
           email: user.email,
-          approved: 1
+          approved: true
         }
       },
       {

@@ -40,8 +40,8 @@ const _handler = async (event, context) => {
       creator: 'jjt4',
       eventType: event.type,
       eventCode: generateCode(),
-      mandatory: event.mandatory === '1' ? 1 : 0,
-      excusable: event.excusable === '1' ? 1 : 0,
+      mandatory: event.mandatory === '1',
+      excusable: event.excusable === '1',
       title: event.title,
       description: event.description,
       start: moment.tz(`${event.date} ${event.time}`, 'America/Chicago').toISOString(),
@@ -87,9 +87,9 @@ const _handler = async (event, context) => {
           eventId: newEvent._id,
           email,
           reason: 'Automatic',
-          late: 0
+          late: false
         },
-        1
+        true
       );
 
       if (!createdExcuse.success) {

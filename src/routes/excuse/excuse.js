@@ -13,7 +13,7 @@ const _handler = async (event, context) => {
     excuse: {
       eventId: '',
       reason: '',
-      late: 0
+      late: false
     }
   });
 
