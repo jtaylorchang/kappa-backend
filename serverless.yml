@@ -169,6 +169,33 @@ functions:
   #         method: POST
   #         cors: true
 
+  candidatesGetAll:
+    warmup: false
+    handler: src/routes/candidates/get-all.handler
+    events:
+      - http:
+          path: candidates
+          method: GET
+          cors: true
+
+  candidatesCreate:
+    warmup: false
+    handler: src/routes/candidates/create.handler
+    events:
+      - http:
+          path: candidates
+          method: POST
+          cors: true
+
+  candidatesUpdateOne:
+    warmup: false
+    handler: src/routes/candidates/update-one.handler
+    events:
+      - http:
+          path: candidates/{target}
+          method: PATCH
+          cors: true
+
   admin-override:
     warmup: false
     handler: src/routes/admin-override/handler.handler
