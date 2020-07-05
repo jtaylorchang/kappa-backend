@@ -30,7 +30,8 @@ const _handler = async (event, context) => {
     givenName: ocBody.candidate.givenName,
     classYear: ocBody.candidate.classYear,
     major: ocBody.candidate.major,
-    approved: false
+    approved: false,
+    events: []
   };
 
   const createdCandidate = await createCandidate(newCandidate);
