@@ -74,3 +74,19 @@ export const updateCandidate = async (email, changes, upsert = false) => {
     return fail(error);
   }
 };
+
+export const deleteCandidate = async (email) => {
+  try {
+    await db.collection('candidates').deleteOne({
+      email
+    });
+
+    return pass({
+      candidate: {
+        email
+      }
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
