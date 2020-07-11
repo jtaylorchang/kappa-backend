@@ -12,6 +12,7 @@ const _handler = async (event, context) => {
   const ocBody = oc(event.body, {
     candidate: {
       email: '',
+      phone: '',
       familyName: '',
       givenName: '',
       classYear: '',
@@ -26,6 +27,7 @@ const _handler = async (event, context) => {
 
   let newCandidate = {
     email: ocBody.candidate.email,
+    phone: ocBody.candidate.phone,
     familyName: ocBody.candidate.familyName,
     givenName: ocBody.candidate.givenName,
     classYear: ocBody.candidate.classYear,
