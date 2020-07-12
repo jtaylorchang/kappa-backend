@@ -22,31 +22,12 @@ export const createCandidate = async (candidate) => {
 
     // update (replace) or create if not found (upsert)
 
-    const res = await collection.update(
-      {
-        email: candidate.email
-      },
-      {
-        ...candidate
-      },
-      {
-        upsert: true
-      }
-    );
-
-    if (!res.result.upserted) {
-      return fail({
-        message: 'Could not create candidate'
-      });
-    }
+    const res = await collection.insertOne(candidate);
 
     // return the id if created
 
     return pass({
-      candidate: {
-        ...candidate,
-        _id: res.result.upserted.length === 1 ? res.result.upserted[0]._id : null
-      }
+      candidate: res.ops[0]
     });
   } catch (error) {
     return fail(error);
