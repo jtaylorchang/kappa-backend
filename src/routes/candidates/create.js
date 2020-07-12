@@ -17,7 +17,8 @@ const _handler = async (event, context) => {
       givenName: '',
       classYear: '',
       major: '',
-      imageUrl: ''
+      imageUrl: '',
+      events: []
     }
   });
 
@@ -32,8 +33,8 @@ const _handler = async (event, context) => {
     givenName: ocBody.candidate.givenName,
     classYear: ocBody.candidate.classYear,
     major: ocBody.candidate.major,
-    approved: false,
-    events: []
+    events: ocBody.candidate.events,
+    approved: false
   };
 
   const createdCandidate = await createCandidate(newCandidate);

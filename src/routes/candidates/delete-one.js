@@ -24,7 +24,7 @@ const _handler = async (event, context) => {
     statusCode: 200,
     body: {
       candidate: {
-        _id: target
+        email: target
       }
     }
   };

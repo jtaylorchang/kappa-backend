@@ -34,6 +34,12 @@ export const createCandidate = async (candidate) => {
       }
     );
 
+    if (!res.result.upserted) {
+      return fail({
+        message: 'Could not create candidate'
+      });
+    }
+
     // return the id if created
 
     return pass({
