@@ -20,7 +20,7 @@ package:
   individually: true
 
   exclude:
-    - 'README.md'
+    - "README.md"
     - ./*.sh
     - tests/**
 
@@ -203,6 +203,60 @@ functions:
       - http:
           path: candidates/{target}
           method: DELETE
+          cors: true
+
+  sessionsGetAll:
+    warmup: false
+    handler: src/routes/voting/get-all-sessions.handler
+    events:
+      - http:
+          path: sessions
+          method: GET
+          cors: true
+
+  sessionsCreate:
+    warmup: false
+    handler: src/routes/voting/create-session.handler
+    events:
+      - http:
+          path: sessions
+          method: POST
+          cors: true
+
+  sessionsUpdateOne:
+    warmup: false
+    handler: src/routes/voting/update-session.handler
+    events:
+      - http:
+          path: sessions/{target}
+          method: PATCH
+          cors: true
+
+  sessionsDeleteOne:
+    warmup: false
+    handler: src/routes/voting/delete-session.handler
+    events:
+      - http:
+          path: sessions/{target}
+          method: DELETE
+          cors: true
+
+  sessionsStart:
+    warmup: false
+    handler: src/routes/voting/start-session.handler
+    events:
+      - http:
+          path: start-session
+          method: POST
+          cors: true
+
+  sessionsEnd:
+    warmup: false
+    handler: src/routes/voting/end-session.handler
+    events:
+      - http:
+          path: end-session
+          method: POST
           cors: true
 
   admin-override:

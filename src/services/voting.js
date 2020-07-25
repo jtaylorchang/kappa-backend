@@ -1,3 +1,5 @@
+import { ObjectID } from 'mongodb';
+
 import { db } from 'utils/mongoConnector';
 import { projectChanges } from 'services/mongoHelper';
 import { pass, fail } from 'utils/res';
@@ -71,6 +73,82 @@ export const deleteCandidate = async (email) => {
     return pass({
       candidate: {
         email
+      }
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
+export const getAllSessions = async () => {
+  try {
+    const collection = db.collection('votingSessions');
+
+    const res = await collection.find({}).toArray();
+
+    return pass({
+      sessions: res
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
+export const createSession = async (session) => {
+  try {
+    const collection = db.collection('votingSessions');
+
+    // update (replace) or create if not found (upsert)
+
+    const res = await collection.insertOne(session);
+
+    // return the id if created
+
+    return pass({
+      session: res.ops[0]
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
+export const updateSession = async (_id, changes, upsert = false) => {
+  try {
+    const collection = db.collection('votingSessions');
+
+    // find and update candidate and return the updated document
+
+    const res = await collection.findOneAndUpdate(
+      {
+        _id: new ObjectID(_id)
+      },
+      {
+        $set: changes
+      },
+      {
+        upsert,
+        returnOriginal: false,
+        returnNewDocument: true
+      }
+    );
+
+    return pass({
+      session: res.value
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
+export const deleteSession = async (_id) => {
+  try {
+    await db.collection('votingSessions').deleteOne({
+      _id: new ObjectID(_id)
+    });
+
+    return pass({
+      session: {
+        _id
       }
     });
   } catch (error) {

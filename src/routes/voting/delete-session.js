@@ -1,11 +1,10 @@
 import middyfy from 'middleware';
 import createHttpError from 'http-errors';
-import oc from 'js-optchain';
 
-import { updateSession } from 'services/voting';
+import { deleteSession } from 'services/voting';
 
 const _handler = async (event, context) => {
-  const target = event.pathParameters?.target;
+  const target = decodeURIComponent(event.pathParameters?.target);
 
   if (!event.authorized || !event.user.privileged) {
     throw new createHttpError.Unauthorized('Not authorized');
@@ -15,20 +14,18 @@ const _handler = async (event, context) => {
     throw new createHttpError.BadRequest('Invalid target');
   }
 
-  const ocBody = oc(event.body, {
-    changes: {}
-  });
+  const deletedSession = await deleteSession(target);
 
-  const updatedSession = await updateSession(target, ocBody.changes);
-
-  if (!updatedSession.success) {
-    throw new createHttpError.InternalServerError('Could not update session');
+  if (!deletedSession.success) {
+    throw new createHttpError.InternalServerError('Could not delete session');
   }
 
   return {
     statusCode: 200,
     body: {
-      session: updatedSession.data.session
+      session: {
+        _id: target
+      }
     }
   };
 };
