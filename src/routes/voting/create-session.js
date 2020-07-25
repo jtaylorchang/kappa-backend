@@ -11,6 +11,7 @@ const _handler = async (event, context) => {
 
   const ocBody = oc(event.body, {
     session: {
+      name: '',
       startDate: '',
       operatorEmail: '',
       candidateOrder: [],
@@ -19,6 +20,7 @@ const _handler = async (event, context) => {
   });
 
   let newSession = {
+    name: ocBody.session.name,
     startDate: ocBody.session.startDate,
     operatorEmail: ocBody.session.operatorEmail,
     candidateOrder: ocBody.session.candidateOrder,
