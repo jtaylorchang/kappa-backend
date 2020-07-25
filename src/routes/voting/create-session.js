@@ -22,7 +22,9 @@ const _handler = async (event, context) => {
     startDate: ocBody.session.startDate,
     operatorEmail: ocBody.session.operatorEmail,
     candidateOrder: ocBody.session.candidateOrder,
-    currentCandidateId: ocBody.session.currentCandidateId,
+    currentCandidateId:
+      ocBody.session.currentCandidateId ||
+      (ocBody.session.candidateOrder.length > 0 ? ocBody.session.candidateOrder[0] : ''),
     active: false,
     verdict: {}
   };
