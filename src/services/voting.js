@@ -155,3 +155,29 @@ export const deleteSession = async (_id) => {
     return fail(error);
   }
 };
+
+export const getActiveSession = async () => {
+  try {
+    const collection = db.collection('votingSessions');
+
+    // find the active session if there is one
+
+    const res = await collection
+      .find({
+        active: true
+      })
+      .toArray();
+
+    if (res.length > 0) {
+      return pass({
+        session: res[0]
+      });
+    } else {
+      return pass({
+        session: null
+      });
+    }
+  } catch (error) {
+    return fail(error);
+  }
+};

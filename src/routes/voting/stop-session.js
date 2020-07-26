@@ -20,13 +20,13 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not get active session');
   }
 
-  if (activeSession.data.session !== null) {
-    throw new createHttpError.InternalServerError('There is already an active session');
+  if (activeSession.data.session === null) {
+    throw new createHttpError.InternalServerError('There are no active sessions');
   }
 
   const updatedSession = await updateSession(target, {
-    active: true,
-    operatorEmail: event.user.email
+    active: false,
+    operatorEmail: ''
   });
 
   if (!updatedSession.success) {

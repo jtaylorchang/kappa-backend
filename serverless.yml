@@ -246,17 +246,17 @@ functions:
     handler: src/routes/voting/start-session.handler
     events:
       - http:
-          path: start-session
-          method: POST
+          path: start-session/{target}
+          method: PATCH
           cors: true
 
-  sessionsEnd:
+  sessionsStop:
     warmup: false
-    handler: src/routes/voting/end-session.handler
+    handler: src/routes/voting/stop-session.handler
     events:
       - http:
-          path: end-session
-          method: POST
+          path: stop-session/{target}
+          method: PATCH
           cors: true
 
   admin-override:
