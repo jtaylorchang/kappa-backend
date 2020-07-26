@@ -17,6 +17,7 @@ const _handler = async (event, context) => {
       givenName: '',
       classYear: '',
       major: '',
+      secondTimeRush: false,
       imageUrl: '',
       events: []
     }
@@ -33,6 +34,7 @@ const _handler = async (event, context) => {
     givenName: ocBody.candidate.givenName,
     classYear: ocBody.candidate.classYear,
     major: ocBody.candidate.major,
+    secondTimeRush: ocBody.candidate.secondTimeRush,
     events: ocBody.candidate.events,
     approved: false
   };

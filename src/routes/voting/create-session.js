@@ -13,7 +13,6 @@ const _handler = async (event, context) => {
     session: {
       name: '',
       startDate: '',
-      operatorEmail: '',
       candidateOrder: [],
       currentCandidateId: ''
     }
@@ -22,11 +21,11 @@ const _handler = async (event, context) => {
   let newSession = {
     name: ocBody.session.name,
     startDate: ocBody.session.startDate,
-    operatorEmail: ocBody.session.operatorEmail,
     candidateOrder: ocBody.session.candidateOrder,
     currentCandidateId:
       ocBody.session.currentCandidateId ||
       (ocBody.session.candidateOrder.length > 0 ? ocBody.session.candidateOrder[0] : ''),
+    operatorEmail: '',
     active: false,
     verdict: {}
   };
