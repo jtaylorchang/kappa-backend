@@ -26,8 +26,7 @@ const _handler = async (event, context) => {
       ocBody.session.currentCandidateId ||
       (ocBody.session.candidateOrder.length > 0 ? ocBody.session.candidateOrder[0] : ''),
     operatorEmail: '',
-    active: false,
-    verdict: {}
+    active: false
   };
 
   const createdSession = await createSession(newSession);

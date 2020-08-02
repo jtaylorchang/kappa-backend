@@ -18,6 +18,22 @@ export const getAllCandidates = async () => {
   }
 };
 
+export const getCandidate = async (_id) => {
+  try {
+    const collection = db.collection('candidates');
+
+    const res = await collection.findOne({
+      _id: new ObjectID(_id)
+    });
+
+    return pass({
+      candidate: res
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
 export const createCandidate = async (candidate) => {
   try {
     const collection = db.collection('candidates');
@@ -162,21 +178,31 @@ export const getActiveSession = async () => {
 
     // find the active session if there is one
 
-    const res = await collection
-      .find({
-        active: true
-      })
-      .toArray();
+    const res = await collection.findOne({
+      active: true
+    });
 
-    if (res.length > 0) {
-      return pass({
-        session: res[0]
-      });
-    } else {
-      return pass({
-        session: null
-      });
-    }
+    return pass({
+      session: res
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
+export const getVote = async (userEmail, sessionId, candidateId) => {
+  try {
+    const collection = db.collection('votes');
+
+    const res = await collection.findOne({
+      userEmail,
+      sessionId,
+      candidateId
+    });
+
+    return pass({
+      vote: res
+    });
   } catch (error) {
     return fail(error);
   }
