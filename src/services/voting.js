@@ -8,6 +8,8 @@ export const getAllCandidates = async () => {
   try {
     const collection = db.collection('candidates');
 
+    // get all candidates
+
     const res = await collection.find({}).toArray();
 
     return pass({
@@ -21,6 +23,8 @@ export const getAllCandidates = async () => {
 export const getCandidate = async (_id) => {
   try {
     const collection = db.collection('candidates');
+
+    // get the given candidate
 
     const res = await collection.findOne({
       _id: new ObjectID(_id)
@@ -82,7 +86,11 @@ export const updateCandidate = async (email, changes, upsert = false) => {
 
 export const deleteCandidate = async (email) => {
   try {
-    await db.collection('candidates').deleteOne({
+    const collection = db.collection('candidates');
+
+    // delete the given candidate
+
+    await collection.deleteOne({
       email
     });
 
@@ -99,6 +107,8 @@ export const deleteCandidate = async (email) => {
 export const getAllSessions = async () => {
   try {
     const collection = db.collection('votingSessions');
+
+    // get all sessions
 
     const res = await collection.find({}).toArray();
 
@@ -158,7 +168,11 @@ export const updateSession = async (_id, changes, upsert = false) => {
 
 export const deleteSession = async (_id) => {
   try {
-    await db.collection('votingSessions').deleteOne({
+    const collection = db.collection('votingSessions');
+
+    // delete the matching session
+
+    await collection.deleteOne({
       _id: new ObjectID(_id)
     });
 
@@ -190,18 +204,75 @@ export const getActiveSession = async () => {
   }
 };
 
+export const getAllVotes = async (sessionId, candidateId) => {
+  try {
+    const collection = db.collection('votes');
+
+    // get all votes for the given session and candidate
+
+    const res = await collection
+      .find({
+        sessionId: new ObjectID(sessionId),
+        candidateId: new ObjectID(candidateId)
+      })
+      .toArray();
+
+    return pass({
+      votes: res
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
 export const getVote = async (userEmail, sessionId, candidateId) => {
   try {
     const collection = db.collection('votes');
 
+    // get the vote matching the given information
+
     const res = await collection.findOne({
       userEmail,
-      sessionId,
-      candidateId
+      sessionId: new ObjectID(sessionId),
+      candidateId: new ObjectID(candidateId)
     });
 
     return pass({
       vote: res
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
+export const updateVote = async (vote, upsert = false) => {
+  try {
+    const collection = db.collection('votes');
+
+    // find and update candidate and return the updated document
+
+    const res = await collection.findOneAndUpdate(
+      {
+        userEmail: vote.userEmail,
+        sessionId: new ObjectID(vote.sessionId),
+        candidateId: new ObjectID(vote.candidateId)
+      },
+      {
+        $set: {
+          ...vote,
+          sessionId: new ObjectID(vote.sessionId),
+          candidateId: new ObjectID(vote.candidateId)
+        }
+      },
+      {
+        upsert,
+        returnOriginal: false,
+        returnNewDocument: true
+      }
+    );
+
+    return pass({
+      vote: res.value
     });
   } catch (error) {
     return fail(error);

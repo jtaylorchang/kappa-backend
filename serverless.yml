@@ -268,6 +268,15 @@ functions:
           method: GET
           cors: true
 
+  submitVote:
+    warmup: false
+    handler: src/routes/voting/submit-vote.handler
+    events:
+      - http:
+          path: vote
+          method: POST
+          cors: true
+
   admin-override:
     warmup: false
     handler: src/routes/admin-override/handler.handler

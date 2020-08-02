@@ -4,6 +4,10 @@ import createHttpError from 'http-errors';
 import { getActiveSession, getCandidate, getVote } from 'services/voting';
 
 const _handler = async (event, context) => {
+  if (!event.authorized) {
+    throw new createHttpError.Unauthorized('Not authorized');
+  }
+
   const foundSession = await getActiveSession();
 
   if (!foundSession.success) {
@@ -43,6 +47,7 @@ const _handler = async (event, context) => {
   return {
     statusCode: 200,
     body: {
+      session: foundSession.data.session,
       candidate: foundCandidate.data.candidate,
       vote: foundVote.data.vote
     }
