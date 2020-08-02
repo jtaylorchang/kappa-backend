@@ -268,6 +268,15 @@ functions:
           method: GET
           cors: true
 
+  getActiveVotes:
+    warmup: false
+    handler: src/routes/voting/get-active-candidate-votes.handler
+    events:
+      - http:
+          path: active-candidate/votes
+          method: GET
+          cors: true
+
   submitVote:
     warmup: false
     handler: src/routes/voting/submit-vote.handler
