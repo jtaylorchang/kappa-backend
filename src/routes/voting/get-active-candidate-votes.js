@@ -4,7 +4,7 @@ import createHttpError from 'http-errors';
 import { getActiveSession, getCandidate, getAllVotes } from 'services/voting';
 
 const _handler = async (event, context) => {
-  if (!event.authorized) {
+  if (!event.authorized || !event.user.privileged) {
     throw new createHttpError.Unauthorized('Not authorized');
   }
 
