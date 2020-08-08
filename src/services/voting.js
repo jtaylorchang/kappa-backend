@@ -204,6 +204,24 @@ export const getActiveSession = async () => {
   }
 };
 
+export const getSession = async (_id) => {
+  try {
+    const collection = db.collection('votingSessions');
+
+    // find the matching session if there is one
+
+    const res = await collection.findOne({
+      _id: new ObjectID(_id)
+    });
+
+    return pass({
+      session: res
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
 export const getAllVotes = async (sessionId, candidateId) => {
   try {
     const collection = db.collection('votes');
