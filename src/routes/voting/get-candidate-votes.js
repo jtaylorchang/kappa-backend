@@ -31,6 +31,12 @@ const _handler = async (event, context) => {
   return {
     statusCode: 200,
     body: {
+      session: {
+        _id: ocBody.session._id
+      },
+      candidate: {
+        _id: ocBody.candidate._id
+      },
       votes: foundVotes.data.votes
     }
   };
