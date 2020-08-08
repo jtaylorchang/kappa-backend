@@ -1,4 +1,5 @@
 import { ObjectID } from 'mongodb';
+import moment from 'moment';
 
 import { db } from 'utils/mongoConnector';
 import { projectChanges } from 'services/mongoHelper';
@@ -176,6 +177,10 @@ export const deleteSession = async (_id) => {
       _id: new ObjectID(_id)
     });
 
+    await db.collection('votes').deleteMany({
+      sessionId: new ObjectID(_id)
+    });
+
     return pass({
       session: {
         _id
@@ -222,7 +227,7 @@ export const getSession = async (_id) => {
   }
 };
 
-export const getAllVotes = async (sessionId, candidateId) => {
+export const getSessionAndCandidateVotes = async (sessionId, candidateId) => {
   try {
     const collection = db.collection('votes');
 
@@ -232,6 +237,26 @@ export const getAllVotes = async (sessionId, candidateId) => {
       .find({
         sessionId: new ObjectID(sessionId),
         candidateId: new ObjectID(candidateId)
+      })
+      .toArray();
+
+    return pass({
+      votes: res
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
+export const getSessionVotes = async (sessionId) => {
+  try {
+    const collection = db.collection('votes');
+
+    // get all votes for the given session
+
+    const res = await collection
+      .find({
+        sessionId: new ObjectID(sessionId)
       })
       .toArray();
 
@@ -295,4 +320,88 @@ export const updateVote = async (vote, upsert = false) => {
   } catch (error) {
     return fail(error);
   }
+};
+
+export const separateCandidatesById = (candidates) => {
+  const separated = {};
+
+  for (const candidate of candidates) {
+    separated[candidate._id] = candidate;
+  }
+
+  return separated;
+};
+
+export const separateVotesByCandidateId = (votes) => {
+  const separated = {};
+
+  for (const vote of votes) {
+    if (!separated.hasOwnProperty(vote.candidateId)) {
+      separated[vote.candidateId] = [];
+    }
+
+    separated[vote.candidateId].push(vote);
+  }
+
+  return separated;
+};
+
+export const generateNextSession = (session, candidates, votes) => {
+  let sessionName = session.name;
+  let sessionNumber = 2;
+
+  if (sessionName.indexOf(' (Round') > 0) {
+    const pieces = sessionName.split(' ');
+    sessionNumber = parseInt(pieces[pieces.length - 1].substring(0, pieces[pieces.length - 1].length - 1), 10) + 1;
+
+    sessionName = sessionName.substring(0, sessionName.indexOf(' (Round'));
+  }
+
+  sessionName += ` (Round ${sessionNumber})`;
+
+  const candidatesWithNoVotes = [];
+  const candidatesUnapprovedWithVotes = [];
+  const candidateVoteCounts = {};
+
+  const idToCandidate = separateCandidatesById(candidates);
+  const candidateToVotes = separateVotesByCandidateId(votes);
+
+  for (const candidateId of session.candidateOrder) {
+    const candidate = idToCandidate[candidateId];
+
+    if (!candidate) {
+      continue;
+    }
+
+    // Do not add already approved candidates
+    if (candidate.approved) {
+      continue;
+    }
+
+    const votes = candidateToVotes.hasOwnProperty(candidateId) ? candidateToVotes[candidateId] : [];
+
+    if (votes.length > 0) {
+      candidatesUnapprovedWithVotes.push(candidate);
+
+      // Track the vote score for sorting
+      candidateVoteCounts[candidateId] =
+        votes.filter((vote) => vote.verdict).length - votes.filter((vote) => !vote.verdict).length * 5;
+    } else {
+      // Separate candidates with no votes in original order
+      candidatesWithNoVotes.push(candidate);
+    }
+  }
+
+  const newCandidateOrder = candidatesWithNoVotes
+    .concat(candidatesUnapprovedWithVotes.sort((a, b) => candidateVoteCounts[a._id] - candidateVoteCounts[b._id]))
+    .map((candidate) => candidate._id);
+
+  return {
+    name: sessionName,
+    startDate: moment().toISOString(),
+    candidateOrder: newCandidateOrder,
+    currentCandidateId: newCandidateOrder.length > 0 ? newCandidateOrder[0] : '',
+    operatorEmail: '',
+    active: false
+  };
 };

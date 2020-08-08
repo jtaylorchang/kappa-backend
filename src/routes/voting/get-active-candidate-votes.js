@@ -1,7 +1,7 @@
 import middyfy from 'middleware';
 import createHttpError from 'http-errors';
 
-import { getActiveSession, getCandidate, getAllVotes, getVote } from 'services/voting';
+import { getActiveSession, getCandidate, getSessionAndCandidateVotes, getVote } from 'services/voting';
 
 const _handler = async (event, context) => {
   if (!event.authorized) {
@@ -45,7 +45,7 @@ const _handler = async (event, context) => {
   let foundVotes;
 
   if (event.user.privileged) {
-    foundVotes = await getAllVotes(foundSession.data.session._id, foundCandidate.data.candidate._id);
+    foundVotes = await getSessionAndCandidateVotes(foundSession.data.session._id, foundCandidate.data.candidate._id);
   } else {
     foundVotes = await getVote(event.user.email, foundSession.data.session._id, foundCandidate.data.candidate._id);
 

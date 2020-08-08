@@ -286,6 +286,15 @@ functions:
           method: POST
           cors: true
 
+  createNextSession:
+    warmup: false
+    handler: src/routes/voting/create-next-session.handler
+    events:
+      - http:
+          path: session/next
+          method: POST
+          cors: true
+
   admin-override:
     warmup: false
     handler: src/routes/admin-override/handler.handler

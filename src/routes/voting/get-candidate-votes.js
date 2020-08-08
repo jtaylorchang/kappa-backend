@@ -2,7 +2,7 @@ import middyfy from 'middleware';
 import createHttpError from 'http-errors';
 import oc from 'js-optchain';
 
-import { getAllVotes } from 'services/voting';
+import { getSessionAndCandidateVotes } from 'services/voting';
 
 const _handler = async (event, context) => {
   if (!event.authorized || !event.user.privileged) {
@@ -22,7 +22,7 @@ const _handler = async (event, context) => {
     throw new createHttpError.BadRequest('Missing required fields');
   }
 
-  const foundVotes = await getAllVotes(ocBody.session._id, ocBody.candidate._id);
+  const foundVotes = await getSessionAndCandidateVotes(ocBody.session._id, ocBody.candidate._id);
 
   if (!foundVotes.success) {
     throw new createHttpError.InternalServerError('Could not get votes');
