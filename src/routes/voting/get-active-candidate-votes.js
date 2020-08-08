@@ -18,7 +18,9 @@ const _handler = async (event, context) => {
     return {
       statusCode: 200,
       body: {
-        candidate: null
+        candidate: null,
+        session: null,
+        votes: []
       }
     };
   }
@@ -33,7 +35,9 @@ const _handler = async (event, context) => {
     return {
       statusCode: 200,
       body: {
-        candidate: null
+        candidate: null,
+        session: null,
+        votes: []
       }
     };
   }
