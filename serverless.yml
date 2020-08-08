@@ -259,15 +259,6 @@ functions:
           method: PATCH
           cors: true
 
-  getActiveCandidate:
-    warmup: false
-    handler: src/routes/voting/get-active-candidate.handler
-    events:
-      - http:
-          path: active-candidate
-          method: GET
-          cors: true
-
   getActiveVotes:
     warmup: false
     handler: src/routes/voting/get-active-candidate-votes.handler

@@ -1,10 +1,10 @@
 import middyfy from 'middleware';
 import createHttpError from 'http-errors';
 
-import { getActiveSession, getCandidate, getAllVotes } from 'services/voting';
+import { getActiveSession, getCandidate, getAllVotes, getVote } from 'services/voting';
 
 const _handler = async (event, context) => {
-  if (!event.authorized || !event.user.privileged) {
+  if (!event.authorized) {
     throw new createHttpError.Unauthorized('Not authorized');
   }
 
@@ -42,7 +42,17 @@ const _handler = async (event, context) => {
     };
   }
 
-  const foundVotes = await getAllVotes(foundSession.data.session._id, foundCandidate.data.candidate._id);
+  let foundVotes;
+
+  if (event.user.privileged) {
+    foundVotes = await getAllVotes(foundSession.data.session._id, foundCandidate.data.candidate._id);
+  } else {
+    foundVotes = await getVote(event.user.email, foundSession.data.session._id, foundCandidate.data.candidate._id);
+
+    if (foundVotes.success) {
+      foundVotes.data.votes = [foundVotes.data.vote];
+    }
+  }
 
   if (!foundVotes.success) {
     throw new createHttpError.InternalServerError('Could not get votes');

@@ -20,7 +20,7 @@ const _handler = async (event, context) => {
       body: {
         candidate: null,
         session: null,
-        vote: null
+        votes: []
       }
     };
   }
@@ -37,7 +37,7 @@ const _handler = async (event, context) => {
       body: {
         candidate: null,
         session: null,
-        vote: null
+        votes: []
       }
     };
   }
@@ -53,7 +53,7 @@ const _handler = async (event, context) => {
     body: {
       session: foundSession.data.session,
       candidate: foundCandidate.data.candidate,
-      vote: foundVote.data.vote
+      votes: [foundVote.data.vote]
     }
   };
 };
