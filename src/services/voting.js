@@ -21,6 +21,26 @@ export const getAllCandidates = async () => {
   }
 };
 
+export const getApprovedCandidates = async () => {
+  try {
+    const collection = db.collection('candidates');
+
+    // get approved candidates
+
+    const res = await collection
+      .find({
+        approved: true
+      })
+      .toArray();
+
+    return pass({
+      candidates: res
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
 export const getCandidate = async (_id) => {
   try {
     const collection = db.collection('candidates');
