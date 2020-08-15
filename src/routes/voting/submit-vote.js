@@ -22,7 +22,7 @@ const _handler = async (event, context) => {
     ocBody.vote.candidateId === '' ||
     ocBody.vote.sessionId === '' ||
     ocBody.vote.verdict === null ||
-    ocBody.vote.reason === ''
+    (ocBody.vote.verdict === false && ocBody.vote.reason.trim() === '')
   ) {
     throw new createHttpError.BadRequest('Missing required fields');
   }
@@ -44,7 +44,7 @@ const _handler = async (event, context) => {
   return {
     statusCode: 200,
     body: {
-      vote: submittedVote.data.vote
+      votes: [submittedVote.data.vote]
     }
   };
 };
