@@ -20,22 +20,12 @@ package:
   individually: true
 
   exclude:
-    - "README.md"
+    - 'README.md'
     - ./*.sh
     - tests/**
 
 functions:
-  hello:
-    warmup: false
-    handler: src/routes/hello.handler
-    events:
-      - http:
-          path: hello
-          method: GET
-          cors: true
-
   usersLogin:
-    warmup: false
     handler: src/routes/users/login.handler
     events:
       - http:
@@ -44,7 +34,6 @@ functions:
           cors: true
 
   usersGetAll:
-    warmup: false
     handler: src/routes/users/get-all.handler
     events:
       - http:
@@ -53,7 +42,6 @@ functions:
           cors: true
 
   usersUpdateOne:
-    warmup: false
     handler: src/routes/users/update-one.handler
     events:
       - http:
@@ -62,7 +50,6 @@ functions:
           cors: true
 
   eventsCreate:
-    warmup: false
     handler: src/routes/events/create.handler
     events:
       - http:
@@ -71,7 +58,6 @@ functions:
           cors: true
 
   eventsGetAll:
-    warmup: false
     handler: src/routes/events/get-all.handler
     events:
       - http:
@@ -80,7 +66,6 @@ functions:
           cors: true
 
   eventsUpdateOne:
-    warmup: false
     handler: src/routes/events/update-one.handler
     events:
       - http:
@@ -89,7 +74,6 @@ functions:
           cors: true
 
   eventsDeleteOne:
-    warmup: false,
     handler: src/routes/events/delete-one.handler
     events:
       - http:
@@ -98,7 +82,6 @@ functions:
           cors: true
 
   attendanceAttend:
-    warmup: false
     handler: src/routes/attendance/attend.handler
     events:
       - http:
@@ -107,7 +90,6 @@ functions:
           cors: true
 
   attendanceGetByUser:
-    warmup: false
     handler: src/routes/attendance/get-by-user.handler
     events:
       - http:
@@ -116,7 +98,6 @@ functions:
           cors: true
 
   attendanceGetByEvent:
-    warmup: false
     handler: src/routes/attendance/get-by-event.handler
     events:
       - http:
@@ -125,7 +106,6 @@ functions:
           cors: true
 
   attendanceExcuse:
-    warmup: false
     handler: src/routes/excuse/excuse.handler
     events:
       - http:
@@ -134,7 +114,6 @@ functions:
           cors: true
 
   attendanceGetExcuses:
-    warmup: false
     handler: src/routes/excuse/get-all.handler
     events:
       - http:
@@ -143,7 +122,6 @@ functions:
           cors: true
 
   attendanceUpdateExcuse:
-    warmup: false
     handler: src/routes/excuse/update-one.handler
     events:
       - http:
@@ -152,7 +130,6 @@ functions:
           cors: true
 
   pointsGetByUser:
-    warmup: false
     handler: src/routes/points/get-by-user.handler
     events:
       - http:
@@ -161,7 +138,6 @@ functions:
           cors: true
 
   # searchEvents:
-  #   warmup: false
   #   handler: src/routes/search/search-event.handler
   #   events:
   #     - http:
@@ -170,7 +146,6 @@ functions:
   #         cors: true
 
   candidatesGetAll:
-    warmup: false
     handler: src/routes/candidates/get-all.handler
     events:
       - http:
@@ -179,7 +154,6 @@ functions:
           cors: true
 
   candidatesCreate:
-    warmup: false
     handler: src/routes/candidates/create.handler
     events:
       - http:
@@ -188,7 +162,6 @@ functions:
           cors: true
 
   candidatesUpdateOne:
-    warmup: false
     handler: src/routes/candidates/update-one.handler
     events:
       - http:
@@ -197,7 +170,6 @@ functions:
           cors: true
 
   candidatesDeleteOne:
-    warmup: false
     handler: src/routes/candidates/delete-one.handler
     events:
       - http:
@@ -206,7 +178,6 @@ functions:
           cors: true
 
   sessionsGetAll:
-    warmup: false
     handler: src/routes/voting/get-all-sessions.handler
     events:
       - http:
@@ -215,7 +186,6 @@ functions:
           cors: true
 
   sessionsCreate:
-    warmup: false
     handler: src/routes/voting/create-session.handler
     events:
       - http:
@@ -224,7 +194,6 @@ functions:
           cors: true
 
   sessionsUpdateOne:
-    warmup: false
     handler: src/routes/voting/update-session.handler
     events:
       - http:
@@ -233,7 +202,6 @@ functions:
           cors: true
 
   sessionsDeleteOne:
-    warmup: false
     handler: src/routes/voting/delete-session.handler
     events:
       - http:
@@ -242,7 +210,6 @@ functions:
           cors: true
 
   sessionsStart:
-    warmup: false
     handler: src/routes/voting/start-session.handler
     events:
       - http:
@@ -251,7 +218,6 @@ functions:
           cors: true
 
   sessionsStop:
-    warmup: false
     handler: src/routes/voting/stop-session.handler
     events:
       - http:
@@ -260,7 +226,6 @@ functions:
           cors: true
 
   getActiveVotes:
-    warmup: false
     handler: src/routes/voting/get-active-candidate-votes.handler
     events:
       - http:
@@ -269,7 +234,6 @@ functions:
           cors: true
 
   getCandidateVotes:
-    warmup: false
     handler: src/routes/voting/get-candidate-votes.handler
     events:
       - http:
@@ -278,7 +242,6 @@ functions:
           cors: true
 
   submitVote:
-    warmup: false
     handler: src/routes/voting/submit-vote.handler
     events:
       - http:
@@ -287,7 +250,6 @@ functions:
           cors: true
 
   createNextSession:
-    warmup: false
     handler: src/routes/voting/create-next-session.handler
     events:
       - http:
@@ -295,17 +257,15 @@ functions:
           method: POST
           cors: true
 
-  admin-override:
-    warmup: false
-    handler: src/routes/admin-override/handler.handler
-    events:
-      - http:
-          path: admin-override
-          method: POST
-          cors: true
+  # admin-override:
+  #   handler: src/routes/admin-override/handler.handler
+  #   events:
+  #     - http:
+  #         path: admin-override
+  #         method: POST
+  #         cors: true
 
   autoUpdateRoles:
-    warmup: false
     handler: src/routes/auto/update-roles.handler
     events:
       - http:
@@ -314,7 +274,6 @@ functions:
           cors: true
 
   autoUpdateUsers:
-    warmup: false
     handler: src/routes/auto/update-users.handler
     events:
       - http:
@@ -323,7 +282,6 @@ functions:
           cors: true
 
   autoCleanUsers:
-    warmup: false
     handler: src/routes/auto/clean-users.handler
     events:
       - http:
@@ -332,7 +290,6 @@ functions:
           cors: true
 
   autoResetYear:
-    warmup: false
     handler: src/routes/auto/reset-year.handler
     events:
       - http:
@@ -341,7 +298,6 @@ functions:
           cors: true
 
   autoImportBulk:
-    warmup: false
     handler: src/routes/auto/import-bulk.handler
     events:
       - http:
@@ -364,6 +320,5 @@ custom:
 
 plugins:
   - serverless-webpack
-  - serverless-plugin-warmup
   - serverless-offline # Should be last
 

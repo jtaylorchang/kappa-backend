@@ -1,5 +1,4 @@
 import middy from '@middy/core';
-import warmup from '@middy/warmup';
 import jsonBodyParser from '@middy/http-json-body-parser';
 import urlEncodeBodyParser from '@middy/http-urlencode-body-parser';
 import cors from '@middy/http-cors';
@@ -84,7 +83,7 @@ const errorHandler = () => ({
 
 // add optional mongo
 const middyfy = (handler, config = { authorized: true, useMongo: true }, inputSchema) => {
-  const middleware = middy(handler).use(warmup());
+  const middleware = middy(handler);
 
   if (config.authorized || config.useMongo) {
     middleware.use(
