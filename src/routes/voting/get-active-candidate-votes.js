@@ -52,7 +52,7 @@ const _handler = async (event, context) => {
     foundVotes = await getVote(event.user.email, activeSession._id, foundCandidate.data.candidate._id);
 
     if (foundVotes.success) {
-      foundVotes.data.votes = [foundVotes.data.vote];
+      foundVotes.data.votes = foundVotes.data.vote ? [foundVotes.data.vote] : [];
     }
   }
 
