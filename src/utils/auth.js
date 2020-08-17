@@ -76,7 +76,9 @@ export const lookupEmail = async (email) => {
     const directory = await getDirectory();
 
     if (!directory.success) {
-      throw new Error('Failed to get directory');
+      return fail({
+        message: 'Failed to get directory'
+      });
     }
 
     const user = getDirectoryUser(directory.data, email);
@@ -92,7 +94,7 @@ export const lookupEmail = async (email) => {
         privileged: user.privileged !== undefined && user.privileged
       });
     } else {
-      fail({
+      return fail({
         message: 'unauthorized email'
       });
     }
