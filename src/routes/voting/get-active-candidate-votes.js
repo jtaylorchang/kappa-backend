@@ -1,31 +1,33 @@
 import middyfy from 'middleware';
 import createHttpError from 'http-errors';
 
-import { getActiveSession, getCandidate, getSessionAndCandidateVotes, getVote } from 'services/voting';
+import { getCandidate, getSessionAndCandidateVotes, getVote, getAllSessions } from 'services/voting';
 
 const _handler = async (event, context) => {
   if (!event.authorized) {
     throw new createHttpError.Unauthorized('Not authorized');
   }
 
-  const foundSession = await getActiveSession();
+  const foundSessions = await getAllSessions();
 
-  if (!foundSession.success) {
+  if (!foundSessions.success) {
     throw new createHttpError.InternalServerError('Could not get session');
   }
 
-  if (!foundSession.data.session) {
+  const activeSession = foundSessions.data.sessions.find((session) => session.active === true);
+
+  if (!activeSession) {
     return {
       statusCode: 200,
       body: {
         candidate: null,
-        session: null,
+        sessions: [],
         votes: []
       }
     };
   }
 
-  const foundCandidate = await getCandidate(foundSession.data.session.currentCandidateId);
+  const foundCandidate = await getCandidate(activeSession.currentCandidateId);
 
   if (!foundCandidate.success) {
     throw new createHttpError.InternalServerError('Could not get candidate');
@@ -36,7 +38,7 @@ const _handler = async (event, context) => {
       statusCode: 200,
       body: {
         candidate: null,
-        session: null,
+        sessions: [],
         votes: []
       }
     };
@@ -45,9 +47,9 @@ const _handler = async (event, context) => {
   let foundVotes;
 
   if (event.user.privileged) {
-    foundVotes = await getSessionAndCandidateVotes(foundSession.data.session._id, foundCandidate.data.candidate._id);
+    foundVotes = await getSessionAndCandidateVotes(activeSession._id, foundCandidate.data.candidate._id);
   } else {
-    foundVotes = await getVote(event.user.email, foundSession.data.session._id, foundCandidate.data.candidate._id);
+    foundVotes = await getVote(event.user.email, activeSession._id, foundCandidate.data.candidate._id);
 
     if (foundVotes.success) {
       foundVotes.data.votes = [foundVotes.data.vote];
@@ -61,7 +63,7 @@ const _handler = async (event, context) => {
   return {
     statusCode: 200,
     body: {
-      session: foundSession.data.session,
+      sessions: foundSessions.data.sessions,
       candidate: foundCandidate.data.candidate,
       votes: foundVotes.data.votes
     }
