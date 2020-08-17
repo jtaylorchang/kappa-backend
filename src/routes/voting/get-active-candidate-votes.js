@@ -46,7 +46,7 @@ const _handler = async (event, context) => {
 
   let foundVotes;
 
-  if (event.user.privileged) {
+  if (event.user.privileged && event.queryStringParameters?.isMobile !== 'true') {
     foundVotes = await getSessionAndCandidateVotes(activeSession._id, foundCandidate.data.candidate._id);
   } else {
     foundVotes = await getVote(event.user.email, activeSession._id, foundCandidate.data.candidate._id);
