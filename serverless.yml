@@ -313,12 +313,14 @@ custom:
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
+  splitStacks:
+    perFunction: true
+    perType: false
   stages:
     - dev
-    - test
-    - v1.0
 
 plugins:
   - serverless-webpack
+  - serverless-plugin-split-stacks
   - serverless-offline # Should be last
 

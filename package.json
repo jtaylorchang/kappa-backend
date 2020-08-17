@@ -36,6 +36,7 @@
     "prettier": "^2.0.2",
     "serverless": "^1.67.0",
     "serverless-offline": "^6.1.2",
+    "serverless-plugin-split-stacks": "^1.9.3",
     "serverless-webpack": "^5.3.1",
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.11",
