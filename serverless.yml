@@ -33,6 +33,14 @@ functions:
           method: POST
           cors: true
 
+  usersCreateOne:
+    handler: src/routes/users/create.handler
+    events:
+      - http:
+          path: users
+          method: POST
+          cors: true
+
   usersGetAll:
     handler: src/routes/users/get-all.handler
     events:

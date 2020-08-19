@@ -76,13 +76,12 @@ export const updateUser = async (email, changes, upsert = false) => {
       {
         upsert,
         returnOriginal: false,
-        returnNewDocument: true,
-        projection: projectChanges(changes)
+        returnNewDocument: true
       }
     );
 
     return pass({
-      changes: res.value
+      user: res.value
     });
   } catch (error) {
     return fail(error);

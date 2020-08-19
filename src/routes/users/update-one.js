@@ -1,43 +1,24 @@
 import middyfy from 'middleware';
 import createHttpError from 'http-errors';
+import oc from 'js-optchain';
+
 import { getUser, updateUser } from 'services/user';
 import { errorLog } from 'utils/log';
 
 const _handler = async (event, context) => {
   const target = decodeURIComponent(event.pathParameters?.target);
-  const changes = event.body?.changes || {};
-
-  let partialChanges = {};
-
-  if (changes.hasOwnProperty('phone') && changes.phone.constructor === String) {
-    partialChanges.phone = changes.phone;
-  }
-
-  if (changes.hasOwnProperty('gradYear') && changes.gradYear.constructor === String) {
-    partialChanges.gradYear = changes.gradYear;
-  }
-
-  if (!partialChanges.hasOwnProperty('phone') && !partialChanges.hasOwnProperty('gradYear')) {
-    throw new createHttpError.BadRequest('Invalid format');
-  }
 
   if (!event.authorized || (target !== event.user.email && !event.user.privileged)) {
     errorLog(`${event.user.email} tried to update ${target}`);
 
-    throw new createHttpError.Unauthorized('Invalid credentials');
+    throw new createHttpError.Unauthorized('Not authorized');
   }
 
-  const foundUser = await getUser(target);
+  const ocBody = oc(event.body, {
+    changes: {}
+  });
 
-  if (!foundUser.success) {
-    throw new createHttpError.InternalServerError('Could not connect to database');
-  }
-
-  if (!foundUser.data.user) {
-    throw new createHttpError.NotFound('Target user does not exist');
-  }
-
-  const updatedUser = await updateUser(target, changes);
+  const updatedUser = await updateUser(target, ocBody.changes);
 
   if (!updatedUser.success) {
     throw new createHttpError.InternalServerError('Could not update user');
@@ -46,7 +27,7 @@ const _handler = async (event, context) => {
   return {
     statusCode: 200,
     body: {
-      changes: updatedUser.data?.changes
+      user: updatedUser.data.user
     }
   };
 };

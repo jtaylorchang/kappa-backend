@@ -34,63 +34,18 @@ const _handler = async (event, context) => {
     throw new createHttpError.Unauthorized('Invalid id token');
   }
 
-  const directoryLookup = await lookupEmail(normalized.email);
-
-  if (!directoryLookup.success) {
-    return {
-      statusCode: 401,
-      body: {
-        message: directoryLookup.error?.message
-      }
-    };
-  }
-
-  const sessionToken = generateToken(normalized.email);
-
   const foundUser = await getUser(normalized.email);
 
   if (!foundUser.success) {
     throw new createHttpError.InternalServerError('Could not connect to database');
   }
 
-  let user = foundUser.data.user;
-
-  if (!foundUser.data.user) {
-    // Need to create a user in the database
-
-    const newUser = {
-      email: normalized.email,
-      familyName: verifiedToken.data.familyName,
-      givenName: verifiedToken.data.givenName,
-      firstYear: directoryLookup.data.firstYear,
-      semester: directoryLookup.data.semester,
-      type: directoryLookup.data.type
-    };
-
-    if (directoryLookup.data.role) {
-      newUser.role = directoryLookup.data.role;
-    }
-
-    if (directoryLookup.data.privileged) {
-      newUser.privileged = directoryLookup.data.privileged;
-    }
-
-    const createdUser = await createUser(newUser);
-
-    if (!createdUser.success || !createdUser.data._id) {
-      throw new createHttpError.InternalServerError('Could not create user');
-    }
-
-    user = {
-      _id: createdUser.data._id,
-      ...newUser
-    };
-  }
+  const sessionToken = generateToken(normalized.email);
 
   return {
     statusCode: 200,
     body: {
-      user,
+      user: foundUser.data.user,
       sessionToken
     }
   };

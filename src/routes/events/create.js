@@ -1,6 +1,5 @@
 import middyfy from 'middleware';
 import createHttpError from 'http-errors';
-import { v4 as uuidV4 } from 'uuid';
 import oc from 'js-optchain';
 
 import { extractNetid } from 'services/user';
