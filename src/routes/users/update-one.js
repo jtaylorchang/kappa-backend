@@ -2,7 +2,7 @@ import middyfy from 'middleware';
 import createHttpError from 'http-errors';
 import oc from 'js-optchain';
 
-import { getUser, updateUser } from 'services/user';
+import { updateUser } from 'services/user';
 import { errorLog } from 'utils/log';
 
 const _handler = async (event, context) => {
@@ -17,6 +17,26 @@ const _handler = async (event, context) => {
   const ocBody = oc(event.body, {
     changes: {}
   });
+
+  if (event.user.role.toLowerCase() !== 'web') {
+    if (ocBody.changes.email || ocBody.changes.role || ocBody.changes.privileged) {
+      throw new createHttpError.Unauthorized('Not authorized');
+    }
+  }
+
+  if (!event.user.privileged) {
+    if (
+      ocBody.changes.givenName ||
+      ocBody.changes.familyName ||
+      ocBody.changes.firstYear ||
+      ocBody.changes.semester ||
+      ocBody.changes.email ||
+      ocBody.changes.role ||
+      ocBody.changes.privileged
+    ) {
+      throw new createHttpError.Unauthorized('Not authorized');
+    }
+  }
 
   const updatedUser = await updateUser(target, ocBody.changes);
 
