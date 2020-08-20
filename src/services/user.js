@@ -38,29 +38,19 @@ export const createUser = async (user) => {
 
     // update (replace) or create if not found (upsert)
 
-    const res = await collection.update(
-      {
-        email: user.email
-      },
-      {
-        ...user
-      },
-      {
-        upsert: true
-      }
-    );
+    const res = await collection.insertOne(user);
 
     // return the id if created
 
     return pass({
-      _id: res.result.upserted.length === 1 ? res.result.upserted[0]._id : null
+      user: res.ops[0]
     });
   } catch (error) {
     return fail(error);
   }
 };
 
-export const updateUser = async (email, changes, upsert = false) => {
+export const updateUser = async (email, changes) => {
   try {
     const collection = db.collection('users');
 
@@ -74,7 +64,6 @@ export const updateUser = async (email, changes, upsert = false) => {
         $set: changes
       },
       {
-        upsert,
         returnOriginal: false,
         returnNewDocument: true
       }
