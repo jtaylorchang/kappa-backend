@@ -5,20 +5,18 @@ import oc from 'js-optchain';
 import { createUser } from 'services/user';
 
 const _handler = async (event, context) => {
-  if (!event.authorized || !event.user.privileged) {
-    throw new createHttpError.Unauthorized('Not authorized');
-  }
-
-  if (event.user.role.toLowerCase() !== 'web') {
+  if (!event.authorized || !event.user.privileged || event.user.role.toLowerCase() !== 'web') {
     throw new createHttpError.Unauthorized('Not authorized');
   }
 
   const ocBody = oc(event.body, {
     user: {
       email: '',
+      phone: '',
       familyName: '',
       givenName: '',
       firstYear: '',
+      gradYear: '',
       semester: '',
       type: 'B',
       role: '',
@@ -38,9 +36,11 @@ const _handler = async (event, context) => {
 
   const newUser = {
     email: ocBody.user.email,
+    phone: ocBody.user.phone,
     familyName: ocBody.user.familyName,
     givenName: ocBody.user.givenName,
     firstYear: ocBody.user.firstYear,
+    gradYear: ocBody.user.gradYear,
     semester: ocBody.user.semester,
     type: ocBody.user.type,
     role: ocBody.user.role,

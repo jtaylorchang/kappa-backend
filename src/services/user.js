@@ -119,9 +119,15 @@ export const removePrivilegeAndRole = async (email) => {
 
 export const removeUser = async (email) => {
   try {
-    const collection = db.collection('users');
+    await db.collection('users').deleteOne({
+      email
+    });
 
-    const res = await collection.deleteOne({
+    await db.collection('attendance').deleteMany({
+      email
+    });
+
+    await db.collection('excuses').deleteMany({
       email
     });
 
