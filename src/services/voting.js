@@ -413,7 +413,7 @@ export const generateNextSession = (session, candidates, votes) => {
   }
 
   const newCandidateOrder = candidatesWithNoVotes
-    .concat(candidatesUnapprovedWithVotes.sort((a, b) => candidateVoteCounts[a._id] - candidateVoteCounts[b._id]))
+    .concat(candidatesUnapprovedWithVotes.sort((a, b) => candidateVoteCounts[b._id] - candidateVoteCounts[a._id]))
     .map((candidate) => candidate._id);
 
   return {
