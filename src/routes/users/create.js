@@ -9,6 +9,10 @@ const _handler = async (event, context) => {
     throw new createHttpError.Unauthorized('Not authorized');
   }
 
+  if (event.user.role.toLowerCase() !== 'web') {
+    throw new createHttpError.Unauthorized('Not authorized');
+  }
+
   const ocBody = oc(event.body, {
     user: {
       email: '',
