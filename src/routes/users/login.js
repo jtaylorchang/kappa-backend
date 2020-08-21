@@ -1,9 +1,9 @@
-import middyfy from 'middleware';
-
-import { lookupEmail, generateToken } from 'utils/auth';
-import { verifyToken } from 'utils/google';
-import { getUser, createUser } from 'services/user';
 import createHttpError from 'http-errors';
+
+import middyfy from 'middleware';
+import { generateToken } from 'utils/auth';
+import { verifyToken } from 'utils/google';
+import { getUser } from 'services/user';
 
 const _handler = async (event, context) => {
   if (event.authorized) {
