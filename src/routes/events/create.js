@@ -5,7 +5,6 @@ import oc from 'js-optchain';
 import { extractNetid } from 'services/user';
 import { createEvent } from 'services/event';
 import { generateCode } from 'utils/auth';
-import { devLog } from 'utils/log';
 
 const _handler = async (event, context) => {
   if (!event.authorized || !event.user.privileged) {
@@ -50,6 +49,8 @@ const _handler = async (event, context) => {
   if (!createdEvent.success) {
     throw new createHttpError.InternalServerError('Could not create event');
   }
+
+  console.log('Created event', createdEvent);
 
   return {
     statusCode: 200,

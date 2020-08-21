@@ -40,6 +40,8 @@ const _handler = async (event, context) => {
     }
   }
 
+  console.log('Updated excuse', updatedExcuse);
+
   // return excuse back with approved -1 if the item was deleted
   return {
     statusCode: 200,

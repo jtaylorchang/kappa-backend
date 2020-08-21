@@ -12,6 +12,8 @@ const _handler = async (event, context) => {
     const user = event.user;
     const sessionToken = generateToken(user.email);
 
+    console.log('Signed in', user);
+
     return {
       statusCode: 200,
       body: {
@@ -39,6 +41,8 @@ const _handler = async (event, context) => {
   if (!foundUser.success) {
     throw new createHttpError.InternalServerError('Could not connect to database');
   }
+
+  console.log('Signed in', foundUser);
 
   const sessionToken = generateToken(normalized.email);
 

@@ -18,6 +18,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not get attendance');
   }
 
+  console.log('Got attendance', target);
+
   return {
     statusCode: 200,
     body: {

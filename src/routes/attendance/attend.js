@@ -33,6 +33,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not create attendance');
   }
 
+  console.log('Created attendance', createdAttendance);
+
   return {
     statusCode: 200,
     body: {

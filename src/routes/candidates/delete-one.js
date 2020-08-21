@@ -20,6 +20,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not delete candidate');
   }
 
+  console.log('Deleted candidate', target);
+
   return {
     statusCode: 200,
     body: {

@@ -14,6 +14,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not connect to database');
   }
 
+  console.log('Got approved candidates');
+
   return {
     statusCode: 200,
     body: {

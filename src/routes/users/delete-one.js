@@ -20,6 +20,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not delete user');
   }
 
+  console.log('Deleted user', target);
+
   return {
     statusCode: 200,
     body: {

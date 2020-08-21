@@ -3,13 +3,12 @@ import createHttpError from 'http-errors';
 import oc from 'js-optchain';
 
 import { updateUser } from 'services/user';
-import { errorLog } from 'utils/log';
 
 const _handler = async (event, context) => {
   const target = decodeURIComponent(event.pathParameters?.target);
 
   if (!event.authorized || (target !== event.user.email && !event.user.privileged)) {
-    errorLog(`${event.user.email} tried to update ${target}`);
+    console.error(`${event.user?.email} tried to update ${target}`);
 
     throw new createHttpError.Unauthorized('Not authorized');
   }
@@ -43,6 +42,8 @@ const _handler = async (event, context) => {
   if (!updatedUser.success) {
     throw new createHttpError.InternalServerError('Could not update user');
   }
+
+  console.log('Updated user', updatedUser);
 
   return {
     statusCode: 200,

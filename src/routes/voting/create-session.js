@@ -35,6 +35,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not create session');
   }
 
+  console.log('Created session', createdSession);
+
   return {
     statusCode: 200,
     body: {

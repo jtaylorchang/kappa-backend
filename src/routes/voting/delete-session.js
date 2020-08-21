@@ -20,6 +20,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not delete session');
   }
 
+  console.log('Deleted session', target);
+
   return {
     statusCode: 200,
     body: {

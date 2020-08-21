@@ -22,6 +22,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not delete event');
   }
 
+  console.log('Deleted event', target);
+
   return {
     statusCode: 200,
     body: {

@@ -25,6 +25,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not update candidate');
   }
 
+  console.log('Updated candidate', updatedCandidate);
+
   return {
     statusCode: 200,
     body: {

@@ -32,6 +32,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not create excuse');
   }
 
+  console.log('Created excuse', createdExcuse);
+
   return {
     statusCode: 200,
     body: {

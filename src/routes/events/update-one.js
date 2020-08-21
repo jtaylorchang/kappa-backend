@@ -25,6 +25,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not update event');
   }
 
+  console.log('Updated event', updatedEvent);
+
   return {
     statusCode: 200,
     body: {

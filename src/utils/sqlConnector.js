@@ -1,15 +1,13 @@
 import ServerlessMysql from 'serverless-mysql';
 
-import { log, errorLog } from 'utils/log';
-
 export let mysql;
 
 const sqlConnector = ({ host, database, user, password, shouldClose = false, shouldLog = true }) => ({
   before: async () => {
     if (mysql) {
-      log(shouldLog, '=> Using existing MySQL connection');
+      console.log('=> Using existing MySQL connection');
     } else {
-      log(shouldLog, '=> Using new MySQL connection');
+      console.log('=> Using new MySQL connection');
 
       mysql = ServerlessMysql({
         base: 5,
@@ -25,7 +23,7 @@ const sqlConnector = ({ host, database, user, password, shouldClose = false, sho
       try {
         await mysql.connect();
       } catch (error) {
-        errorLog('=> Connection error with MySQL', error);
+        console.error('=> Connection error with MySQL', error);
       }
     }
   },
@@ -33,7 +31,7 @@ const sqlConnector = ({ host, database, user, password, shouldClose = false, sho
     await mysql?.end();
 
     if (shouldClose) {
-      log(shouldLog, '=> Closing MySQL connection');
+      console.log('=> Closing MySQL connection');
 
       await mysql?.quit();
       mysql = null;

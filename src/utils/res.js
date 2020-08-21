@@ -1,5 +1,3 @@
-import { devLog, errorLog } from './log';
-
 export const pass = (data) => {
   return {
     success: true,
@@ -8,7 +6,7 @@ export const pass = (data) => {
 };
 
 export const fail = (error) => {
-  errorLog(error);
+  console.error(error);
 
   return {
     success: false,

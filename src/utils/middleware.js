@@ -9,7 +9,6 @@ import oc from 'js-optchain';
 import mongoConnector from 'utils/mongoConnector';
 import * as auth from 'utils/auth';
 import { getUser } from 'services/user';
-import { devLog } from './log';
 
 const httpHeaderAuthorizer = () => ({
   before: async (handler, next) => {
@@ -25,7 +24,13 @@ const httpHeaderAuthorizer = () => ({
         if (foundUser.success && foundUser.data?.user) {
           handler.event.authorized = true;
           handler.event.user = foundUser.data.user;
+
+          console.log('Signed in', handler.event.user);
+        } else {
+          console.log('Failed sign in', email);
         }
+      } else {
+        console.log('Failed sign in no email');
       }
     }
 
@@ -62,7 +67,7 @@ const jsonBodyEncoder = () => ({
 const errorHandler = () => ({
   onError: (handler, next) => {
     if (handler.error.statusCode && handler.error.message) {
-      devLog(handler.error);
+      console.error(handler.error);
 
       handler.response = {
         statusCode: handler.error.statusCode,

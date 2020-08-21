@@ -61,7 +61,7 @@ const _handler = async (event, context) => {
       continue;
     }
 
-    const upsertedUser = await updateUser(email, differences, true);
+    const upsertedUser = await updateUser(email, differences);
 
     if (!upsertedUser.success) {
       throw new createHttpError.InternalServerError(`Could not upsert ${email}`);

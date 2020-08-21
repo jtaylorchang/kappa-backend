@@ -25,6 +25,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not update session');
   }
 
+  console.log('Updated session', updatedSession);
+
   return {
     statusCode: 200,
     body: {

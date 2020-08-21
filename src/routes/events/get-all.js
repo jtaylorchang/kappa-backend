@@ -14,6 +14,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not get events');
   }
 
+  console.log('Got all events');
+
   return {
     statusCode: 200,
     body: {

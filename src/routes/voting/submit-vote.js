@@ -41,6 +41,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not submit votes');
   }
 
+  console.log('Submitted vote', submittedVote);
+
   return {
     statusCode: 200,
     body: {

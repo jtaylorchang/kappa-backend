@@ -28,6 +28,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not get votes');
   }
 
+  console.log('Found votes', ocBody.session._id, ocBody.candidate._id, foundVotes);
+
   return {
     statusCode: 200,
     body: {

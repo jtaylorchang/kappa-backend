@@ -16,6 +16,8 @@ const _handler = async (event, context) => {
 
   const activeSession = foundSessions.data.sessions.find((session) => session.active === true);
 
+  console.log('Found session', activeSession);
+
   if (!activeSession) {
     return {
       statusCode: 200,
@@ -32,6 +34,8 @@ const _handler = async (event, context) => {
   if (!foundCandidate.success) {
     throw new createHttpError.InternalServerError('Could not get candidate');
   }
+
+  console.log('Found candidate', foundCandidate);
 
   if (!foundCandidate.data.candidate) {
     return {
@@ -59,6 +63,8 @@ const _handler = async (event, context) => {
   if (!foundVotes.success) {
     throw new createHttpError.InternalServerError('Could not get votes');
   }
+
+  console.log('Found votes', foundVotes);
 
   return {
     statusCode: 200,

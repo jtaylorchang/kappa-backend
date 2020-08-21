@@ -45,6 +45,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not create candidate');
   }
 
+  console.log('Created candidate', createdCandidate);
+
   return {
     statusCode: 200,
     body: {

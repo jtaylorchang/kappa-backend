@@ -53,6 +53,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not create user');
   }
 
+  console.log('Created user', createdUser);
+
   return {
     statusCode: 200,
     body: {
