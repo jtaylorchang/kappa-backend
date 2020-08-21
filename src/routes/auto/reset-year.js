@@ -1,17 +1,25 @@
-import middyfy from 'middleware';
 import createHttpError from 'http-errors';
 
+import middyfy from 'middleware';
+import { deleteAllEvents } from 'services/event';
+
 const _handler = async (event, context) => {
-  if (!event.authorized || !event.user.privileged) {
+  if (!event.authorized || !event.user.privileged || process.env.SLS_IS_OFFLINE !== 'TRUE') {
     throw new createHttpError.Unauthorized('Not authorized');
   }
 
-  // TODO: Remove all data from SQL
+  // Delete all the events (and weak entities) for a clean slate
+
+  const deletedAllEvents = await deleteAllEvents();
+
+  if (!deletedAllEvents.success) {
+    throw new createHttpError.InternalServerError('Could not delete events');
+  }
 
   return {
     statusCode: 200,
     body: {
-      message: 'Hello World'
+      message: 'Success'
     }
   };
 };
