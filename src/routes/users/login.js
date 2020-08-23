@@ -38,8 +38,8 @@ const _handler = async (event, context) => {
 
   const foundUser = await getUser(normalized.email);
 
-  if (!foundUser.success) {
-    throw new createHttpError.InternalServerError('Could not connect to database');
+  if (!foundUser.success || !foundUser.data.user) {
+    throw new createHttpError.Unauthorized('Your email was not recognized');
   }
 
   console.log('Signed in', foundUser);
