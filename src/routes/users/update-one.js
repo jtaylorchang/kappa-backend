@@ -17,7 +17,7 @@ const _handler = async (event, context) => {
     changes: {}
   });
 
-  if (event.user.role.toLowerCase() !== 'web') {
+  if (event.user.role?.toLowerCase() !== 'web') {
     if (ocBody.changes.email || ocBody.changes.role || ocBody.changes.privileged) {
       throw new createHttpError.Unauthorized('Not authorized');
     }
