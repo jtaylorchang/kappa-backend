@@ -15,7 +15,14 @@ export const getAllEvents = async (user) => {
           eventCode: 0
         };
 
-    const res = await collection.find({}, projection).toArray();
+    const res = await collection
+      .find(
+        {},
+        {
+          projection
+        }
+      )
+      .toArray();
 
     return pass({
       events: res
