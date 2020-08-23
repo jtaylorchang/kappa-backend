@@ -51,6 +51,22 @@ export const generateSecretCode = async (email) => {
   }
 };
 
+export const getUserWithSecretCode = async (secretCode) => {
+  try {
+    const collection = db.collection('users');
+
+    const res = await collection.findOne({
+      secretCode
+    });
+
+    return pass({
+      user: res
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
 export const getAllUsers = async () => {
   try {
     const collection = db.collection('users');
