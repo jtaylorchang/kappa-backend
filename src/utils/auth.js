@@ -35,15 +35,15 @@ export const verifyAndDecodeToken = (token) => {
   }
 };
 
-export const generateCode = () => {
+export const generateCode = (codeLength = 4) => {
   let code = '';
 
   // continue generating until code is long enough
-  while (code.length < 4) {
+  while (code.length < codeLength) {
     code += uuidV4().replace(/\D/g, '');
   }
 
-  return code.substring(0, 4);
+  return code.substring(0, codeLength);
 };
 
 export const getDirectory = async () => {

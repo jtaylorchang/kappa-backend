@@ -1,6 +1,8 @@
+import moment from 'moment';
+
 import { db } from 'utils/mongoConnector';
-import { projectChanges } from 'services/mongoHelper';
 import { pass, fail } from 'utils/res';
+import { generateCode } from 'utils/auth';
 
 export const getUser = async (email) => {
   try {
@@ -18,11 +20,52 @@ export const getUser = async (email) => {
   }
 };
 
+export const generateSecretCode = async (email) => {
+  try {
+    const secretCode = generateCode(6);
+    const secretCodeExpiration = moment().add(30, 'minutes').toISOString();
+
+    const collection = db.collection('users');
+
+    const res = await collection.findOneAndUpdate(
+      {
+        email
+      },
+      {
+        $set: {
+          secretCode,
+          secretCodeExpiration
+        }
+      },
+      {
+        returnOriginal: false,
+        returnNewDocument: true
+      }
+    );
+
+    return pass({
+      user: res.value
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
 export const getAllUsers = async () => {
   try {
     const collection = db.collection('users');
 
-    const res = await collection.find({}).toArray();
+    const res = await collection
+      .find(
+        {},
+        {
+          projection: {
+            secretCode: 0,
+            secretCodeExpiration: 0
+          }
+        }
+      )
+      .toArray();
 
     return pass({
       users: res
@@ -82,9 +125,17 @@ export const getPrivilegedUsers = async () => {
     const collection = db.collection('users');
 
     const res = await collection
-      .find({
-        privileged: true
-      })
+      .find(
+        {
+          privileged: true
+        },
+        {
+          projection: {
+            secretCode: 0,
+            secretCodeExpiration: 0
+          }
+        }
+      )
       .toArray();
 
     return pass({

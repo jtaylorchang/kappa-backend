@@ -20,7 +20,7 @@ package:
   individually: true
 
   exclude:
-    - "README.md"
+    - 'README.md'
     - ./*.sh
     - tests/**
 
@@ -30,6 +30,14 @@ functions:
     events:
       - http:
           path: users/login
+          method: POST
+          cors: true
+
+  usersGenerateSecretCode:
+    handler: src/routes/users/generate-secret-code.handler
+    events:
+      - http:
+          path: users/generate-secret-code
           method: POST
           cors: true
 
