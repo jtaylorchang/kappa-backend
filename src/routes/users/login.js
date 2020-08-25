@@ -47,6 +47,8 @@ const _handler = async (event, context) => {
     const foundUser = await getUser(normalized.email);
 
     if (!foundUser.success || !foundUser.data.user) {
+      console.log('Unrecognized email', normalized);
+
       throw new createHttpError.Unauthorized('Your email was not recognized');
     }
 
@@ -65,12 +67,16 @@ const _handler = async (event, context) => {
     const foundUser = await getUserWithSecretCode(normalized.secretCode);
 
     if (!foundUser.success || !foundUser.data.user) {
+      console.log('Invalid secret code', normalized);
+
       throw new createHttpError.NotFound('Secret code was invalid');
     }
 
     const secretCodeExpiration = foundUser.data.user.secretCodeExpiration;
 
     if (moment(secretCodeExpiration).isBefore(moment())) {
+      console.log('Secret code expired', foundUser);
+
       throw new createHttpError.BadRequest('Secret code has expired');
     }
 
