@@ -15,12 +15,14 @@ const _handler = async (event, context) => {
   });
 
   if (ocBody.eventId === '' || ocBody.eventCode === '') {
+    console.log('Incomplete body', ocBody);
     throw new createHttpError.BadRequest('Missing required fields');
   }
 
   const verifiedAttendance = await verifyAttendanceCode(ocBody);
 
   if (!verifiedAttendance.success) {
+    console.log('Could not verify attendance', ocBody);
     throw new createHttpError.BadRequest(verifiedAttendance.error.message);
   }
 
@@ -30,6 +32,7 @@ const _handler = async (event, context) => {
   });
 
   if (!createdAttendance.success) {
+    console.log('Could not create attendance', createdAttendance);
     throw new createHttpError.InternalServerError('Could not create attendance');
   }
 

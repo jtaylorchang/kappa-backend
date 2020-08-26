@@ -18,6 +18,8 @@ const httpHeaderAuthorizer = () => ({
       const token = auth.extractToken(handler.event.headers.Authorization);
       const email = auth.verifyAndDecodeToken(token);
 
+      console.log('Received body', handler.event.body);
+
       if (email) {
         const foundUser = await getUser(email);
 
