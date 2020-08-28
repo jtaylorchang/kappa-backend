@@ -16,7 +16,7 @@ const _handler = async (event, context) => {
     throw new createHttpError.InternalServerError('Could not get points');
   }
 
-  console.log('Got points');
+  console.log('Got points', pointEvents);
 
   return {
     statusCode: 200,

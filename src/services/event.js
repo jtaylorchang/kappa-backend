@@ -325,30 +325,33 @@ export const getAllPointEvents = async (user) => {
       ])
       .toArray();
 
-    const excused = await db.collection('excuses').aggregate([
-      {
-        $match: {
-          email: user.email,
-          approved: true
+    const excused = await db
+      .collection('excuses')
+      .aggregate([
+        {
+          $match: {
+            email: user.email,
+            approved: true
+          }
+        },
+        {
+          $lookup: {
+            from: 'events',
+            localField: 'eventId',
+            foreignField: '_id',
+            as: 'event'
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            eventId: 1,
+            eventType: { $arrayElemAt: ['$event.eventType', 0] },
+            points: { $arrayElemAt: ['$event.points', 0] }
+          }
         }
-      },
-      {
-        $lookup: {
-          from: 'events',
-          localField: 'eventId',
-          foreignField: '_id',
-          as: 'event'
-        }
-      },
-      {
-        $project: {
-          _id: 0,
-          eventId: 1,
-          eventType: { $arrayElemAt: ['$event.eventType', 0] },
-          points: { $arrayElemAt: ['$event.points', 0] }
-        }
-      }
-    ]);
+      ])
+      .toArray();
 
     return pass({
       events: attended.concat(excused)
