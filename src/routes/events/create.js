@@ -22,6 +22,7 @@ const _handler = async (event, context) => {
       start: '',
       duration: -1,
       location: '',
+      zoom: '',
       points: {}
     }
   });
@@ -41,6 +42,7 @@ const _handler = async (event, context) => {
     start: ocBody.event.start,
     duration: ocBody.event.duration,
     location: ocBody.event.location,
+    zoom: ocBody.event.zoom,
     points: ocBody.event.points
   };
 
