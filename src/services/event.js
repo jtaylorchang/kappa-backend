@@ -238,7 +238,7 @@ export const getPendingExcuses = async (user) => {
             reason: 1,
             late: 1,
             approved: 1,
-            title: { $arrayElemAt: ['$event.eventType', 0] },
+            title: { $arrayElemAt: ['$event.title', 0] },
             start: { $arrayElemAt: ['$event.start', 0] }
           }
         }
