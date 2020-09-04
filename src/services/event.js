@@ -186,6 +186,39 @@ export const createAttendance = async (attendance) => {
   }
 };
 
+export const createBulkAttendance = async (eventId, emails) => {
+  try {
+    const collection = db.collection('attendance');
+
+    const eventObjectId = new ObjectID(eventId);
+
+    const docs = emails.map((email) => ({
+      email,
+      eventId: eventObjectId
+    }));
+
+    try {
+      const res = await collection.insertMany(docs, {
+        ordered: false
+      });
+    } catch (mongoError) {
+      console.log(mongoError);
+    }
+
+    const attended = await collection
+      .find({
+        eventId: eventObjectId
+      })
+      .toArray();
+
+    return pass({
+      attended
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
 export const createExcuse = async (excuse, approved = false) => {
   try {
     const collection = db.collection('excuses');

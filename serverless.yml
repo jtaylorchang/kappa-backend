@@ -20,7 +20,7 @@ package:
   individually: true
 
   exclude:
-    - 'README.md'
+    - "README.md"
     - ./*.sh
     - tests/**
 
@@ -110,6 +110,14 @@ functions:
     events:
       - http:
           path: attendance
+          method: POST
+          cors: true
+
+  attendanceBulkAttend:
+    handler: src/routes/attendance/bulk-attend.handler
+    events:
+      - http:
+          path: bulk-attendance
           method: POST
           cors: true
 
