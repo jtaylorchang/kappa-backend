@@ -48,7 +48,7 @@ const getRegular = async ({ event, foundSessions, activeSession }) => {
     throw new createHttpError.InternalServerError('Could not get votes');
   }
 
-  // console.log('Found votes', foundVotes);
+  console.log('Found votes', foundVotes.data.votes.length);
 
   return {
     statusCode: 200,
@@ -96,6 +96,8 @@ const getMulti = async ({ event, foundSessions, activeSession }) => {
   if (!foundVotes.success) {
     throw new createHttpError.InternalServerError('Could not get votes');
   }
+
+  console.log('Found votes', foundVotes.data.votes.length);
 
   return {
     statusCode: 200,

@@ -413,6 +413,63 @@ export const updateVote = async (vote, upsert = false) => {
   }
 };
 
+export const createMultiVotes = async ({ sessionId, candidates, userEmail }) => {
+  try {
+    const collection = db.collection('votes');
+
+    const sessionObjectId = new ObjectID(sessionId);
+
+    const votes = candidates.map((candidateId) => ({
+      candidateId: new ObjectID(candidateId),
+      sessionId: sessionObjectId,
+      userEmail,
+      verdict: true,
+      reason: ''
+    }));
+
+    try {
+      const res = await collection.insertMany(votes, {
+        ordered: false
+      });
+    } catch (mongoError) {
+      console.log(mongoError);
+    }
+
+    const ids = votes.map((vote) => vote.candidateId);
+
+    const voteDocs = await collection
+      .find({
+        sessionId: sessionObjectId,
+        userEmail,
+        candidateId: {
+          $in: ids
+        }
+      })
+      .toArray();
+
+    return pass({
+      votes: voteDocs
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
+export const deleteVotes = async ({ sessionId, userEmail }) => {
+  try {
+    const collection = db.collection('votes');
+
+    await collection.deleteMany({
+      sessionId: new ObjectID(sessionId),
+      userEmail
+    });
+
+    return pass();
+  } catch (error) {
+    return fail(error);
+  }
+};
+
 export const separateCandidatesById = (candidates) => {
   const separated = {};
 

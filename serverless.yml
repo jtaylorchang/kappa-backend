@@ -289,6 +289,14 @@ functions:
           method: POST
           cors: true
 
+  submitMultiVote:
+    handler: src/routes/voting/submit-multi-vote.handler
+    events:
+      - http:
+          path: multi-vote
+          method: POST
+          cors: true
+
   createNextSession:
     handler: src/routes/voting/create-next-session.handler
     events:
