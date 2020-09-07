@@ -193,6 +193,14 @@ functions:
           method: POST
           cors: true
 
+  candidatesImportBulk:
+    handler: src/routes/candidates/import-candidates.handler
+    events:
+      - http:
+          path: import-candidates
+          method: POST
+          cors: true
+
   candidatesUpdateOne:
     handler: src/routes/candidates/update-one.handler
     events:

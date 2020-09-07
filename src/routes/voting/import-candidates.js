@@ -1,0 +1,68 @@
+import middyfy from 'middleware';
+import createHttpError from 'http-errors';
+import oc from 'js-optchain';
+
+import { createBulkCandidates, updateSession } from 'services/voting';
+
+const _handler = async (event, context) => {
+  if (!event.authorized || !event.user.privileged || event.user.role.toLowerCase() !== 'web') {
+    throw new createHttpError.Unauthorized('Not authorized');
+  }
+
+  const ocBody = oc(event.body, {
+    session: '',
+    candidates: []
+  });
+
+  if (ocBody.candidates.length === 0) {
+    throw new createHttpError.BadRequest('Missing required fields');
+  }
+
+  const sessionId = ocBody.session;
+  const candidates = ocBody.candidates.map((candidate) =>
+    oc(candidate, {
+      email: '',
+      phone: '',
+      familyName: '',
+      givenName: '',
+      classYear: '',
+      major: '',
+      secondTimeRush: false,
+      events: [],
+      approved: false
+    })
+  );
+
+  const createdCandidates = await createBulkCandidates(candidates);
+
+  if (!createdCandidate.success) {
+    throw new createHttpError.InternalServerError('Could not create candidate');
+  }
+
+  console.log('Created candidate', createdCandidate);
+
+  if (sessionId) {
+    const candidateDocs = createdCandidates.data.candidates;
+    const candidateOrder = candidateDocs.map((candidate) => candidate._id.toString());
+
+    const updatedSession = await updateSession(sessionId, {
+      candidateOrder
+    });
+
+    if (!updatedSession.success) {
+      throw new createHttpError.InternalServerError('Could not update session');
+    }
+  }
+
+  return {
+    statusCode: 200,
+    body: {
+      candidates: createdCandidate.data.candidates
+    }
+  };
+};
+
+export const handler = middyfy(_handler, {
+  authorized: true,
+  useMongo: true
+});

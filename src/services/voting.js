@@ -77,6 +77,36 @@ export const createCandidate = async (candidate) => {
   }
 };
 
+export const createBulkCandidates = async (candidates) => {
+  try {
+    const collection = db.collection('candidates');
+
+    try {
+      const res = await collection.insertMany(candidates, {
+        ordered: false
+      });
+    } catch (mongoError) {
+      console.log(mongoError);
+    }
+
+    const emails = candidates.map((candidate) => candidate.email);
+
+    const candidateDocs = await collection
+      .find({
+        email: {
+          $in: emails
+        }
+      })
+      .toArray();
+
+    return pass({
+      candidates: candidateDocs
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
 export const updateCandidate = async (email, changes, upsert = false) => {
   try {
     const collection = db.collection('candidates');
