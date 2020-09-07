@@ -35,11 +35,11 @@ const _handler = async (event, context) => {
 
   const createdCandidates = await createBulkCandidates(candidates);
 
-  if (!createdCandidate.success) {
+  if (!createdCandidates.success) {
     throw new createHttpError.InternalServerError('Could not create candidate');
   }
 
-  console.log('Created candidate', createdCandidate);
+  console.log('Created candidate', createdCandidates);
 
   if (sessionId) {
     const candidateDocs = createdCandidates.data.candidates;
@@ -57,7 +57,7 @@ const _handler = async (event, context) => {
   return {
     statusCode: 200,
     body: {
-      candidates: createdCandidate.data.candidates
+      candidates: createdCandidates.data.candidates
     }
   };
 };
