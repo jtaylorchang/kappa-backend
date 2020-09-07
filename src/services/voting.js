@@ -59,6 +59,28 @@ export const getCandidate = async (_id) => {
   }
 };
 
+export const getMultiCandidates = async (ids) => {
+  try {
+    const collection = db.collection('candidates');
+
+    const objectIds = ids.map((id) => new ObjectID(id));
+
+    const candidates = await collection
+      .find({
+        _id: {
+          $in: objectIds
+        }
+      })
+      .toArray();
+
+    return pass({
+      candidates
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
 export const createCandidate = async (candidate) => {
   try {
     const collection = db.collection('candidates');
@@ -328,6 +350,25 @@ export const getVote = async (userEmail, sessionId, candidateId) => {
       userEmail,
       sessionId: new ObjectID(sessionId),
       candidateId: new ObjectID(candidateId)
+    });
+
+    return pass({
+      vote: res
+    });
+  } catch (error) {
+    return fail(error);
+  }
+};
+
+export const getVoteBySession = async (userEmail, sessionId) => {
+  try {
+    const collection = db.collection('votes');
+
+    // get the vote matching the given information
+
+    const res = await collection.findOne({
+      userEmail,
+      sessionId: new ObjectID(sessionId)
     });
 
     return pass({
