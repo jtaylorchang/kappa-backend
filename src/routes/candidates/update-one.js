@@ -5,7 +5,7 @@ import oc from 'js-optchain';
 import { updateCandidate } from 'services/voting';
 
 const _handler = async (event, context) => {
-  const target = event.pathParameters?.target;
+  const target = decodeURIComponent(event.pathParameters?.target);
 
   if (!event.authorized || !event.user.privileged) {
     throw new createHttpError.Unauthorized('Not authorized');
