@@ -43,7 +43,14 @@ const _handler = async (event, context) => {
 
   if (sessionId) {
     const candidateDocs = createdCandidates.data.candidates;
-    const candidateOrder = candidateDocs.map((candidate) => candidate._id.toString());
+
+    const emailToId = {};
+
+    for (const candidate of candidateDocs) {
+      emailToId[candidate.email] = candidate._id.toString();
+    }
+
+    const candidateOrder = candidates.map((candidate) => emailToId[candidate.email]);
 
     const updatedSession = await updateSession(sessionId, {
       candidateOrder
