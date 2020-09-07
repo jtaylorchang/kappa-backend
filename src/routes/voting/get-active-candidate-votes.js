@@ -34,7 +34,7 @@ const getRegular = async ({ event, foundSessions, activeSession }) => {
 
   let foundVotes;
 
-  if (event.user.privileged && event.queryStringParameters?.isMobile !== 'true') {
+  if (event.user.privileged) {
     foundVotes = await getSessionAndCandidateVotes(activeSession._id, foundCandidate.data.candidate._id);
   } else {
     foundVotes = await getVote(event.user.email, activeSession._id, foundCandidate.data.candidate._id);
@@ -83,7 +83,7 @@ const getMulti = async ({ event, foundSessions, activeSession }) => {
 
   let foundVotes;
 
-  if (event.user.privileged && event.queryStringParameters?.isMobile !== 'true') {
+  if (event.user.privileged) {
     foundVotes = await getSessionVotes(activeSession._id);
   } else {
     foundVotes = await getVoteBySession(event.user.email, activeSession._id);
