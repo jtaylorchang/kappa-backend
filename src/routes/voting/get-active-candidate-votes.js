@@ -7,7 +7,7 @@ import {
   getVote,
   getAllSessions,
   getMultiCandidates,
-  getVoteBySession,
+  getVotesBySession,
   getSessionVotes
 } from 'services/voting';
 
@@ -86,18 +86,14 @@ const getMulti = async ({ event, foundSessions, activeSession }) => {
   if (event.user.privileged) {
     foundVotes = await getSessionVotes(activeSession._id);
   } else {
-    foundVotes = await getVoteBySession(event.user.email, activeSession._id);
-
-    if (foundVotes.success) {
-      foundVotes.data.votes = foundVotes.data.vote ? [foundVotes.data.vote] : [];
-    }
+    foundVotes = await getVotesBySession(event.user.email, activeSession._id);
   }
 
   if (!foundVotes.success) {
     throw new createHttpError.InternalServerError('Could not get votes');
   }
 
-  console.log('Found votes', foundVotes.data.votes.length);
+  // console.log('Found votes', foundVotes);
 
   return {
     statusCode: 200,

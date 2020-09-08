@@ -360,19 +360,21 @@ export const getVote = async (userEmail, sessionId, candidateId) => {
   }
 };
 
-export const getVoteBySession = async (userEmail, sessionId) => {
+export const getVotesBySession = async (userEmail, sessionId) => {
   try {
     const collection = db.collection('votes');
 
     // get the vote matching the given information
 
-    const res = await collection.findOne({
-      userEmail,
-      sessionId: new ObjectID(sessionId)
-    });
+    const res = await collection
+      .find({
+        userEmail,
+        sessionId: new ObjectID(sessionId)
+      })
+      .toArray();
 
     return pass({
-      vote: res
+      votes: res
     });
   } catch (error) {
     return fail(error);
