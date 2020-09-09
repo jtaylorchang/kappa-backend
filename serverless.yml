@@ -169,6 +169,14 @@ functions:
           method: GET
           cors: true
 
+  pointsCRUD:
+    handler: src/routes/points/crud-group.handler
+    events:
+      - http:
+          path: point-groups
+          method: POST
+          cors: true
+
   # searchEvents:
   #   handler: src/routes/search/search-event.handler
   #   events:

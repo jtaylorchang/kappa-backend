@@ -10,6 +10,8 @@ const _handler = async (event, context) => {
     throw new createHttpError.Unauthorized('Not authorized');
   }
 
+  // Get points from events
+
   const pointEvents = await getAllPointEvents({ email: target });
 
   if (!pointEvents.success) {
@@ -18,10 +20,13 @@ const _handler = async (event, context) => {
 
   console.log('Got points', pointEvents);
 
+  // Get points from groups
+
   return {
     statusCode: 200,
     body: {
-      points: computePoints(pointEvents.data.events)
+      points: computePoints(pointEvents.data.events),
+      groups: null
     }
   };
 };
