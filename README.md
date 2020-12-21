@@ -1,4 +1,4 @@
-# ktt-backend
+# kappa-backend
 
 ## Setup
 
