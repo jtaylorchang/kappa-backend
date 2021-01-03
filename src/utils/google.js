@@ -13,7 +13,8 @@ export const verifyToken = async (token, email) => {
         '223233671218-v5meaa316pd8mgar3mgcvsmg3td7qnl6.apps.googleusercontent.com', // iOS Prod
         '223233671218-6pfiu8hqonhkhugvf2jb4burtij54tru.apps.googleusercontent.com', // Android Prod
         '223233671218-mujcmkmt5plupe2c5piurpvp1h435pgu.apps.googleusercontent.com', // Web Dev
-        '223233671218-l6tkqeif7rb8hj35ek87sci396nmt37r.apps.googleusercontent.com' // Web Prod
+        '223233671218-l6tkqeif7rb8hj35ek87sci396nmt37r.apps.googleusercontent.com', // Web Prod
+        '223233671218-f0csil399er4e27jqchlfg9ka3au3er7.apps.googleusercontent.com' // PWA Prod
       ]
     });
 
