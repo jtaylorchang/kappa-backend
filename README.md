@@ -11,9 +11,9 @@
 
   ```bash
   #!/bin/bash
-  export SERVERLESS_ACCESS_KEY="<CHANGE ME>"
-  export AWS_ACCESS_KEY_ID="<CHANGE ME>"
-  export AWS_SECRET_ACCESS_KEY="<CHANGE ME>"
+  export SERVERLESS_ACCESS_KEY="<CHANGE_ME>"
+  export AWS_ACCESS_KEY_ID="<CHANGE_ME>"
+  export AWS_SECRET_ACCESS_KEY="<CHANGE_ME>"
   ```
 
 - Run `yarn deploy`
@@ -25,11 +25,11 @@ Need to create a `serverless-config/secrets.json` file of the following signatur
 
 ```javascript
 {
-  "AUTH_SECRET": "<CHANGE ME>",
-  "ADMIN_SECRET": "<CHANGE ME>",
-  "AWS_ACCESS_KEY_ID": "<CHANGE ME>",
-  "AWS_SECRET_ACCESS_KEY": "<CHANGE ME>",
-  "MONGODB_URI": "<CHANGE ME>"
+  "SERVERLESS_ACCESS": "<CHANGE_ME>",
+  "AUTH_SECRET": "<CHANGE_ME>",
+  "AWS_ACCESS_KEY_ID": "<CHANGE_ME>",
+  "AWS_SECRET_ACCESS_KEY": "<CHANGE_ME>",
+  "MONGODB_URI": "<CHANGE_ME>"
 }
 ```
 
