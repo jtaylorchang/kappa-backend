@@ -8,6 +8,14 @@
 ## Deploying
 
 - Setup a deploy script `deploy.sh` that exports the appropriate tokens: `SERVERLESS_ACCESS_KEY`, `AWS_ACCESS_KEY_ID`, and `AWS_SECRET_ACCESS_KEY`
+
+  ```bash
+  #!/bin/bash
+  export SERVERLESS_ACCESS_KEY="<CHANGE ME>"
+  export AWS_ACCESS_KEY_ID="<CHANGE ME>"
+  export AWS_SECRET_ACCESS_KEY="<CHANGE ME>"
+  ```
+
 - Run `yarn deploy`
 - Follow serverless directions for deploying
 
@@ -17,11 +25,11 @@ Need to create a `serverless-config/secrets.json` file of the following signatur
 
 ```javascript
 {
-  "AUTH_SECRET": "<auth_secret>",
-  "ADMIN_SECRET": "<admin_secret>",
-  "AWS_ACCESS_KEY_ID": "<access_key>",
-  "AWS_SECRET_ACCESS_KEY": "<secret_access_key>",
-  "MONGODB_URI": "<mongo_database_uri>"
+  "AUTH_SECRET": "<CHANGE ME>",
+  "ADMIN_SECRET": "<CHANGE ME>",
+  "AWS_ACCESS_KEY_ID": "<CHANGE ME>",
+  "AWS_SECRET_ACCESS_KEY": "<CHANGE ME>",
+  "MONGODB_URI": "<CHANGE ME>"
 }
 ```
 
