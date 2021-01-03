@@ -39,7 +39,7 @@ yarn offline
 
 ## Note:
 
-`MySQL` was used in v0.1 but for v1.0 we are moving to store all data in `Mongo`. Originally the `MySQL` hosting was via `Heroku` but we hit free tier limitations and AWS RDS pricing is not perpetual unlike `Mongo`. `Mongo`'s 512mb free tier should be plenty to store all the data for the app. Any references to `SQL` are for legacy purposes but are going to be (or are) deprecated as of v1.0
+> `MySQL` was used in v0.1 but for v1.0 we are moving to store all data in `Mongo`. Originally the `MySQL` hosting was via `Heroku` but we hit free tier limitations and AWS RDS pricing is not perpetual unlike `Mongo`. `Mongo`'s 512mb free tier should be plenty to store all the data for the app. Any references to `SQL` are for legacy purposes but are going to be (or are) deprecated as of v1.0
 
 ## Testing
 
