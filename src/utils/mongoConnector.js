@@ -20,6 +20,8 @@ const mongoConnector = ({
         let client = await MongoClient.connect(databaseURI, connectionOpts);
 
         db = client.db('ThetaTau');
+
+        console.log('=> Connection success');
       } catch (error) {
         console.error('=> Connection error with MongoDB', error);
       }
