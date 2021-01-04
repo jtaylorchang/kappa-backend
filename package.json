@@ -43,8 +43,8 @@
     "webpack-node-externals": "^1.7.2"
   },
   "scripts": {
-    "offline": "source ./offline.sh && serverless offline start",
-    "deploy": "source ./deploy.sh && sls deploy",
+    "offline": ". ./offline.sh && serverless offline start",
+    "deploy": ". ./deploy.sh && sls deploy",
     "pretest": "sh pretest.sh",
     "test": "echo 'TEST GOES HERE'",
     "posttest": "sh posttest.sh"
