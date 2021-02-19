@@ -43,8 +43,8 @@
     "webpack-node-externals": "^1.7.2"
   },
   "scripts": {
-    "offline": ". ./offline.sh && serverless offline start --allowCache",
-    "deploy": ". ./deploy.sh && sls deploy",
+    "offline": ". ./offline.sh && yarn serverless offline start --allowCache",
+    "deploy": ". ./deploy.sh && yarn sls deploy",
     "pretest": "sh pretest.sh",
     "test": "echo 'TEST GOES HERE'",
     "posttest": "sh posttest.sh"
