@@ -8,3 +8,5 @@ jspm_packages
 
 # secrets
 deploy.sh
+login.sh
+src/secrets.js

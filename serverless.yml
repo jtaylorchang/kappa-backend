@@ -177,14 +177,6 @@ functions:
           method: POST
           cors: true
 
-  # searchEvents:
-  #   handler: src/routes/search/search-event.handler
-  #   events:
-  #     - http:
-  #         path: search/events
-  #         method: POST
-  #         cors: true
-
   candidatesGetAll:
     handler: src/routes/candidates/get-all.handler
     events:
@@ -321,43 +313,11 @@ functions:
   #         method: POST
   #         cors: true
 
-  autoUpdateRoles:
-    handler: src/routes/auto/update-roles.handler
-    events:
-      - http:
-          path: auto/roles
-          method: POST
-          cors: true
-
-  autoUpdateUsers:
-    handler: src/routes/auto/update-users.handler
-    events:
-      - http:
-          path: auto/update-users
-          method: POST
-          cors: true
-
-  autoCleanUsers:
-    handler: src/routes/auto/clean-users.handler
-    events:
-      - http:
-          path: auto/clean-users
-          method: POST
-          cors: true
-
   autoResetYear:
     handler: src/routes/auto/reset-year.handler
     events:
       - http:
           path: auto/reset
-          method: POST
-          cors: true
-
-  autoImportBulk:
-    handler: src/routes/auto/import-bulk.handler
-    events:
-      - http:
-          path: auto/import-bulk
           method: POST
           cors: true
 

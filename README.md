@@ -5,7 +5,22 @@
 ## Setup
 
 - Run `yarn install`
-- Create `secrets.json` file referenced below
+- Create `serverless-config/secrets.json` file referenced below
+- Create `src/secrets.js`:
+
+```javascript
+export const PRIMARY_AUDIENCE = '<CHANGE_ME>';
+
+export const GOOGLE_AUDIENCES = [
+  '<CHANGE_ME>', // iOS Dev
+  '<CHANGE_ME>', // Android Dev
+  '<CHANGE_ME>', // iOS Prod
+  '<CHANGE_ME>', // Android Prod
+  '<CHANGE_ME>', // Web Dev
+  '<CHANGE_ME>', // Web Prod
+  '<CHANGE_ME>' // PWA Prod
+];
+```
 
 ## Deploying
 
@@ -23,21 +38,26 @@
 
 ## Running Offline
 
-Need to create a `serverless-config/secrets.json` file of the following signature. The values do not have to be real for development purposes except for ones pertaining to the database connections.
+- Need to create a `login.sh` like the following:
 
-```javascript
-{
-  "SERVERLESS_ACCESS": "<CHANGE_ME>",
-  "AUTH_SECRET": "<CHANGE_ME>",
-  "AWS_ACCESS_KEY_ID": "<CHANGE_ME>",
-  "AWS_SECRET_ACCESS_KEY": "<CHANGE_ME>",
-  "MONGODB_URI": "<CHANGE_ME>"
-}
-```
+  ```bash
+  #!/bin/bash
+  export SERVERLESS_ACCESS_KEY="<CHANGE_ME>"
+  ```
 
-```bash
-yarn offline
-```
+- Need to create a `serverless-config/secrets.json` file of the following signature. The values do not have to be real for development purposes except for ones pertaining to the database connections.
+
+  ```javascript
+  {
+    "SERVERLESS_ACCESS": "<CHANGE_ME>",
+    "AUTH_SECRET": "<CHANGE_ME>",
+    "AWS_ACCESS_KEY_ID": "<CHANGE_ME>",
+    "AWS_SECRET_ACCESS_KEY": "<CHANGE_ME>",
+    "MONGODB_URI": "<CHANGE_ME>"
+  }
+  ```
+
+- Run `yarn offline`
 
 ## Note:
 
@@ -45,11 +65,11 @@ yarn offline
 
 ## Testing
 
-This project uses `serverless` in conjunction with `Mongo`, `MySQL` and `Docker`. In order to test offline, you must have docker installed and our `ktt-docker` repos cloned. You must also have mysql and mongo installed locally, we recommend using Homebrew for MacOS users.
+This project uses `serverless` in conjunction with `Mongo` and `Docker`. In order to test offline, you must have docker installed and our `ktt-docker` repos cloned. You must also have mongo installed locally, we recommend using Homebrew for MacOS users.
 
 **Installation**
 
-- Clone the `ktt-docker-mysql` and `ktt-docker-mongo` repos, with their default names, as sibling folders of this `ktt-backend` repo.
+- Clone the `ktt-docker-mongo` repos, with their default names, as sibling folders of this `ktt-backend` repo.
 - Install Docker
 
 **Running**
@@ -58,7 +78,9 @@ This project uses `serverless` in conjunction with `Mongo`, `MySQL` and `Docker`
 - Make sure none of our docker instances are running
 - Run `yarn run test`
 
-There is a pre-test hook that will spin up a MySQL docker instance and a Mongo docker instance. Both of these will require downloading the first time they are run which may be time intensive. The MySQL docker instance will automatically have the correct SQL dump run during initialization. Both databases will be empty once the hook is complete. The MySQL docker is accessible at `127.0.0.1:3306` and Mongo is at `127.0.0.1:27017` assuming they complete successfully. The tests will be run with `Jest` and then the post-test hook will spin down both docker instances and clear data.
+Note: There are currently no tests to run
+
+There is a pre-test hook that will spin up a Mongo docker instance. Both of these will require downloading the first time they are run which may be time intensive. The database will be empty once the hook is complete. The Mongo container is at `127.0.0.1:27017` assuming they complete successfully. The tests will be run with `Jest` and then the post-test hook will spin down both docker instances and clear data.
 
 ## Data Sources
 
@@ -66,9 +88,9 @@ There is a pre-test hook that will spin up a MySQL docker instance and a Mongo d
 | -------------------------- | ---------------------------------------------------- |
 | directory of allowed users | `https://kappathetatau.org/assets/js/directory.json` |
 | users                      | MongoDB Atlas                                        |
-| events                     | AWS RDS MySQL                                        |
-| attendance                 | AWS RDS MySQL                                        |
-| points                     | AWS RDS MySQL                                        |
+| events                     | MongoDB Atlas                                        |
+| attendance                 | MongoDB Atlas                                        |
+| points                     | MongoDB Atlas                                        |
 
 ## Functions
 
