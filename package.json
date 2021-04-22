@@ -1,5 +1,6 @@
 {
   "name": "ktt-backend",
+  "license": "GPL-2.0-only",
   "version": "0.0.1",
   "description": "Serverless backend for Theta Tau Mobile",
   "repository": "https://github.com/jtaylorchang/kappa-backend.git",

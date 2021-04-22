@@ -266,3 +266,7 @@ CREATE TABLE `point` (
   CONSTRAINT `point_event_id` FOREIGN KEY (`event_id`) REFERENCES `event` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
+
+## License
+
+This project is [GPLv2 licensed](./LICENSE)
