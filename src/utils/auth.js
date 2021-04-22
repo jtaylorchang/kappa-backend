@@ -1,12 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { v4 as uuidV4 } from 'uuid';
-import fetch from 'node-fetch';
-import { pass, fail } from 'utils/res';
-
-import { DIRECTORY } from 'utils/dataSources';
 
 const BEARER_OFFSET = 7;
-const SALT_ROUNDS = 10;
 
 export const extractToken = (bearer) => {
   return bearer.substring(BEARER_OFFSET);
@@ -44,63 +39,6 @@ export const generateCode = (codeLength = 4) => {
   }
 
   return code.substring(0, codeLength);
-};
-
-export const getDirectory = async () => {
-  try {
-    const response = await fetch(DIRECTORY);
-    const data = await response.json();
-
-    return pass(data);
-  } catch (error) {
-    return fail(error);
-  }
-};
-
-export const getDirectoryUser = (directoryData, email) => {
-  return directoryData.directory.active[email];
-};
-
-export const getAllDirectoryUsers = (directoryData) => {
-  return directoryData.directory.active;
-};
-
-export const lookupEmail = async (email) => {
-  if (!email || email?.indexOf('@') == -1) {
-    return fail({
-      message: 'email is invalid'
-    });
-  }
-
-  try {
-    const directory = await getDirectory();
-
-    if (!directory.success) {
-      return fail({
-        message: 'Failed to get directory'
-      });
-    }
-
-    const user = getDirectoryUser(directory.data, email);
-
-    if (user) {
-      // user found. return valid user data
-
-      return pass({
-        semester: user.semester,
-        type: 'B',
-        firstYear: user.firstYear,
-        role: user.role || '',
-        privileged: user.privileged !== undefined && user.privileged
-      });
-    } else {
-      return fail({
-        message: 'unauthorized email'
-      });
-    }
-  } catch (error) {
-    return fail(error);
-  }
 };
 
 export const isEmpty = (obj) => {
