@@ -1,6 +1,6 @@
 # kappa-backend
 
-[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
+![GitHub](https://img.shields.io/github/license/kappatt/kappa-backend) [![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
 
 ## Setup
 
